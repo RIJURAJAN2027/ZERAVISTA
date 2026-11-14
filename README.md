@@ -1,6 +1,6 @@
 # Zera Bytes website
 
-The company website for **Zera Bytes**. It opens on a full-screen intro where the dog looks toward the pointer, then scrolls into About, Solutions, Portfolio (by category), Process and Contact, in the blue of the intro film.
+The company website for **Zera Bytes**. It opens on a full-screen intro where the dog looks toward the pointer, then scrolls into a filterable Works gallery, Solutions, About, Process and Contact, in blue liquid glass.
 
 Built with Vite, React, Tailwind and GSAP.
 
@@ -17,14 +17,16 @@ npm run dev
 ## Where to edit
 
 ```
-src/data.js            Contact details, navigation, divisions, portfolio categories, process steps
-src/App.jsx            Page sections and the concept builds
+src/data.js            Contact details, menu, work filters, projects, divisions, process steps
+src/App.jsx            Sections, glass navigation, project popup and scroll animations
 src/Hero.jsx           The intro screen (headline, paragraph, bottom labels)
-src/index.css          Colours (in :root) and all section styles
+src/index.css          Colours (in :root), liquid glass and all section styles
 src/gaze-frames.json   Gaze calibration for the supplied video; a different clip needs a new table
+public/work/           Project images shown in the Works gallery
+tools/render-work-screens.cjs   Script that drew the nine concept screens (needs Playwright)
 ```
 
 ## Before sharing with clients
 
-- In `src/data.js`, fill in `CONTACT` (WhatsApp number, email, booking link). Empty values are hidden, and with all three empty the Contact section says "Contact details coming soon".
-- The three concept builds use sample data and are labelled "Concept". Replace them with client projects as you complete them.
+- In `src/data.js`, fill in `CONTACT` (WhatsApp number, email, booking link). Empty values are hidden.
+- The nine projects in the gallery are concept designs and are labelled "Concept". To add a real project, put its screenshot in `public/work/` and add an entry to `WORKS` in `src/data.js`.

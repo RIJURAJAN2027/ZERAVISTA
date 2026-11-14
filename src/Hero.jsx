@@ -123,6 +123,9 @@ export default function Hero() {
     }
     const onLeave = () => { entered = false; gsap.to([dot, ring], { opacity: 0, duration: 0.25 }) }
     const onEnter = () => {}
+    // Scrolling moves the page under a still pointer, so hide the cursor until it moves again.
+    const onScroll = () => { if (entered) { entered = false; gsap.to([dot, ring], { opacity: 0, duration: 0.2 }) } }
+    window.addEventListener('scroll', onScroll, { passive: true })
 
     const targets = rootRef.current.querySelectorAll('a, button')
     const onOver = () => {
@@ -143,6 +146,7 @@ export default function Hero() {
     document.addEventListener('mouseenter', onEnter)
 
     return () => {
+      window.removeEventListener('scroll', onScroll)
       window.removeEventListener('mousemove', onMove)
       document.removeEventListener('mouseleave', onLeave)
       document.removeEventListener('mouseenter', onEnter)
