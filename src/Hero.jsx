@@ -216,6 +216,10 @@ export default function Hero() {
       </div>
 
 
+      <a href="#work" data-fade className="cue" aria-label="Scroll to our work">
+        <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9l6 6 6-6" /></svg>
+      </a>
+
       <div ref={dotRef} className="cursor-dot" />
       <div ref={ringRef} className="cursor-ring">
         <span className="chev">◀</span>

@@ -223,7 +223,10 @@ function AllWorks({ filter, setFilter, onOpen }) {
   )
 }
 
-function WorkModal({ work, origin, onClose }) {
+function WorkModal({ work, origin, list, onStep, onClose }) {
+  const index = list.findIndex((w) => w.id === work.id)
+  const dir = useRef(0)
+  const step = (d) => { if (list.length > 1) { dir.current = d; onStep(list[(index + d + list.length) % list.length]) } }
   const panelRef = useRef(null)
   const backRef = useRef(null)
   const closing = useRef(false)
@@ -263,14 +266,29 @@ function WorkModal({ work, origin, onClose }) {
     }
   }, [])
 
+  // Arrow keys and a slide when moving between projects.
+  useEffect(() => {
+    const onKey = (event) => { if (event.key === 'ArrowRight') step(1); if (event.key === 'ArrowLeft') step(-1) }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  })
+  useLayoutEffect(() => {
+    if (!dir.current || reduced()) return
+    const panel = panelRef.current
+    const tween = gsap.fromTo([panel.querySelector('.modal__shot'), ...panel.querySelectorAll('[data-in]')], { opacity: 0, x: 60 * dir.current }, { opacity: 1, x: 0, duration: 0.5, ease: 'expo.out', stagger: 0.04, clearProps: 'opacity,transform' })
+    return () => tween.kill()
+  }, [work.id])
+
   return (
     <div className="modal" role="dialog" aria-modal="true" aria-label={work.name}>
       <div className="modal__back" ref={backRef} onClick={close} />
       <div className="modal__panel glass" ref={panelRef}>
         <button className="modal__close rip" type="button" onClick={close} aria-label="Close">×</button>
+        {list.length > 1 && <button className="modal__nav modal__nav--prev rip" type="button" onClick={() => step(-1)} aria-label="Previous project">{Icon.back}</button>}
+        {list.length > 1 && <button className="modal__nav modal__nav--next rip" type="button" onClick={() => step(1)} aria-label="Next project">{Icon.back}</button>}
         <img className="modal__shot" src={`${BASE}work/${work.id}.jpg`} alt={`${work.name} screen`} width="1200" height="780" />
         <div className="modal__info">
-          <div className="modal__name" data-in><Glyph work={work} /><h3>{work.name}</h3><span className="chip">{work.label}</span><span className="chip chip--soft">Concept</span></div>
+          <div className="modal__name" data-in><Glyph work={work} /><h3>{work.name}</h3><span className="chip">{work.label}</span><span className="chip chip--soft">Concept</span><span className="mono modal__count">{index + 1} / {list.length}</span></div>
           <p data-in>{work.line}</p>
           <div className="chips" data-in>{work.stack.map((t) => <span className="chip chip--soft" key={t}>{t}</span>)}</div>
           <a className="btn rip" href="#contact" onClick={close} data-in>Build something like this</a>
@@ -469,7 +487,7 @@ export default function App() {
       <Dock />
       {POLICIES[hash.slice(1)] && <Policy id={hash.slice(1)} />}
       {hash === '#all-works' && <AllWorks filter={filter} setFilter={setFilter} onOpen={openWork} />}
-      {open && <WorkModal work={open.work} origin={open.origin} onClose={() => setOpen(null)} />}
+      {open && <WorkModal work={open.work} origin={open.origin} list={pick(filter)} onStep={(work) => setOpen({ work, origin: null })} onClose={() => setOpen(null)} />}
     </>
   )
 }
