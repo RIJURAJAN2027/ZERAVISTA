@@ -17,24 +17,16 @@ Then open http://localhost:8080. Any static host works, including GitHub Pages, 
 ## Structure
 
 ```
-index.html              Page sections: hero, services, ecosystem, case studies, process, contact
-assets/css/styles.css   Design tokens (colors, fonts) at the top in :root
-assets/js/cases.js      Case-study data + built-in vector mockups  ← edit this
-assets/js/main.js       Rendering, filters, scroll reveal, 3D hero (Three.js)
-assets/vendor/          three.min.js (r128)
+index.html              The whole site: markup, styles and scripts in one file
+assets/vendor/          three.min.js (r128), used for the 3D hero background
 assets/img/             Put project screenshots / renders here
 ```
 
-## Editing the portfolio
+## Before sharing with clients
 
-All case studies live in `assets/js/cases.js` (`window.CASE_STUDIES`). Each entry renders as a card and as a row in the "View as matrix" table.
+Open `index.html` and edit the block marked `EDIT THESE BEFORE SHARING`:
 
-- **Images:** set `image: "assets/img/your-file.jpg"` to replace the built-in vector mockup with a real screenshot or render. Use 16:10 or 16:9 at 1600px wide or more.
-- **ROI figures:** the current numbers are **placeholders**. Replace them with verified, client-approved results before you publish.
-- **New project:** copy an entry and set `filter` to `web`, `erp` or `auto` so the category filter picks it up.
-
-## Before launch
-
-- Wire the contact form in `index.html` (`.cta__form`) to a real endpoint, such as Formspree, an n8n webhook or your CRM. Right now it only shows a confirmation message.
-- Replace the placeholder ROI metrics.
-- Add real project imagery.
+- `CONTACT.whatsapp`: your WhatsApp number, digits only with country code (e.g. `919876543210`). This turns on the WhatsApp buttons.
+- `CONTACT.email`: your real address. The current one is a placeholder.
+- `CONTACT.booking`: a Calendly or similar link for "Book a Call".
+- `CASES`: each project's text, stack and outcomes. Set `image` to a real screenshot to replace the drawn mockup.

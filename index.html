@@ -1,249 +1,790 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Zera Bytes — End-to-End SME Transformation</title>
-  <meta name="description" content="Zera Bytes builds immersive 3D and Web3 sites, n8n workflow automation, and custom SME ERP software — one integrated digital transformation ecosystem." />
-  <meta name="theme-color" content="#05060b" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/css/styles.css" />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Zera Bytes Portfolio</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Zera Bytes: immersive 3D and Web3 sites, n8n workflow automation and GST-ready SME ERP, built as one connected system.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Layout: floating pill nav over centred, monochrome sections; glass cards carry the content; colour only lives in the project visuals. */
+:root {
+  color-scheme: dark;
+  --bg: #08090a;
+  --bg-raise: #101113;
+  --fg: #f3f3f2;
+  --fg-soft: #b9bab8;
+  --muted: #8a8b89;
+  --faint: #5d5e5c;
+  --line: rgba(255, 255, 255, 0.11);
+  --line-hi: rgba(255, 255, 255, 0.22);
+  --glass-1: rgba(255, 255, 255, 0.055);
+  --glass-2: rgba(255, 255, 255, 0.015);
+  --pill: #f3f3f2;
+  --pill-fg: #0b0b0c;
+  --live: #4ade80;
+  --font-display: "DM Sans", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "DM Sans", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --r-lg: 28px;
+  --r-md: 18px;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 110px; background: var(--bg); }
+body {
+  margin: 0; background: var(--bg); color: var(--fg);
+  font-family: var(--font-body); font-size: 16px; line-height: 1.6;
+  -webkit-font-smoothing: antialiased; overflow-x: hidden;
+}
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 60; background: var(--bg); }
+a { color: inherit; text-decoration: none; }
+h1, h2, h3, h4, p { margin: 0; }
+h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; }
+button { font: inherit; color: inherit; }
+svg { display: block; }
+.wrap {
+  width: 100%; max-width: 1280px; margin-inline: auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+@media (min-width: 720px) { .wrap { padding-left: max(32px, env(safe-area-inset-left, 0px)); padding-right: max(32px, env(safe-area-inset-right, 0px)); } }
+
+/* ambient light */
+.ambient { position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background:
+    radial-gradient(60% 45% at 50% -5%, rgba(255,255,255,.075), transparent 70%),
+    radial-gradient(40% 40% at 90% 40%, rgba(255,255,255,.03), transparent 70%);
+}
+
+/* ---------- shared pieces ---------- */
+.glass {
+  background: linear-gradient(165deg, var(--glass-1), var(--glass-2));
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.07), 0 30px 80px -40px rgba(0,0,0,.9);
+  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+}
+.label {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 9px 18px; border: 1px solid var(--line-hi); border-radius: 999px;
+  font-size: 12px; font-weight: 500; letter-spacing: .16em; text-transform: uppercase; color: var(--fg-soft);
+}
+.headline { font-size: clamp(40px, 7vw, 92px); font-weight: 600; letter-spacing: -0.055em; line-height: .98; }
+.headline--md { font-size: clamp(36px, 5.6vw, 76px); }
+.fade { display: block; background: linear-gradient(180deg, #e6e6e5 0%, #7c7d7b 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.lede { color: var(--fg-soft); font-size: clamp(16px, 1.6vw, 19px); line-height: 1.65; max-width: 60ch; }
+.head { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 28px; margin-bottom: 64px; }
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  min-height: 52px; padding: 0 28px; border-radius: 999px; font-weight: 500; font-size: 16px;
+  border: 1px solid transparent; cursor: pointer; white-space: nowrap;
+  transition: transform .2s ease, background .2s ease, border-color .2s ease, box-shadow .2s ease;
+}
+.btn:hover { transform: translateY(-1px); }
+.btn--solid { background: linear-gradient(180deg, #ffffff, #dcdcdb); color: var(--pill-fg); box-shadow: 0 10px 40px -10px rgba(255,255,255,.35), inset 0 -1px 0 rgba(0,0,0,.08); }
+.btn--ghost { background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,0)); border-color: var(--line-hi); color: var(--fg); }
+.btn--ghost:hover { border-color: rgba(255,255,255,.4); }
+.btn--sm { min-height: 42px; padding: 0 20px; font-size: 15px; }
+:focus-visible { outline: 2px solid var(--fg); outline-offset: 3px; border-radius: 999px; }
+
+.tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.tags span { font-family: var(--font-mono); font-size: 12px; color: var(--fg-soft); padding: 5px 10px; border-radius: 999px; border: 1px solid var(--line); background: rgba(255,255,255,.03); }
+
+/* ---------- nav ---------- */
+.nav { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 50; padding-top: 14px; }
+.nav__bar {
+  display: flex; align-items: center; gap: 12px; height: 66px; padding: 0 10px 0 22px;
+  border-radius: 999px; border: 1px solid var(--line-hi);
+  background: rgba(12, 13, 14, .72); backdrop-filter: blur(18px) saturate(130%); -webkit-backdrop-filter: blur(18px) saturate(130%);
+}
+.brand { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 18px; letter-spacing: -.02em; }
+.brand svg { width: 30px; height: 30px; }
+.nav__links { display: flex; gap: 4px; margin-inline: auto; }
+.nav__links a { padding: 9px 16px; border-radius: 999px; font-size: 15px; color: var(--fg-soft); transition: background .2s, color .2s; }
+.nav__links a:hover, .nav__links a.is-current { background: rgba(255,255,255,.08); color: var(--fg); }
+.nav__menu { display: none; width: 46px; height: 46px; border-radius: 50%; border: 1px solid var(--line-hi); background: rgba(255,255,255,.04); cursor: pointer; place-items: center; }
+.nav__menu span { display: block; width: 18px; height: 1.5px; background: var(--fg); margin: 3px auto; transition: transform .25s; }
+.nav.is-open .nav__menu span:first-child { transform: translateY(2.25px) rotate(45deg); }
+.nav.is-open .nav__menu span:last-child { transform: translateY(-2.25px) rotate(-45deg); }
+.nav__drawer { display: none; }
+
+/* ---------- hero ---------- */
+.hero { position: relative; isolation: isolate; padding-block: 96px 72px; overflow: hidden; }
+.hero__3d { position: absolute; inset: -10% 0 0 0; z-index: -1; opacity: .42;
+  mask-image: radial-gradient(60% 60% at 50% 45%, #000 20%, transparent 75%);
+  -webkit-mask-image: radial-gradient(60% 60% at 50% 45%, #000 20%, transparent 75%); }
+.hero__3d canvas { width: 100% !important; height: 100% !important; display: block; }
+.hero .head { margin-bottom: 0; }
+.hero__ctas { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 8px; }
+.proof { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 28px; margin-top: 28px; list-style: none; padding: 0;
+  font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+.proof li { display: flex; align-items: center; gap: 10px; }
+.proof li::before { content: ""; width: 4px; height: 4px; border-radius: 50%; background: var(--fg-soft); }
+
+/* ---------- sections ---------- */
+.section { padding-block: 120px; }
+.section--tight { padding-block: 72px; }
+
+/* services cards */
+.cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+.svc { position: relative; padding: 34px 32px 32px; display: flex; flex-direction: column; gap: 18px; min-width: 0; transition: border-color .3s, transform .3s; }
+.svc:hover { border-color: var(--line-hi); transform: translateY(-4px); }
+.svc__num { font-size: 68px; font-weight: 600; letter-spacing: -.05em; line-height: 1; background: linear-gradient(180deg, #d9d9d8, #5f605e); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.svc__corner { position: absolute; top: 28px; right: 28px; width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--line-hi); display: grid; place-items: center; color: var(--fg-soft); }
+.svc__corner svg { width: 12px; height: 12px; }
+.svc__tier { font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); margin-top: 28px; }
+.svc h3 { font-size: 30px; font-weight: 500; letter-spacing: -.035em; line-height: 1.12; margin-top: -8px; }
+.svc > p { color: var(--muted); font-size: 16px; }
+.svc ul { list-style: none; padding: 18px 0 0; margin: 0; border-top: 1px solid var(--line); display: grid; gap: 14px; }
+.svc li { display: grid; gap: 2px; }
+.svc li strong { font-weight: 500; font-size: 15.5px; color: var(--fg); }
+.svc li span { font-size: 14.5px; color: var(--muted); line-height: 1.5; }
+.svc .btn { align-self: flex-start; margin-top: auto; }
+.svc .tags { margin-bottom: 4px; }
+
+/* filters */
+.filters { display: flex; gap: 4px; padding: 6px; border-radius: 999px; border: 1px solid var(--line-hi); background: rgba(255,255,255,.03);
+  overflow-x: auto; scrollbar-width: none; max-width: 100%; }
+.filters::-webkit-scrollbar { display: none; }
+.filter { flex: none; border: 0; background: transparent; color: var(--fg-soft); padding: 10px 18px; border-radius: 999px; font-size: 15px; cursor: pointer; transition: background .2s, color .2s; }
+.filter:hover { color: var(--fg); }
+.filter[aria-selected="true"] { background: linear-gradient(180deg, #fff, #dcdcdb); color: var(--pill-fg); font-weight: 500; }
+
+/* case studies */
+.cases { display: grid; gap: 24px; }
+.case { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); overflow: hidden; padding: 10px; gap: 10px; }
+.case[hidden] { display: none; }
+.case:nth-child(even) .case__media { order: 2; }
+.case__media { position: relative; border-radius: 20px; overflow: hidden; min-height: 400px; background: #0c0d10; border: 1px solid var(--line); }
+.case__media svg, .case__media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.case__cap { position: absolute; left: 14px; bottom: 14px; font-size: 12px; color: var(--fg-soft); padding: 6px 12px; border-radius: 999px; background: rgba(8,9,10,.75); border: 1px solid var(--line); backdrop-filter: blur(8px); }
+.case__body { padding: 28px 26px 26px; display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+.case__meta { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.case__meta b { font-weight: 500; color: var(--fg); }
+.case h3 { font-size: clamp(28px, 3vw, 38px); font-weight: 500; letter-spacing: -.04em; line-height: 1.05; }
+.case__row { display: grid; gap: 6px; }
+.case__row h4 { font-size: 12px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: var(--faint); }
+.case__row p { color: var(--fg-soft); font-size: 15.5px; }
+.outcomes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: auto; }
+.outcome { padding: 14px; border-radius: 14px; border: 1px solid var(--line); background: rgba(255,255,255,.025); display: grid; gap: 4px; align-content: start; }
+.outcome b { font-weight: 500; font-size: 15px; color: var(--fg); line-height: 1.3; }
+.outcome span { font-size: 12.5px; color: var(--muted); line-height: 1.4; }
+.outcome i { width: 6px; height: 6px; border-radius: 50%; background: var(--live); box-shadow: 0 0 10px var(--live); margin-bottom: 6px; }
+
+/* matrix */
+.matrix { margin-top: 24px; overflow: hidden; border-radius: var(--r-md); }
+.matrix summary { cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; padding: 20px 26px; font-weight: 500; font-size: 17px; border-radius: var(--r-md); }
+.matrix summary::-webkit-details-marker { display: none; }
+.matrix summary i { font-style: normal; width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--line-hi); display: grid; place-items: center; transition: transform .25s; }
+.matrix[open] summary i { transform: rotate(45deg); }
+.matrix__scroll { overflow-x: auto; border-top: 1px solid var(--line); }
+.matrix table { width: 100%; min-width: 860px; border-collapse: collapse; font-size: 14.5px; }
+.matrix th, .matrix td { text-align: left; vertical-align: top; padding: 16px 22px; border-bottom: 1px solid var(--line); }
+.matrix th { font-size: 11.5px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: var(--faint); }
+.matrix td { color: var(--fg-soft); }
+.matrix td:first-child { color: var(--fg); font-weight: 500; white-space: nowrap; }
+.matrix tr:last-child td { border-bottom: 0; }
+
+/* ecosystem */
+.eco { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; padding: 8px; }
+.eco__step { padding: 26px 24px; display: grid; gap: 10px; position: relative; min-width: 0; }
+.eco__step + .eco__step { border-left: 1px solid var(--line); }
+.eco__step small { font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+.eco__step b { font-size: 22px; font-weight: 500; letter-spacing: -.03em; }
+.eco__step p { color: var(--muted); font-size: 15px; }
+
+/* process */
+.steps { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+.step { padding: 28px; display: grid; gap: 10px; align-content: start; border-radius: var(--r-md); }
+.step .svc__num { font-size: 44px; }
+.step h3 { font-size: 21px; font-weight: 500; letter-spacing: -.02em; margin-top: 18px; }
+.step p { color: var(--muted); font-size: 15px; }
+
+/* contact */
+.cta { padding: clamp(36px, 6vw, 80px) clamp(20px, 5vw, 64px); text-align: center; display: flex; flex-direction: column; align-items: center; gap: 26px; position: relative; overflow: hidden; }
+.cta::after { content: ""; position: absolute; inset: auto -20% -60% -20%; height: 80%; background: radial-gradient(50% 50% at 50% 50%, rgba(255,255,255,.08), transparent 70%); pointer-events: none; }
+.contact-line { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px; color: var(--muted); font-size: 15px; }
+.contact-line code { font-family: var(--font-mono); font-size: 14px; color: var(--fg); padding: 8px 14px; border-radius: 999px; border: 1px solid var(--line); user-select: all; }
+.copy { border: 1px solid var(--line-hi); background: transparent; border-radius: 999px; padding: 8px 14px; font-size: 13px; cursor: pointer; color: var(--fg-soft); }
+.copy:hover { color: var(--fg); border-color: rgba(255,255,255,.4); }
+
+/* footer */
+.footer { border-top: 1px solid var(--line); padding-block: 36px 120px; }
+.footer .wrap { display: flex; flex-wrap: wrap; gap: 16px; justify-content: space-between; align-items: center; color: var(--faint); font-size: 14px; }
+
+/* floating live chat */
+.chat { position: fixed; z-index: 55; left: calc(16px + env(safe-area-inset-left, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  display: flex; align-items: center; gap: 6px; padding: 6px 6px 6px 16px; border-radius: 999px;
+  background: rgba(14,15,16,.82); border: 1px solid var(--line-hi); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 16px 40px -12px rgba(0,0,0,.8); }
+.chat__label { display: flex; align-items: center; gap: 9px; font-size: 15px; padding-right: 6px; }
+.chat__label::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--live); box-shadow: 0 0 10px var(--live); }
+.chat a { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; border: 1px solid var(--line); background: rgba(255,255,255,.05); transition: transform .2s; }
+.chat a:hover { transform: scale(1.06); }
+.chat a.chat__primary { background: linear-gradient(180deg, #fff, #dcdcdb); color: var(--pill-fg); border-color: transparent; }
+.chat svg { width: 22px; height: 22px; }
+
+/* ---------- responsive ---------- */
+@media (max-width: 1080px) {
+  .cards, .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cards .svc:last-child { grid-column: 1 / -1; }
+  .eco { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .eco__step:nth-child(3) { border-left: 0; }
+  .eco__step:nth-child(n+3) { border-top: 1px solid var(--line); }
+  .case, .case:nth-child(even) { grid-template-columns: minmax(0, 1fr); }
+  .case:nth-child(even) .case__media { order: 0; }
+  .case__media { min-height: 0; aspect-ratio: 16 / 10; max-width: 100%; }
+}
+@media (max-width: 860px) {
+  .nav__links, .nav__bar > .btn--quiet { display: none; }
+  .nav__menu { display: grid; }
+  .nav__bar { padding: 0 8px 0 18px; height: 62px; }
+  .nav__bar .btn--solid { margin-left: auto; }
+  .nav__drawer { display: grid; gap: 4px; margin-top: 8px; padding: 10px; border-radius: 24px; border: 1px solid var(--line-hi); background: rgba(12,13,14,.94); backdrop-filter: blur(18px); }
+  .nav__drawer[hidden] { display: none; }
+  .nav__drawer a { padding: 14px 16px; border-radius: 14px; font-size: 17px; color: var(--fg-soft); }
+  .nav__drawer a:hover { background: rgba(255,255,255,.06); color: var(--fg); }
+}
+@media (max-width: 680px) {
+  .hero { padding-block: 64px 48px; }
+  .section { padding-block: 80px; }
+  .head { margin-bottom: 44px; gap: 22px; }
+  .cards, .steps, .eco { grid-template-columns: minmax(0, 1fr); }
+  .eco__step + .eco__step { border-left: 0; border-top: 1px solid var(--line); }
+  .svc { padding: 28px 22px 24px; }
+  .svc__num { font-size: 56px; }
+  .svc h3 { font-size: 26px; }
+  .hero__ctas { flex-direction: column; align-items: stretch; width: 100%; max-width: 380px; }
+  .case__body { padding: 20px 12px 12px; }
+  .outcomes { grid-template-columns: minmax(0, 1fr); }
+  .brand span { display: none; }
+  .chat__label { font-size: 14px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+}
+</style>
 </head>
 <body>
-  <div class="bg-grid" aria-hidden="true"></div>
-  <div class="bg-glow bg-glow--cyan" aria-hidden="true"></div>
-  <div class="bg-glow bg-glow--purple" aria-hidden="true"></div>
 
-  <!-- NAV -->
-  <header class="nav" id="top">
-    <div class="container nav__inner">
-      <a class="brand" href="#top" aria-label="Zera Bytes home">
-        <span class="brand__mark" aria-hidden="true">
-          <svg viewBox="0 0 32 32"><path d="M6 7h20L6 25h20" fill="none" stroke="url(#bg)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/><defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#22e6ff"/><stop offset="1" stop-color="#9d5cff"/></linearGradient></defs></svg>
-        </span>
-        <span class="brand__name">Zera<span>Bytes</span></span>
-      </a>
-      <nav class="nav__links" aria-label="Primary">
-        <a href="#services">Services</a>
-        <a href="#ecosystem">Ecosystem</a>
-        <a href="#work">Case Studies</a>
-        <a href="#process">Process</a>
-      </nav>
-      <a class="btn btn--sm btn--glass" href="#contact">Book a Strategy Call</a>
-      <button class="nav__toggle" aria-label="Open menu" aria-expanded="false"><span></span><span></span></button>
+
+<div class="ambient" aria-hidden="true"></div>
+
+<header class="nav wrap" id="top">
+  <div class="nav__bar">
+    <a class="brand" href="#top" aria-label="Zera Bytes, back to top">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M7 8h18L7 24h18" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 16h5M23 16h5" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" opacity=".45"/></svg>
+      <span>Zera Bytes</span>
+    </a>
+    <nav class="nav__links" aria-label="Sections">
+      <a href="#work">Work</a>
+      <a href="#services">Services</a>
+      <a href="#ecosystem">Ecosystem</a>
+      <a href="#process">How We Work</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <a class="btn btn--solid btn--sm" href="#contact">Book a Call</a>
+    <button class="nav__menu" type="button" id="menu-btn" aria-label="Open menu" aria-expanded="false" aria-controls="drawer"><span></span><span></span></button>
+  </div>
+  <nav class="nav__drawer" id="drawer" hidden aria-label="Sections">
+    <a href="#work">Work</a>
+    <a href="#services">Services</a>
+    <a href="#ecosystem">Ecosystem</a>
+    <a href="#process">How We Work</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</header>
+
+<main>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero__3d" id="hero-3d" aria-hidden="true"></div>
+    <div class="wrap head">
+      <span class="label">Digital transformation for SMEs</span>
+      <h1 class="headline">End-to-end SME transformation. <span class="fade">Built as one system.</span></h1>
+      <p class="lede">Immersive 3D and Web3 storefronts, n8n automation and a GST-ready ERP. Start with the one you need now and add the others as you grow. They all share the same data.</p>
+      <div class="hero__ctas">
+        <a class="btn btn--solid" href="#contact">Book a Free Call</a>
+        <a class="btn btn--ghost" href="#work">View Recent Work</a>
+      </div>
+      <ul class="proof">
+        <li>3 integrated divisions</li>
+        <li>n8n automation</li>
+        <li>GST-ready ERP</li>
+      </ul>
     </div>
-  </header>
+  </section>
 
-  <main>
-    <!-- HERO -->
-    <section class="hero">
-      <div class="container hero__inner">
-        <div class="hero__copy">
-          <p class="eyebrow"><span class="dot"></span> Digital Transformation Agency for SMEs</p>
-          <h1 class="hero__title">End-to-End <span class="grad">SME Transformation</span>, engineered as one ecosystem.</h1>
-          <p class="hero__lede">From immersive 3D storefronts to n8n automation and a GST-ready ERP core. Start with one service, then grow into a fully connected stack without re-platforming.</p>
-          <div class="hero__cta">
-            <a class="btn btn--primary" href="#work">View Case Studies <span aria-hidden="true">→</span></a>
-            <a class="btn btn--glass" href="#services">Explore the Architecture</a>
-          </div>
-          <ul class="hero__stack" aria-label="Core technologies">
-            <li>Three.js</li><li>React</li><li>Solidity</li><li>n8n</li><li>Python</li><li>PostgreSQL</li>
+  <!-- WORK -->
+  <section class="section" id="work">
+    <div class="wrap">
+      <div class="head">
+        <span class="label">Our work</span>
+        <h2 class="headline headline--md">Bespoke builds. <span class="fade">Real results.</span></h2>
+        <p class="lede">Each project starts from a specific business problem. Here's what we found, what we built and what changed.</p>
+        <div class="filters" role="tablist" aria-label="Filter projects">
+          <button class="filter" role="tab" aria-selected="true" data-f="all" id="f-all">All</button>
+          <button class="filter" role="tab" aria-selected="false" data-f="web" id="f-web">Web3 &amp; eCommerce</button>
+          <button class="filter" role="tab" aria-selected="false" data-f="erp" id="f-erp">ERP &amp; Finance</button>
+          <button class="filter" role="tab" aria-selected="false" data-f="auto" id="f-auto">Workflow Automation</button>
+        </div>
+      </div>
+      <div class="cases" id="cases"></div>
+      <details class="matrix glass">
+        <summary>Compare all projects <i aria-hidden="true">+</i></summary>
+        <div class="matrix__scroll">
+          <table>
+            <thead><tr><th>Project</th><th>Category</th><th>Challenge</th><th>Solution</th><th>Stack</th></tr></thead>
+            <tbody id="matrix"></tbody>
+          </table>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="section" id="services">
+    <div class="wrap">
+      <div class="head">
+        <span class="label">What we do</span>
+        <h2 class="headline headline--md">Everything your business runs on. <span class="fade">Under one roof.</span></h2>
+        <p class="lede">Three divisions, from the storefront your customers see to the ledger your accountant reads. Each one works on its own, and each one connects to the other two.</p>
+      </div>
+      <div class="cards">
+        <article class="svc glass">
+          <span class="svc__num">01</span>
+          <span class="svc__corner" aria-hidden="true"><svg viewBox="0 0 12 12"><path d="M1 1h10v10" fill="none" stroke="currentColor" stroke-width="1.4"/></svg></span>
+          <span class="svc__tier">Front-end</span>
+          <h3>Zera Web &amp; Experiences</h3>
+          <p>The sites and storefronts that win customers.</p>
+          <ul>
+            <li><strong>Immersive corporate sites</strong><span>3D animated brand sites built with WebGL and Three.js.</span></li>
+            <li><strong>Web3 &amp; next-gen commerce</strong><span>Token-gated storefronts, wallet checkout and crypto-ready platforms.</span></li>
+            <li><strong>Marketplace architecture</strong><span>Multi-vendor platforms built to scale, with Instagram Shopping built in.</span></li>
           </ul>
-        </div>
-        <div class="hero__visual">
-          <div class="hero__canvas glass" id="hero-canvas" role="img" aria-label="Animated 3D model of the three connected Zera Bytes divisions">
-            <div class="hero__fallback" aria-hidden="true"></div>
-          </div>
-          <div class="hero__chip hero__chip--a glass"><span class="k">Front-End</span><span class="v">Zera Web</span></div>
-          <div class="hero__chip hero__chip--b glass"><span class="k">Middleware</span><span class="v">Zera Automate</span></div>
-          <div class="hero__chip hero__chip--c glass"><span class="k">Back-End</span><span class="v">Zera Core ERP</span></div>
-        </div>
+          <div class="tags"><span>Three.js</span><span>React</span><span>Next.js</span><span>Solidity</span></div>
+          <a class="btn btn--ghost btn--sm" href="#case-urbankicks">See UrbanKicks</a>
+        </article>
+        <article class="svc glass">
+          <span class="svc__num">02</span>
+          <span class="svc__corner" aria-hidden="true"><svg viewBox="0 0 12 12"><path d="M1 1h10v10" fill="none" stroke="currentColor" stroke-width="1.4"/></svg></span>
+          <span class="svc__tier">Middleware &amp; operations</span>
+          <h3>Zera Automate</h3>
+          <p>n8n workflows that take repetitive work off your team.</p>
+          <ul>
+            <li><strong>Omnichannel dashboards</strong><span>WhatsApp Business API, Instagram automation and YouTube analytics in one place.</span></li>
+            <li><strong>Social commerce automation</strong><span>Automatic DM replies, lead routing and onboarding sequences.</span></li>
+            <li><strong>Internal productivity</strong><span>Staff task assignment, HR tracking and daily KPI reports.</span></li>
+          </ul>
+          <div class="tags"><span>n8n</span><span>WhatsApp API</span><span>Meta Graph</span><span>Webhooks</span></div>
+          <a class="btn btn--ghost btn--sm" href="#case-drift">See Drift Motors</a>
+        </article>
+        <article class="svc glass">
+          <span class="svc__num">03</span>
+          <span class="svc__corner" aria-hidden="true"><svg viewBox="0 0 12 12"><path d="M1 1h10v10" fill="none" stroke="currentColor" stroke-width="1.4"/></svg></span>
+          <span class="svc__tier">Back-end</span>
+          <h3>Zera Core ERP</h3>
+          <p>The back office that keeps compliance, stock and cash in order.</p>
+          <ul>
+            <li><strong>Financial compliance</strong><span>Automatic GST invoices and e-way bills, plus data prepared for income tax filing.</span></li>
+            <li><strong>Resource management</strong><span>Live inventory, synced with every online storefront.</span></li>
+            <li><strong>Business intelligence</strong><span>Cash flow, payroll and supply chain on one dashboard.</span></li>
+          </ul>
+          <div class="tags"><span>Python</span><span>PostgreSQL</span><span>GSTN API</span><span>FastAPI</span></div>
+          <a class="btn btn--ghost btn--sm" href="#case-apex">See Apex Retail</a>
+        </article>
       </div>
-    </section>
-
-    <!-- STATS -->
-    <section class="stats" aria-label="Highlights">
-      <div class="container stats__grid">
-        <div class="stat glass"><span class="stat__num">3</span><span class="stat__label">Integrated divisions</span></div>
-        <div class="stat glass"><span class="stat__num">1</span><span class="stat__label">Unified data layer</span></div>
-        <div class="stat glass"><span class="stat__num">24/7</span><span class="stat__label">Automated operations</span></div>
-        <div class="stat glass"><span class="stat__num">GST</span><span class="stat__label">Compliance built in</span></div>
-      </div>
-    </section>
-
-    <!-- SERVICES -->
-    <section class="section" id="services">
-      <div class="container">
-        <div class="section__head">
-          <p class="eyebrow">Services Architecture</p>
-          <h2>Three layers. <span class="grad">One operating system</span> for your business.</h2>
-          <p class="section__lede">Each division stands on its own, and each one is built to plug into the other two.</p>
-        </div>
-
-        <div class="arch">
-          <article class="layer glass" data-accent="cyan">
-            <header class="layer__head">
-              <span class="layer__idx">01</span>
-              <span class="layer__tier">Front-End</span>
-            </header>
-            <div class="layer__icon" aria-hidden="true">
-              <svg viewBox="0 0 48 48"><path d="M24 4 42 14v20L24 44 6 34V14z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M6 14l18 10 18-10M24 24v20" fill="none" stroke="currentColor" stroke-width="2" opacity=".6"/></svg>
-            </div>
-            <h3>Zera Web &amp; Experiences</h3>
-            <p class="layer__desc">Customer-facing digital assets and acquisition channels.</p>
-            <ul class="layer__list">
-              <li><strong>Immersive Corporate Sites</strong><span>3D animated web assets in WebGL and Three.js for premium brand positioning.</span></li>
-              <li><strong>Decentralized &amp; Next-Gen Commerce</strong><span>Web3 integrations, token-gated storefronts and crypto-ready checkout.</span></li>
-              <li><strong>Marketplace Architecture</strong><span>Multi-vendor platforms built to scale, with Instagram Shopping integration.</span></li>
-            </ul>
-            <div class="tags"><span>Three.js</span><span>React</span><span>Next.js</span><span>Solidity</span></div>
-          </article>
-
-          <article class="layer glass" data-accent="violet">
-            <header class="layer__head">
-              <span class="layer__idx">02</span>
-              <span class="layer__tier">Middleware &amp; Ops</span>
-            </header>
-            <div class="layer__icon" aria-hidden="true">
-              <svg viewBox="0 0 48 48"><circle cx="10" cy="12" r="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="38" cy="24" r="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="10" cy="36" r="5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M15 12c10 0 8 12 18 12M15 36c10 0 8-12 18-12" fill="none" stroke="currentColor" stroke-width="2" opacity=".6"/></svg>
-            </div>
-            <h3>Zera Automate</h3>
-            <p class="layer__desc">n8n workflows that remove manual tasks and keep customer conversations moving.</p>
-            <ul class="layer__list">
-              <li><strong>Omnichannel Dashboards</strong><span>One place to run the WhatsApp Business API, Instagram automation and YouTube analytics.</span></li>
-              <li><strong>Social Commerce Automation</strong><span>Automated DM replies, lead routing and low-friction onboarding sequences.</span></li>
-              <li><strong>Internal Productivity</strong><span>Automated staff tasking, HR tracking and daily KPI reports.</span></li>
-            </ul>
-            <div class="tags"><span>n8n</span><span>WhatsApp API</span><span>Meta Graph</span><span>Webhooks</span></div>
-          </article>
-
-          <article class="layer glass" data-accent="blue">
-            <header class="layer__head">
-              <span class="layer__idx">03</span>
-              <span class="layer__tier">Back-End</span>
-            </header>
-            <div class="layer__icon" aria-hidden="true">
-              <svg viewBox="0 0 48 48"><ellipse cx="24" cy="10" rx="16" ry="5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 10v28c0 2.8 7.2 5 16 5s16-2.2 16-5V10M8 24c0 2.8 7.2 5 16 5s16-2.2 16-5" fill="none" stroke="currentColor" stroke-width="2" opacity=".6"/></svg>
-            </div>
-            <h3>Zera Core ERP</h3>
-            <p class="layer__desc">The system that runs day-to-day operations and keeps the whole stack in sync.</p>
-            <ul class="layer__list">
-              <li><strong>Financial Compliance</strong><span>Automated GST invoicing, e-way bills and data prep for income tax filing.</span></li>
-              <li><strong>Resource Management</strong><span>Real-time inventory synced with every digital storefront.</span></li>
-              <li><strong>Business Intelligence</strong><span>Cash flow, payroll and supply-chain health on one dashboard.</span></li>
-            </ul>
-            <div class="tags"><span>Python</span><span>PostgreSQL</span><span>GSTN API</span><span>FastAPI</span></div>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- ECOSYSTEM -->
-    <section class="section section--tight" id="ecosystem">
-      <div class="container">
-        <div class="eco glass">
-          <div class="eco__copy">
-            <p class="eyebrow">Land &amp; Expand</p>
-            <h2>Enter through one service. <span class="grad">Scale into the full stack.</span></h2>
-            <p>Every build shares a common data model, so a storefront order, a WhatsApp lead and a GST invoice are the same record seen from three angles. Adding the next layer is an integration, not a migration.</p>
-          </div>
-          <ol class="eco__flow">
-            <li><span class="eco__step">Acquire</span><span class="eco__what">3D site / marketplace captures demand</span></li>
-            <li><span class="eco__step">Automate</span><span class="eco__what">n8n routes leads, orders and follow-ups</span></li>
-            <li><span class="eco__step">Operate</span><span class="eco__what">ERP books stock, invoices and GST</span></li>
-            <li><span class="eco__step">Optimise</span><span class="eco__what">Unified BI loops insight back to growth</span></li>
-          </ol>
-        </div>
-      </div>
-    </section>
-
-    <!-- WORK -->
-    <section class="section" id="work">
-      <div class="container">
-        <div class="section__head section__head--row">
-          <div>
-            <p class="eyebrow">Client Portfolio Matrix</p>
-            <h2>Case studies with <span class="grad">visual proof</span> and technical depth.</h2>
-          </div>
-          <div class="filters" role="tablist" aria-label="Filter case studies">
-            <button class="filter is-active" data-filter="all" role="tab" aria-selected="true">All</button>
-            <button class="filter" data-filter="web" role="tab" aria-selected="false">Web3 &amp; eCommerce</button>
-            <button class="filter" data-filter="erp" role="tab" aria-selected="false">ERP &amp; Finance</button>
-            <button class="filter" data-filter="auto" role="tab" aria-selected="false">Automation</button>
-          </div>
-        </div>
-
-        <div class="cases" id="cases"><!-- rendered by main.js from CASE_STUDIES --></div>
-
-        <!-- Matrix / table view -->
-        <details class="matrix glass">
-          <summary>View as matrix <span aria-hidden="true">+</span></summary>
-          <div class="matrix__scroll">
-            <table>
-              <thead><tr><th>Project / Client</th><th>Service Category</th><th>The Challenge</th><th>The Zera Bytes Solution</th><th>Stack</th><th>ROI</th></tr></thead>
-              <tbody id="matrix-body"></tbody>
-            </table>
-          </div>
-        </details>
-      </div>
-    </section>
-
-    <!-- PROCESS -->
-    <section class="section section--tight" id="process">
-      <div class="container">
-        <div class="section__head">
-          <p class="eyebrow">How we engage</p>
-          <h2>From audit to <span class="grad">compounding ROI</span>.</h2>
-        </div>
-        <div class="process">
-          <div class="step glass"><span class="step__n">01</span><h4>Systems Audit</h4><p>We map your channels, tools and manual work to find the leaks that cost the most.</p></div>
-          <div class="step glass"><span class="step__n">02</span><h4>Blueprint</h4><p>A phased architecture across Web, Automate and ERP, with clear KPIs for each phase.</p></div>
-          <div class="step glass"><span class="step__n">03</span><h4>Build &amp; Integrate</h4><p>Two-week sprints, live staging environments and integrations with your existing systems.</p></div>
-          <div class="step glass"><span class="step__n">04</span><h4>Run &amp; Scale</h4><p>Managed support, monitoring and a roadmap for the next layer.</p></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- CONTACT -->
-    <section class="section" id="contact">
-      <div class="container">
-        <div class="cta glass">
-          <div>
-            <p class="eyebrow">Start your transformation</p>
-            <h2>Tell us where it hurts. <span class="grad">We'll map the fix.</span></h2>
-            <p>A free 30-minute systems audit covering your storefront, workflows and finance stack.</p>
-          </div>
-          <form class="cta__form" onsubmit="event.preventDefault(); this.classList.add('is-sent');">
-            <label><span>Name</span><input required name="name" autocomplete="name" placeholder="Your name" /></label>
-            <label><span>Work email</span><input required type="email" name="email" autocomplete="email" placeholder="you@company.com" /></label>
-            <label><span>Where do you want to start?</span>
-              <select name="interest">
-                <option>Zera Web &amp; Experiences</option>
-                <option>Zera Automate</option>
-                <option>Zera Core ERP</option>
-                <option>Full ecosystem</option>
-              </select>
-            </label>
-            <button class="btn btn--primary" type="submit">Request Audit <span aria-hidden="true">→</span></button>
-            <p class="cta__ok" role="status">Thanks. We'll be in touch within one business day.</p>
-          </form>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer class="footer">
-    <div class="container footer__inner">
-      <span class="brand__name">Zera<span>Bytes</span></span>
-      <span class="footer__meta">Web &amp; Experiences · Automate · Core ERP</span>
-      <span class="footer__meta">© <span id="year"></span> Zera Bytes</span>
     </div>
-  </footer>
+  </section>
 
-  <script src="assets/vendor/three.min.js" defer></script>
-  <script src="assets/js/cases.js" defer></script>
-  <script src="assets/js/main.js" defer></script>
+  <!-- ECOSYSTEM -->
+  <section class="section section--tight" id="ecosystem">
+    <div class="wrap">
+      <div class="head">
+        <span class="label">How it connects</span>
+        <h2 class="headline headline--md">Start with one service. <span class="fade">Grow into all three.</span></h2>
+        <p class="lede">An order on your website, a WhatsApp lead and a GST invoice are all part of the same record. So adding the next division is a connection, not a rebuild.</p>
+      </div>
+      <div class="eco glass">
+        <div class="eco__step"><small>Acquire</small><b>Zera Web</b><p>Your site or marketplace brings in orders and leads.</p></div>
+        <div class="eco__step"><small>Automate</small><b>Zera Automate</b><p>n8n routes each lead and order and sends the follow-ups.</p></div>
+        <div class="eco__step"><small>Operate</small><b>Zera Core ERP</b><p>Stock, invoices and GST are recorded automatically.</p></div>
+        <div class="eco__step"><small>Optimise</small><b>Unified BI</b><p>One dashboard shows what's working, so you know where to invest next.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section class="section" id="process">
+    <div class="wrap">
+      <div class="head">
+        <span class="label">How we work</span>
+        <h2 class="headline headline--md">From first call <span class="fade">to go-live.</span></h2>
+      </div>
+      <div class="steps">
+        <div class="step glass"><span class="svc__num">01</span><h3>Systems audit</h3><p>We map your sales channels, tools and manual tasks, and find where you're losing the most time and money.</p></div>
+        <div class="step glass"><span class="svc__num">02</span><h3>Blueprint</h3><p>A phased plan across Web, Automate and ERP, with clear goals for each phase.</p></div>
+        <div class="step glass"><span class="svc__num">03</span><h3>Build &amp; integrate</h3><p>Two-week sprints with a live staging site, connected to the tools you already use.</p></div>
+        <div class="step glass"><span class="svc__num">04</span><h3>Run &amp; scale</h3><p>Ongoing support and monitoring, plus a plan for adding the next layer.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="section section--tight" id="contact">
+    <div class="wrap">
+      <div class="cta glass">
+        <span class="label">Start your transformation</span>
+        <h2 class="headline headline--md">Tell us where it hurts. <span class="fade">We'll map the fix.</span></h2>
+        <p class="lede">A free 30-minute systems audit covering your storefront, your workflows and your finance stack.</p>
+        <div class="hero__ctas">
+          <a class="btn btn--solid" id="cta-wa" href="#contact" target="_blank" rel="noopener">Chat on WhatsApp</a>
+          <a class="btn btn--ghost" id="cta-cal" href="#contact" target="_blank" rel="noopener">Book a Call</a>
+        </div>
+        <div class="contact-line">
+          <span>Or email</span>
+          <code id="email-text"></code>
+          <button class="copy" type="button" id="copy-email">Copy</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <span class="brand"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M7 8h18L7 24h18" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Zera Bytes</span>
+    <span>Web &amp; Experiences · Automate · Core ERP</span>
+    <span>© <span id="year">2026</span> Zera Bytes</span>
+  </div>
+</footer>
+
+<div class="chat" role="complementary" aria-label="Contact shortcuts">
+  <span class="chat__label">Live chat</span>
+  <a id="chat-wa" href="#contact" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 20.5l1.3-4.2A8.5 8.5 0 1 1 8 19.4z"/><path d="M9 8.6c.2-.5.5-.6.8-.6h.5c.2 0 .4.1.5.4l.7 1.6c.1.3 0 .5-.1.7l-.5.6c-.1.2-.1.4 0 .5.6 1 1.4 1.8 2.4 2.3.2.1.4.1.5 0l.6-.6c.2-.2.5-.2.7-.1l1.5.7c.3.1.4.3.4.6v.4c0 .4-.2.8-.6 1-.6.3-1.6.5-2.9-.1-2-.9-3.6-2.6-4.4-4.5-.5-1.2-.4-2.3.1-2.9z" fill="currentColor" stroke="none"/></svg>
+  </a>
+  <a class="chat__primary" href="#contact" aria-label="Go to contact options">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3c5 0 9 3.4 9 7.7s-4 7.7-9 7.7c-1 0-2-.1-2.9-.4L4.5 20l1.2-3.6C4 15 3 13 3 10.7 3 6.4 7 3 12 3z"/></svg>
+  </a>
+</div>
+
+<script src="assets/vendor/three.min.js"></script>
+<script>
+/* ============ EDIT THESE BEFORE SHARING ============ */
+const CONTACT = {
+  whatsapp: "",                      // international format, digits only, e.g. "919876543210"
+  email: "hello@zerabytes.com",      // replace with your real address
+  booking: ""                        // e.g. a Calendly link; leave empty to scroll to this section
+};
+
+/* Case studies. image: set a real screenshot path / data URI to replace the drawn mockup. */
+const CASES = [
+  {
+    id: "urbankicks", f: "web", name: "UrbanKicks Marketplace", category: "Web3 & eCommerce", divisions: "Web + Automate",
+    challenge: "Vendor payouts were calculated by hand, and Instagram sales were tracked separately from the main store.",
+    solution: "A custom multi-vendor marketplace with smart-contract vendor payouts, a 3D product showcase and Instagram Shopping on the same product catalogue.",
+    stack: ["Three.js", "React", "Next.js", "Solidity", "IG Shopping API", "n8n"],
+    outcomes: [["Automatic payouts", "Smart contracts settle each vendor's share"], ["One catalogue", "Instagram and the web store stay in sync"], ["3D storefront", "Products shown in an interactive 3D view"]],
+    mockup: "web", caption: "3D homepage + mobile view", image: null
+  },
+  {
+    id: "apex", f: "erp", name: "Apex Retail", category: "ERP & Finance", divisions: "Core ERP",
+    challenge: "Stock counts didn't match across three stores, and GST returns were filed late.",
+    solution: "Zera Core ERP rolled out with live inventory sync across every store and an automated monthly GST process, from invoice to filed return.",
+    stack: ["Python", "FastAPI", "PostgreSQL", "GSTN API", "e-Way Bill API", "React"],
+    outcomes: [["Live stock", "All 3 stores and the online store share one count"], ["GST on schedule", "Monthly returns prepared automatically"], ["One dashboard", "Cash flow, stock and tax side by side"]],
+    mockup: "erp", caption: "Unified GST + inventory dashboard", image: null
+  },
+  {
+    id: "drift", f: "auto", name: "Drift Motors", category: "Workflow Automation", divisions: "Automate",
+    challenge: "WhatsApp leads went unanswered after hours, and staff were given tasks informally over chat.",
+    solution: "An n8n workflow that qualifies each WhatsApp lead, sends it to the right salesperson's dashboard and follows up automatically until the lead is closed.",
+    stack: ["n8n", "WhatsApp Business API", "Node.js", "PostgreSQL", "Google Sheets"],
+    outcomes: [["Instant replies", "A WhatsApp bot answers every enquiry, day or night"], ["Every lead assigned", "Routed to a named salesperson"], ["Auto follow-ups", "Reminders continue until each lead is closed"]],
+    mockup: "auto", caption: "n8n flow + WhatsApp chatbot", image: null
+  }
+];
+const MOCKUPS = {
+  web: `
+<svg viewBox="0 0 800 500" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <defs>
+    <linearGradient id="w-g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#22e6ff"/><stop offset="1" stop-color="#9d5cff"/></linearGradient>
+    <radialGradient id="w-r" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#22e6ff" stop-opacity=".45"/><stop offset="1" stop-color="#22e6ff" stop-opacity="0"/></radialGradient>
+  </defs>
+  <!-- browser -->
+  <g transform="translate(60 60)">
+    <rect width="560" height="360" rx="14" fill="#0b0e1c" stroke="#ffffff22"/>
+    <rect width="560" height="34" rx="14" fill="#11152a"/><rect y="20" width="560" height="14" fill="#11152a"/>
+    <circle cx="20" cy="17" r="5" fill="#ff5f7a"/><circle cx="38" cy="17" r="5" fill="#ffc94d"/><circle cx="56" cy="17" r="5" fill="#3ef0a8"/>
+    <rect x="160" y="9" width="240" height="16" rx="8" fill="#ffffff10"/>
+    <text x="28" y="66" font-family="Space Grotesk, sans-serif" font-weight="700" font-size="15" fill="#fff">URBAN<tspan fill="#22e6ff">KICKS</tspan></text>
+    <g font-family="Inter, sans-serif" font-size="10" fill="#9aa3bd"><text x="330" y="66">Drops</text><text x="380" y="66">Vendors</text><text x="440" y="66">Web3</text><rect x="482" y="54" width="54" height="18" rx="9" fill="url(#w-g)"/><text x="492" y="66" fill="#050611" font-weight="600">Connect</text></g>
+    <text x="28" y="130" font-family="Space Grotesk, sans-serif" font-weight="700" font-size="32" fill="#fff">Step into</text>
+    <text x="28" y="166" font-family="Space Grotesk, sans-serif" font-weight="700" font-size="32" fill="url(#w-g)">the next drop.</text>
+    <rect x="28" y="188" width="150" height="8" rx="4" fill="#ffffff18"/><rect x="28" y="204" width="120" height="8" rx="4" fill="#ffffff12"/>
+    <rect x="28" y="232" width="110" height="32" rx="16" fill="url(#w-g)"/><text x="48" y="252" font-family="Inter, sans-serif" font-weight="600" font-size="11" fill="#050611">Shop the 3D drop</text>
+    <!-- 3D sneaker stage -->
+    <ellipse cx="400" cy="200" rx="130" ry="130" fill="url(#w-r)"/>
+    <ellipse cx="400" cy="270" rx="120" ry="22" fill="none" stroke="#22e6ff" stroke-opacity=".6"/>
+    <ellipse cx="400" cy="270" rx="90" ry="15" fill="none" stroke="#9d5cff" stroke-opacity=".5"/>
+    <g transform="translate(310 160) rotate(-10)">
+      <path d="M10 70 C 20 30, 60 20, 90 30 L 120 38 C 150 46, 175 60, 180 80 L 182 92 L 8 92 Z" fill="#141a33" stroke="url(#w-g)" stroke-width="2.5"/>
+      <path d="M6 92 H 184 Q 186 104 176 106 H 14 Q 4 104 6 92Z" fill="#eef1fb"/>
+      <path d="M40 48 L 70 70 M 55 40 L 85 64 M 70 35 L 98 58" stroke="#22e6ff" stroke-width="2" stroke-linecap="round"/>
+      <path d="M118 44 C 140 60, 150 76, 168 84" stroke="#9d5cff" stroke-width="3" fill="none"/>
+    </g>
+    <g font-family="JetBrains Mono, monospace" font-size="9" fill="#9aa3bd"><rect x="470" y="110" width="70" height="40" rx="8" fill="#ffffff08" stroke="#ffffff1a"/><text x="478" y="126">0.042 ETH</text><text x="478" y="141" fill="#3ef0a8">● token-gated</text></g>
+    <!-- product strip -->
+    <g transform="translate(28 296)">
+      <rect width="120" height="44" rx="10" fill="#ffffff08" stroke="#ffffff14"/><rect x="132" width="120" height="44" rx="10" fill="#ffffff08" stroke="#ffffff14"/><rect x="264" width="120" height="44" rx="10" fill="#ffffff08" stroke="#ffffff14"/><rect x="396" width="108" height="44" rx="10" fill="#22e6ff12" stroke="#22e6ff55"/>
+      <text x="410" y="27" font-family="Inter, sans-serif" font-size="10" fill="#22e6ff">+124 vendors</text>
+    </g>
+  </g>
+  <!-- phone -->
+  <g transform="translate(580 120)">
+    <rect width="170" height="330" rx="26" fill="#070915" stroke="url(#w-g)" stroke-width="2"/>
+    <rect x="62" y="10" width="46" height="8" rx="4" fill="#ffffff20"/>
+    <rect x="14" y="34" width="142" height="130" rx="14" fill="#11152a"/>
+    <ellipse cx="85" cy="100" rx="50" ry="50" fill="url(#w-r)"/>
+    <path d="M40 118 C 48 94, 74 88, 92 92 L 110 96 C 126 100, 134 110, 136 122 L 38 122 Z" fill="#141a33" stroke="#22e6ff" stroke-width="1.5"/>
+    <rect x="38" y="122" width="98" height="7" rx="3" fill="#eef1fb"/>
+    <text x="16" y="186" font-family="Space Grotesk, sans-serif" font-size="13" font-weight="700" fill="#fff">Aero Drift V2</text>
+    <text x="16" y="204" font-family="Inter, sans-serif" font-size="10" fill="#9aa3bd">by @kicklab · IG Shop</text>
+    <text x="16" y="226" font-family="Space Grotesk, sans-serif" font-size="16" font-weight="700" fill="#22e6ff">₹8,499</text>
+    <rect x="14" y="244" width="142" height="34" rx="17" fill="url(#w-g)"/><text x="58" y="265" font-family="Inter, sans-serif" font-weight="600" font-size="11" fill="#050611">Buy now</text>
+    <rect x="14" y="288" width="142" height="26" rx="13" fill="none" stroke="#ffffff30"/><text x="44" y="305" font-family="Inter, sans-serif" font-size="10" fill="#c9d0e6">Pay with wallet</text>
+  </g>
+</svg>`,
+
+  erp: `
+<svg viewBox="0 0 800 500" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <defs>
+    <linearGradient id="e-g" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#22e6ff"/><stop offset="1" stop-color="#9d5cff"/></linearGradient>
+    <linearGradient id="e-a" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#22e6ff" stop-opacity=".35"/><stop offset="1" stop-color="#22e6ff" stop-opacity="0"/></linearGradient>
+  </defs>
+  <g transform="translate(40 40)">
+    <rect width="720" height="420" rx="16" fill="#0a0d1b" stroke="#ffffff1f"/>
+    <!-- sidebar -->
+    <rect width="140" height="420" rx="16" fill="#0e1224"/><rect x="124" width="16" height="420" fill="#0e1224"/>
+    <text x="20" y="36" font-family="Space Grotesk, sans-serif" font-weight="700" font-size="13" fill="#fff">Zera<tspan fill="#22e6ff">Core</tspan></text>
+    <g font-family="Inter, sans-serif" font-size="11" fill="#9aa3bd">
+      <rect x="12" y="58" width="116" height="28" rx="8" fill="#22e6ff18"/><text x="24" y="76" fill="#22e6ff">Overview</text>
+      <text x="24" y="110">Inventory</text><text x="24" y="138">GST &amp; Tax</text><text x="24" y="166">Invoices</text><text x="24" y="194">Payroll</text><text x="24" y="222">Supply chain</text>
+    </g>
+    <!-- header -->
+    <text x="164" y="38" font-family="Space Grotesk, sans-serif" font-weight="600" font-size="16" fill="#fff">Apex Retail · All stores</text>
+    <rect x="590" y="22" width="110" height="24" rx="12" fill="#3ef0a81a" stroke="#3ef0a866"/><text x="604" y="38" font-family="JetBrains Mono, monospace" font-size="10" fill="#3ef0a8">● GSTR-3B filed</text>
+    <!-- KPI cards -->
+    <g font-family="Inter, sans-serif">
+      <g transform="translate(164 62)"><rect width="128" height="70" rx="12" fill="#ffffff07" stroke="#ffffff14"/><text x="14" y="24" font-size="10" fill="#9aa3bd">Cash flow (MTD)</text><text x="14" y="50" font-family="Space Grotesk" font-weight="700" font-size="19" fill="#fff">₹18.4L</text><text x="86" y="50" font-size="10" fill="#3ef0a8">+12%</text></g>
+      <g transform="translate(304 62)"><rect width="128" height="70" rx="12" fill="#ffffff07" stroke="#ffffff14"/><text x="14" y="24" font-size="10" fill="#9aa3bd">GST liability</text><text x="14" y="50" font-family="Space Grotesk" font-weight="700" font-size="19" fill="#fff">₹2.31L</text><text x="86" y="50" font-size="10" fill="#22e6ff">Auto</text></g>
+      <g transform="translate(444 62)"><rect width="128" height="70" rx="12" fill="#ffffff07" stroke="#ffffff14"/><text x="14" y="24" font-size="10" fill="#9aa3bd">Stock accuracy</text><text x="14" y="50" font-family="Space Grotesk" font-weight="700" font-size="19" fill="#fff">99.6%</text></g>
+      <g transform="translate(584 62)"><rect width="116" height="70" rx="12" fill="#ffffff07" stroke="#ffffff14"/><text x="14" y="24" font-size="10" fill="#9aa3bd">e-Way bills</text><text x="14" y="50" font-family="Space Grotesk" font-weight="700" font-size="19" fill="#fff">142</text></g>
+    </g>
+    <!-- revenue chart -->
+    <g transform="translate(164 148)">
+      <rect width="340" height="252" rx="12" fill="#ffffff05" stroke="#ffffff14"/>
+      <text x="16" y="26" font-family="Inter, sans-serif" font-size="11" fill="#c9d0e6">Revenue vs. GST payable</text>
+      <g stroke="#ffffff0d"><line x1="16" y1="80" x2="324" y2="80"/><line x1="16" y1="130" x2="324" y2="130"/><line x1="16" y1="180" x2="324" y2="180"/><line x1="16" y1="228" x2="324" y2="228"/></g>
+      <path d="M16 200 L 60 180 L 104 188 L 148 150 L 192 160 L 236 118 L 280 104 L 324 70 L 324 228 L 16 228 Z" fill="url(#e-a)"/>
+      <path d="M16 200 L 60 180 L 104 188 L 148 150 L 192 160 L 236 118 L 280 104 L 324 70" fill="none" stroke="#22e6ff" stroke-width="2.5"/>
+      <path d="M16 214 L 60 208 L 104 210 L 148 198 L 192 200 L 236 188 L 280 184 L 324 172" fill="none" stroke="#9d5cff" stroke-width="2" stroke-dasharray="5 4"/>
+      <circle cx="324" cy="70" r="4" fill="#22e6ff"/>
+    </g>
+    <!-- inventory by store -->
+    <g transform="translate(516 148)" font-family="Inter, sans-serif">
+      <rect width="184" height="252" rx="12" fill="#ffffff05" stroke="#ffffff14"/>
+      <text x="16" y="26" font-size="11" fill="#c9d0e6">Live inventory · 3 stores</text>
+      <g font-size="10" fill="#9aa3bd">
+        <text x="16" y="60">Store A · Mumbai</text><rect x="16" y="68" width="152" height="8" rx="4" fill="#ffffff10"/><rect x="16" y="68" width="128" height="8" rx="4" fill="url(#e-g)"/>
+        <text x="16" y="100">Store B · Pune</text><rect x="16" y="108" width="152" height="8" rx="4" fill="#ffffff10"/><rect x="16" y="108" width="96" height="8" rx="4" fill="url(#e-g)"/>
+        <text x="16" y="140">Store C · Nashik</text><rect x="16" y="148" width="152" height="8" rx="4" fill="#ffffff10"/><rect x="16" y="148" width="140" height="8" rx="4" fill="url(#e-g)"/>
+        <text x="16" y="180">Online storefront</text><rect x="16" y="188" width="152" height="8" rx="4" fill="#ffffff10"/><rect x="16" y="188" width="72" height="8" rx="4" fill="url(#e-g)"/>
+      </g>
+      <rect x="16" y="210" width="152" height="26" rx="8" fill="#22e6ff12" stroke="#22e6ff44"/><text x="28" y="227" font-family="JetBrains Mono, monospace" font-size="9" fill="#22e6ff">⟳ synced 4s ago</text>
+    </g>
+  </g>
+</svg>`,
+
+  auto: `
+<svg viewBox="0 0 800 500" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <defs>
+    <linearGradient id="a-g" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#22e6ff"/><stop offset="1" stop-color="#9d5cff"/></linearGradient>
+    <pattern id="a-dots" width="18" height="18" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="1" fill="#ffffff14"/></pattern>
+  </defs>
+  <rect width="800" height="500" fill="url(#a-dots)"/>
+  <!-- edges -->
+  <g fill="none" stroke="url(#a-g)" stroke-width="2.5" stroke-linecap="round">
+    <path d="M150 170 C 190 170, 190 170, 220 170"/>
+    <path d="M330 170 C 360 170, 350 110, 390 110"/>
+    <path d="M330 170 C 360 170, 350 240, 390 240"/>
+    <path d="M500 110 C 520 110, 500 180, 300 330" stroke-dasharray="6 5" opacity=".6"/>
+    <path d="M500 240 C 530 240, 520 330, 300 360" stroke-dasharray="6 5" opacity=".6"/>
+  </g>
+  <g font-family="Inter, sans-serif" font-size="11">
+    <!-- trigger -->
+    <g transform="translate(40 140)"><rect width="110" height="60" rx="14" fill="#0e1224" stroke="#3ef0a8"/><circle cx="24" cy="30" r="12" fill="#3ef0a822"/><path d="M18 34 l4-10 h6 l-3 7 h5 l-8 11 z" fill="#3ef0a8"/><text x="42" y="27" fill="#fff" font-weight="600">WhatsApp</text><text x="42" y="42" fill="#9aa3bd" font-size="9">Trigger</text></g>
+    <!-- AI qualify -->
+    <g transform="translate(220 140)"><rect width="110" height="60" rx="14" fill="#0e1224" stroke="#22e6ff"/><circle cx="24" cy="30" r="12" fill="#22e6ff22"/><circle cx="24" cy="30" r="5" fill="none" stroke="#22e6ff" stroke-width="2"/><text x="42" y="27" fill="#fff" font-weight="600">Qualify</text><text x="42" y="42" fill="#9aa3bd" font-size="9">Intent + budget</text></g>
+    <!-- route -->
+    <g transform="translate(390 80)"><rect width="110" height="60" rx="14" fill="#0e1224" stroke="#9d5cff"/><circle cx="24" cy="30" r="12" fill="#9d5cff22"/><path d="M18 30h12M24 24v12" stroke="#9d5cff" stroke-width="2"/><text x="42" y="27" fill="#fff" font-weight="600">Assign</text><text x="42" y="42" fill="#9aa3bd" font-size="9">Sales dashboard</text></g>
+    <g transform="translate(390 210)"><rect width="110" height="60" rx="14" fill="#0e1224" stroke="#4c7dff"/><circle cx="24" cy="30" r="12" fill="#4c7dff22"/><path d="M19 30a5 5 0 1 0 10 0" stroke="#4c7dff" stroke-width="2" fill="none"/><text x="42" y="27" fill="#fff" font-weight="600">Follow-up</text><text x="42" y="42" fill="#9aa3bd" font-size="9">Wait 24h · retry</text></g>
+    <text x="40" y="60" font-family="JetBrains Mono, monospace" font-size="11" fill="#9aa3bd">n8n · drift-lead-router</text>
+    <rect x="40" y="70" width="86" height="20" rx="10" fill="#3ef0a81a" stroke="#3ef0a866"/><text x="52" y="84" font-family="JetBrains Mono, monospace" font-size="9" fill="#3ef0a8">● active</text>
+    <!-- staff dashboard -->
+    <g transform="translate(40 300)"><rect width="260" height="160" rx="14" fill="#0b0e1c" stroke="#ffffff1f"/><text x="16" y="26" fill="#c9d0e6">Staff queue · today</text>
+      <g font-size="10"><rect x="16" y="40" width="228" height="30" rx="8" fill="#ffffff07"/><text x="28" y="59" fill="#fff">Rahul K. · SUV test drive</text><text x="196" y="59" fill="#3ef0a8">1m</text>
+      <rect x="16" y="76" width="228" height="30" rx="8" fill="#ffffff07"/><text x="28" y="95" fill="#fff">Priya S. · EMI enquiry</text><text x="196" y="95" fill="#22e6ff">4m</text>
+      <rect x="16" y="112" width="228" height="30" rx="8" fill="#ffffff07"/><text x="28" y="131" fill="#fff">Arjun M. · Service slot</text><text x="190" y="131" fill="#c4a2ff">auto</text></g></g>
+  </g>
+  <!-- WhatsApp phone -->
+  <g transform="translate(560 40)" font-family="Inter, sans-serif" font-size="10">
+    <rect width="200" height="420" rx="28" fill="#070915" stroke="url(#a-g)" stroke-width="2"/>
+    <rect x="12" y="14" width="176" height="44" rx="14" fill="#11152a"/><circle cx="34" cy="36" r="11" fill="url(#a-g)"/><text x="52" y="33" fill="#fff" font-weight="600">Drift Motors</text><text x="52" y="47" fill="#3ef0a8" font-size="9">online · bot</text>
+    <rect x="70" y="76" width="116" height="34" rx="12" fill="#1f6f5a"/><text x="80" y="97" fill="#eafff6">Price of Drift X?</text>
+    <rect x="14" y="122" width="150" height="58" rx="12" fill="#161b33"/><text x="24" y="141" fill="#eef1fb">Hi! Drift X starts at</text><text x="24" y="155" fill="#eef1fb">₹11.9L. Want a test</text><text x="24" y="169" fill="#eef1fb">drive this week?</text>
+    <rect x="14" y="190" width="80" height="24" rx="12" fill="none" stroke="#22e6ff"/><text x="30" y="206" fill="#22e6ff">Book slot</text>
+    <rect x="100" y="190" width="70" height="24" rx="12" fill="none" stroke="#ffffff40"/><text x="114" y="206" fill="#c9d0e6">EMI plan</text>
+    <rect x="96" y="226" width="90" height="30" rx="12" fill="#1f6f5a"/><text x="108" y="245" fill="#eafff6">Book slot</text>
+    <rect x="14" y="268" width="160" height="58" rx="12" fill="#161b33"/><text x="24" y="287" fill="#eef1fb">Done ✅ Sat 11:00 AM.</text><text x="24" y="301" fill="#eef1fb">Rahul from our team</text><text x="24" y="315" fill="#eef1fb">will call you shortly.</text>
+    <rect x="12" y="372" width="176" height="34" rx="17" fill="#11152a"/><text x="28" y="393" fill="#626b86">Type a message</text>
+  </g>
+</svg>`
+};
+
+
+/* =================================================== */
+
+(() => {
+  "use strict";
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+  const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  $("#year").textContent = new Date().getFullYear();
+
+  /* contact wiring */
+  const wa = CONTACT.whatsapp ? "https://wa.me/" + CONTACT.whatsapp.replace(/\D/g, "") + "?text=" + encodeURIComponent("Hi Zera Bytes, I'd like a free systems audit.") : null;
+  [["#cta-wa", wa], ["#chat-wa", wa], ["#cta-cal", CONTACT.booking || null]].forEach(([sel, url]) => {
+    const a = $(sel);
+    if (url) a.href = url; else { a.href = "#contact"; a.removeAttribute("target"); }
+  });
+  $("#email-text").textContent = CONTACT.email;
+  $("#copy-email").addEventListener("click", (e) => {
+    const btn = e.currentTarget;
+    const done = () => { btn.textContent = "Copied"; setTimeout(() => (btn.textContent = "Copy"), 1600); };
+    const fallback = () => { const r = document.createRange(); r.selectNodeContents($("#email-text")); const s = getSelection(); s.removeAllRanges(); s.addRange(r); btn.textContent = "Selected, press copy"; };
+    try { navigator.clipboard.writeText(CONTACT.email).then(done, fallback); } catch (_) { fallback(); }
+  });
+
+  /* nav */
+  const nav = $(".nav"), menu = $("#menu-btn"), drawer = $("#drawer");
+  const setMenu = (open) => { nav.classList.toggle("is-open", open); drawer.hidden = !open; menu.setAttribute("aria-expanded", String(open)); };
+  menu.addEventListener("click", () => setMenu(drawer.hidden));
+  $$("#drawer a").forEach((a) => a.addEventListener("click", () => setMenu(false)));
+  if ("IntersectionObserver" in window) {
+    const links = $$(".nav__links a");
+    const io = new IntersectionObserver((es) => es.forEach((e) => {
+      if (e.isIntersecting) links.forEach((l) => l.classList.toggle("is-current", l.getAttribute("href") === "#" + e.target.id));
+    }), { rootMargin: "-45% 0px -50% 0px" });
+    $$("main section[id]").forEach((s) => io.observe(s));
+  }
+
+  /* cases */
+  $("#cases").innerHTML = CASES.map((c) => `
+    <article class="case glass" id="case-${esc(c.id)}" data-f="${esc(c.f)}">
+      <div class="case__media">
+        ${c.image ? `<img src="${esc(c.image)}" alt="${esc(c.name)}: ${esc(c.caption)}" loading="lazy">` : (MOCKUPS[c.mockup] || "")}
+        <span class="case__cap">${esc(c.caption)}</span>
+      </div>
+      <div class="case__body">
+        <div class="case__meta"><b>${esc(c.category)}</b><span>Zera ${esc(c.divisions)}</span></div>
+        <h3>${esc(c.name)}</h3>
+        <div class="case__row"><h4>The challenge</h4><p>${esc(c.challenge)}</p></div>
+        <div class="case__row"><h4>What we built</h4><p>${esc(c.solution)}</p></div>
+        <div class="case__row"><h4>Stack</h4><div class="tags">${c.stack.map((t) => `<span>${esc(t)}</span>`).join("")}</div></div>
+        <div class="outcomes">${c.outcomes.map(([k, v]) => `<div class="outcome"><i></i><b>${esc(k)}</b><span>${esc(v)}</span></div>`).join("")}</div>
+      </div>
+    </article>`).join("");
+
+  $("#matrix").innerHTML = CASES.map((c) => `<tr><td>${esc(c.name)}</td><td>${esc(c.category)}</td><td>${esc(c.challenge)}</td><td>${esc(c.solution)}</td><td>${esc(c.stack.slice(0, 4).join(", "))}</td></tr>`).join("");
+
+  $$(".filter").forEach((b) => b.addEventListener("click", () => {
+    $$(".filter").forEach((x) => x.setAttribute("aria-selected", String(x === b)));
+    $$(".case").forEach((el) => { el.hidden = b.dataset.f !== "all" && el.dataset.f !== b.dataset.f; });
+  }));
+  // service "See X" links: show all projects so the anchor target is visible
+  $$('a[href^="#case-"]').forEach((a) => a.addEventListener("click", () => $("#f-all").click()));
+
+  /* monochrome 3D backdrop */
+  const host = $("#hero-3d");
+  if (!window.THREE || !host) return;
+  try {
+    const T = window.THREE;
+    const renderer = new T.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    host.appendChild(renderer.domElement);
+    const scene = new T.Scene();
+    const camera = new T.PerspectiveCamera(38, 1, 0.1, 100);
+    camera.position.set(0, 0, 10);
+    const root = new T.Group(); scene.add(root);
+
+    const line = (o) => new T.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: o });
+    const ico = new T.IcosahedronGeometry(2.1, 1);
+    const shell = new T.LineSegments(new T.WireframeGeometry(ico), line(0.35)); root.add(shell);
+    const inner = new T.LineSegments(new T.EdgesGeometry(new T.IcosahedronGeometry(1.25, 0)), line(0.5)); root.add(inner);
+    root.add(new T.Points(ico, new T.PointsMaterial({ color: 0xffffff, size: 0.05, transparent: true, opacity: 0.8 })));
+
+    const orbits = [[3.4, [1.25, 0, 0.3], 0.4], [4.0, [0.4, 0.9, -0.2], -0.28], [4.6, [-0.6, 0.3, 0.9], 0.2]].map(([r, tilt, sp], i) => {
+      const g = new T.Group(); g.rotation.set(tilt[0], tilt[1], tilt[2]);
+      g.add(new T.Mesh(new T.TorusGeometry(r, 0.006, 6, 200), new T.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.22 })));
+      const node = new T.Mesh(new T.OctahedronGeometry(0.16, 0), new T.MeshBasicMaterial({ color: 0xffffff }));
+      g.add(node); root.add(g);
+      return { r, sp, node, ph: i * 2.1 };
+    });
+
+    const N = 600, pos = new Float32Array(N * 3);
+    for (let i = 0; i < N; i++) {
+      const r = 5 + Math.random() * 6, t = Math.random() * Math.PI * 2, p = Math.acos(2 * Math.random() - 1);
+      pos.set([r * Math.sin(p) * Math.cos(t), r * Math.sin(p) * Math.sin(t), r * Math.cos(p)], i * 3);
+    }
+    const pg = new T.BufferGeometry(); pg.setAttribute("position", new T.BufferAttribute(pos, 3));
+    const field = new T.Points(pg, new T.PointsMaterial({ color: 0xffffff, size: 0.022, transparent: true, opacity: 0.5 }));
+    scene.add(field);
+
+    const resize = () => { const w = host.clientWidth, h = host.clientHeight; if (!w || !h) return; renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); };
+    if ("ResizeObserver" in window) new ResizeObserver(resize).observe(host);
+    resize();
+
+    const tgt = { x: 0, y: 0 };
+    addEventListener("pointermove", (e) => { tgt.x = (e.clientX / innerWidth - 0.5) * 0.5; tgt.y = (e.clientY / innerHeight - 0.5) * 0.3; }, { passive: true });
+    let visible = true;
+    if ("IntersectionObserver" in window) new IntersectionObserver(([e]) => { visible = e.isIntersecting; }).observe(host);
+
+    const clock = new T.Clock();
+    const frame = () => {
+      const t = clock.getElapsedTime();
+      shell.rotation.y = t * 0.12; shell.rotation.x = Math.sin(t * 0.2) * 0.2;
+      inner.rotation.y = -t * 0.2; inner.rotation.z = t * 0.1;
+      orbits.forEach((o) => { const a = o.ph + t * o.sp; o.node.position.set(Math.cos(a) * o.r, Math.sin(a) * o.r, 0); o.node.rotation.y = t; });
+      field.rotation.y = t * 0.015;
+      root.rotation.y += (tgt.x - root.rotation.y) * 0.04;
+      root.rotation.x += (tgt.y - root.rotation.x) * 0.04;
+      renderer.render(scene, camera);
+    };
+    if (reduce) { frame(); return; }
+    const loop = () => { if (visible) frame(); requestAnimationFrame(loop); };
+    loop();
+  } catch (err) { console.warn("3D backdrop unavailable", err); }
+})();
+</script>
+
 </body>
 </html>
