@@ -2,7 +2,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Hero from './Hero.jsx'
-import { CONTACT, NAV, FILTERS, WORKS, DIVISIONS, FLOW, PROCESS, STACK } from './data.js'
+import { CONTACT, NAV, FILTERS, WORKS, DIVISIONS, FLOW, PROCESS, CLIENTS, HOME_LIMIT } from './data.js'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -69,6 +69,12 @@ const Icon = {
   chat: (
     <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M12 3c5 0 9 3.4 9 7.7s-4 7.7-9 7.7c-1 0-2-.1-2.9-.4L4.5 20l1.2-3.6C4 15 3 13 3 10.7 3 6.4 7 3 12 3z" /></svg>
   ),
+  logo: (
+    <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#fff" /><path d="M10 10h12L10 22h12" fill="none" stroke="#1f55c4" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+  ),
+  back: (
+    <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M11 6l-6 6 6 6" /></svg>
+  ),
   up: (
     <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 19V5M6 11l6-6 6 6" /></svg>
   ),
@@ -86,7 +92,7 @@ function Nav() {
   return (
     <header className="nav">
       <div className="nav__pill glass" {...glassProps}>
-        <a className="nav__brand" href="#top" onClick={() => setOpen(false)}>ZERA BYTES</a>
+        <a className="nav__brand" href="#top" onClick={() => setOpen(false)} aria-label="Zera Bytes">{Icon.logo}<span>Zera Bytes</span></a>
         <nav className="nav__links" aria-label="Sections">
           {NAV.map(([label, href]) => <a key={href} href={href} className={current === href ? 'is-current' : ''}>{label}</a>)}
         </nav>
@@ -109,13 +115,8 @@ function Glyph({ work }) {
   return <span className="glyph" style={{ background: work.tint, color: work.ink }} aria-hidden="true">{work.name[0]}</span>
 }
 
-function Works({ onOpen }) {
-  const [filter, setFilter] = useState('all')
+function FilterBar({ filter, setFilter }) {
   const barRef = useRef(null)
-  const gridRef = useRef(null)
-  const first = useRef(true)
-  const shown = WORKS.filter((w) => filter === 'all' || w.cat === filter)
-
   // Slide the glass indicator under the active pill.
   useLayoutEffect(() => {
     const bar = barRef.current
@@ -123,7 +124,19 @@ function Works({ onOpen }) {
     bar.style.setProperty('--ix', `${active.offsetLeft}px`)
     bar.style.setProperty('--iw', `${active.offsetWidth}px`)
   }, [filter])
+  return (
+    <div className="filters glass" ref={barRef} role="group" aria-label="Filter works">
+      <span className="filters__ind" aria-hidden="true" />
+      {FILTERS.map(([key, label]) => (
+        <button key={key} type="button" className="filter" aria-pressed={filter === key} onClick={() => setFilter(key)}>{label}</button>
+      ))}
+    </div>
+  )
+}
 
+function WorkGrid({ items, filter, onOpen, animateCards }) {
+  const gridRef = useRef(null)
+  const first = useRef(true)
   // Re-deal the cards when the filter changes.
   useLayoutEffect(() => {
     if (first.current) { first.current = false; return }
@@ -131,33 +144,65 @@ function Works({ onOpen }) {
     const tween = gsap.fromTo(gridRef.current.children, { opacity: 0, y: 28, scale: 0.94 }, { opacity: 1, y: 0, scale: 1, duration: 0.55, ease: 'power3.out', stagger: 0.05, clearProps: 'opacity,transform' })
     return () => tween.kill()
   }, [filter])
+  return (
+    <div className="grid" ref={gridRef}>
+      {items.map((work) => (
+        <button key={work.id} type="button" className="work" {...(animateCards ? { 'data-card': '' } : {})} data-tilt {...glassProps} onClick={(e) => onOpen(work, e.currentTarget.querySelector('.work__shot'))} aria-label={`${work.name}, ${work.label}. Open details`}>
+          <span className="work__frame glass">
+            <img className="work__shot" src={`${BASE}work/${work.id}.jpg`} alt="" loading="lazy" width="1200" height="780" />
+            <span className="work__go">{Icon.arrow}</span>
+          </span>
+          <span className="work__meta"><Glyph work={work} /><b>{work.name}</b><i>{work.label}</i></span>
+        </button>
+      ))}
+    </div>
+  )
+}
 
+const pick = (filter) => WORKS.filter((w) => filter === 'all' || w.cat === filter)
+
+function Works({ filter, setFilter, onOpen }) {
   return (
     <section className="section works" id="work">
       <div className="wrap">
         <div className="works__head">
           <h2 className="title" data-reveal>Works</h2>
-          <div className="filters glass" ref={barRef} role="group" aria-label="Filter works" data-reveal>
-            <span className="filters__ind" aria-hidden="true" />
-            {FILTERS.map(([key, label]) => (
-              <button key={key} type="button" className="filter" aria-pressed={filter === key} onClick={() => setFilter(key)}>{label}</button>
-            ))}
-          </div>
+          <div data-reveal><FilterBar filter={filter} setFilter={setFilter} /></div>
         </div>
-        <div className="grid" ref={gridRef}>
-          {shown.map((work) => (
-            <button key={work.id} type="button" className="work" data-card data-tilt {...glassProps} onClick={(e) => onOpen(work, e.currentTarget.querySelector('.work__shot'))} aria-label={`${work.name}, ${work.label}. Open details`}>
-              <span className="work__frame glass">
-                <img className="work__shot" src={`${BASE}work/${work.id}.jpg`} alt="" loading="lazy" width="1200" height="780" />
-                <span className="work__go">{Icon.arrow}</span>
-              </span>
-              <span className="work__meta"><Glyph work={work} /><b>{work.name}</b><i>{work.label}</i></span>
-            </button>
-          ))}
-        </div>
-        <p className="fine">Concept projects</p>
+        <WorkGrid items={pick(filter).slice(0, HOME_LIMIT)} filter={filter} onOpen={onOpen} animateCards />
+        <div className="works__more"><a className="btn rip" href="#all-works">See more {Icon.arrow}</a></div>
       </div>
     </section>
+  )
+}
+
+/* Full-screen page with every project. Opens at #all-works. */
+function AllWorks({ filter, setFilter, onOpen }) {
+  const ref = useRef(null)
+  useLayoutEffect(() => {
+    document.documentElement.style.overflow = 'hidden'
+    let tween
+    if (!reduced()) tween = gsap.fromTo(ref.current, { clipPath: 'circle(0% at 50% 100%)' }, { clipPath: 'circle(150% at 50% 100%)', duration: 0.9, ease: 'expo.out', clearProps: 'clipPath' })
+    const onKey = (event) => { if (event.key === 'Escape' && !document.querySelector('.modal')) window.location.hash = 'work' }
+    window.addEventListener('keydown', onKey)
+    return () => { document.documentElement.style.overflow = ''; window.removeEventListener('keydown', onKey); if (tween) tween.kill() }
+  }, [])
+  const items = pick(filter)
+  return (
+    <div className="all" ref={ref} role="dialog" aria-modal="true" aria-label="All works">
+      <div className="wrap">
+        <div className="all__bar">
+          <a className="all__back glass rip" href="#work">{Icon.back}<span>Back</span></a>
+          <span className="mono">{items.length} {items.length === 1 ? 'project' : 'projects'}</span>
+        </div>
+        <div className="works__head">
+          <h2 className="title">All works</h2>
+          <FilterBar filter={filter} setFilter={setFilter} />
+        </div>
+        <WorkGrid items={items} filter={filter} onOpen={onOpen} />
+        <p className="fine">Concept projects</p>
+      </div>
+    </div>
   )
 }
 
@@ -219,12 +264,15 @@ function WorkModal({ work, origin, onClose }) {
 }
 
 /* ---------- other sections ---------- */
-function Marquee() {
-  const row = [...STACK, ...STACK]
+function Clients() {
+  const row = [...CLIENTS, ...CLIENTS, ...CLIENTS, ...CLIENTS]
   return (
-    <div className="marquee" aria-hidden="true">
-      <div className="marquee__track">{row.map((t, i) => <span key={i}>{t}</span>)}</div>
-    </div>
+    <section className="clients" aria-label="Our clients">
+      <p className="mono clients__label">Our clients</p>
+      <div className="marquee">
+        <div className="marquee__track">{row.map((name, i) => <span key={i} aria-hidden={i >= CLIENTS.length}>{name}</span>)}</div>
+      </div>
+    </section>
   )
 }
 
@@ -236,7 +284,7 @@ function Solutions() {
         <div className="sols">
           {DIVISIONS.map((d) => (
             <article className="sol glass" key={d.id} data-card data-tilt {...glassProps}>
-              <div className="sol__top"><span className="sol__icon">{Icon[d.id]}</span><span className="mono">{d.layer}</span></div>
+              <div className="sol__top"><span className="sol__icon">{Icon[d.id]}</span></div>
               <h3>{d.name}</h3>
               <p>{d.line}</p>
               <ul>{d.points.map((point) => <li key={point}>{point}</li>)}</ul>
@@ -324,7 +372,15 @@ function Dock() {
 
 export default function App() {
   const [open, setOpen] = useState(null)
+  const [filter, setFilter] = useState('all')
+  const [hash, setHash] = useState(() => window.location.hash)
   const siteRef = useRef(null)
+  const openWork = (work, shot) => setOpen({ work, origin: shot ? shot.getBoundingClientRect() : null })
+  useEffect(() => {
+    const onHash = () => setHash(window.location.hash)
+    window.addEventListener('hashchange', onHash)
+    return () => window.removeEventListener('hashchange', onHash)
+  }, [])
   useRipples()
 
   // Scroll-driven motion. Transforms only at rest, so content is never hidden if this fails.
@@ -347,8 +403,6 @@ export default function App() {
         paths.forEach((path) => { const len = path.getTotalLength(); path.style.strokeDasharray = len; path.style.strokeDashoffset = len })
         gsap.to(paths, { strokeDashoffset: 0, duration: 1.4, ease: 'power2.out', stagger: 0.12, scrollTrigger: { trigger: svg, start: 'top 88%' } })
       })
-      gsap.to('.blob--a', { y: 260, ease: 'none', scrollTrigger: { trigger: siteRef.current, start: 'top bottom', end: 'bottom top', scrub: true } })
-      gsap.to('.blob--b', { y: -320, ease: 'none', scrollTrigger: { trigger: siteRef.current, start: 'top bottom', end: 'bottom top', scrub: true } })
     }, siteRef)
     return () => context.revert()
   }, [])
@@ -359,11 +413,8 @@ export default function App() {
       <main>
         <Hero />
         <div className="site" ref={siteRef}>
-          <span className="blob blob--a" aria-hidden="true" />
-          <span className="blob blob--b" aria-hidden="true" />
-          <span className="blob blob--c" aria-hidden="true" />
-          <Works onOpen={(work, shot) => setOpen({ work, origin: shot ? shot.getBoundingClientRect() : null })} />
-          <Marquee />
+          <Works filter={filter} setFilter={setFilter} onOpen={openWork} />
+          <Clients />
           <Solutions />
           <About />
           <Process />
@@ -372,6 +423,7 @@ export default function App() {
         </div>
       </main>
       <Dock />
+      {hash === '#all-works' && <AllWorks filter={filter} setFilter={setFilter} onOpen={openWork} />}
       {open && <WorkModal work={open.work} origin={open.origin} onClose={() => setOpen(null)} />}
     </>
   )

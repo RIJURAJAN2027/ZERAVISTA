@@ -214,21 +214,8 @@ export default function Hero() {
           We build the websites, automations and ERP that growing businesses run on, connected
           from day one.
         </p>
-        <a
-          href="#portfolio"
-          data-fade
-          className="link-underline mt-5 inline-block text-[17px] font-bold text-white md:mt-6 md:text-[18px]"
-        >
-          See our work ↓
-        </a>
       </div>
 
-      <footer className="absolute bottom-0 left-0 z-20 flex w-full items-center justify-between px-5 py-5 text-[15px] font-bold text-white md:px-12 md:py-7 md:text-[17px]">
-        <span data-fade>3D Websites</span>
-        <span data-fade className="hidden sm:block">Web3 Commerce</span>
-        <span data-fade className="hidden sm:block">n8n Automation</span>
-        <span data-fade>GST-ready ERP</span>
-      </footer>
 
       <div ref={dotRef} className="cursor-dot" />
       <div ref={ringRef} className="cursor-ring">

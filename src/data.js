@@ -38,9 +38,9 @@ export const WORKS = [
 ]
 
 export const DIVISIONS = [
-  { id: 'web', layer: 'Front-end', name: 'Zera Web', line: 'Sites and stores that sell.', points: ['3D company sites', 'Web3 commerce', 'Marketplaces'] },
-  { id: 'auto', layer: 'Middleware', name: 'Zera Automate', line: 'Workflows that run themselves.', points: ['WhatsApp and Instagram', 'Lead routing', 'Daily KPI reports'] },
-  { id: 'erp', layer: 'Back-end', name: 'Zera Core ERP', line: 'Books, stock and tax in order.', points: ['GST and e-way bills', 'Live inventory', 'Owner dashboard'] },
+  { id: 'web', name: 'Zera Web', line: 'Sites and stores that sell.', points: ['Professional website', '3D website', 'Web3 commerce', 'Marketplace'] },
+  { id: 'auto', name: 'Zera Automate', line: 'Workflows that run themselves.', points: ['WhatsApp and Instagram', 'Lead routing', 'Business workflow'] },
+  { id: 'erp', name: 'Zera Core ERP', line: 'Books, stock and tax in order.', points: ['GST and e-way bills', 'Live inventory', 'Owner dashboard'] },
 ]
 
 export const FLOW = ['Order', 'WhatsApp update', 'Stock', 'GST invoice', 'Report']
@@ -52,4 +52,8 @@ export const PROCESS = [
   ['Support', 'Monitoring, fixes and the next phase.'],
 ]
 
-export const STACK = ['React', 'Next.js', 'Three.js', 'Solidity', 'n8n', 'WhatsApp Business API', 'Meta Graph API', 'Python', 'FastAPI', 'PostgreSQL', 'GSTN API', 'e-Way Bill API']
+// Shown in the moving "Our clients" strip.
+export const CLIENTS = ['Loyola College', 'Larsen & Toubro', 'Jula International', 'Kripkart']
+
+// How many projects the home page shows before "See more".
+export const HOME_LIMIT = 6
