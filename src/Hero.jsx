@@ -2,10 +2,6 @@ import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import gazeFrames from './gaze-frames.json'
 
-// Where "Our work" and "See our work" lead. '../' is the portfolio when this
-// page is hosted in a /hero/ folder next to it; change it if you host elsewhere.
-const PORTFOLIO_URL = import.meta.env.VITE_PORTFOLIO_URL || '../'
-
 // SUBSTITUTION (Layer 11 clause): the spec's four linear anchors
 // (FWD_L / LEFT_MAX / FWD_R / RIGHT_MAX) assume the clip contains a single
 // monotonic head turn. This footage sweeps left and right several times over
@@ -31,7 +27,7 @@ function poseToTime(pose) {
 
 const FORWARD_TIME = poseToTime(0)
 
-export default function App() {
+export default function Hero() {
   const videoRef = useRef(null)
   const rootRef = useRef(null)
   const dotRef = useRef(null)
@@ -62,7 +58,8 @@ export default function App() {
       const delta = targetPose - pose
       pose = Math.abs(delta) < 0.001 ? targetPose : pose + delta * 0.055
 
-      if (video.readyState >= 2 && !video.seeking) {
+      // Skip seeking once the hero has scrolled out of view.
+      if (window.scrollY < window.innerHeight && video.readyState >= 2 && !video.seeking) {
         const time = poseToTime(pose)
         if (Math.abs(video.currentTime - time) > 1 / 48) video.currentTime = time
       }
@@ -108,9 +105,15 @@ export default function App() {
     const ringX = gsap.quickTo(ring, 'x', { duration: 0.45, ease: 'power3.out' })
     const ringY = gsap.quickTo(ring, 'y', { duration: 0.45, ease: 'power3.out' })
 
+    // The custom cursor belongs to the hero only; the rest of the site uses the normal one.
     let entered = false
     const onMove = (event) => {
       const { clientX: x, clientY: y } = event
+      const inside = rootRef.current.contains(event.target)
+      if (!inside) {
+        if (entered) { entered = false; gsap.to([dot, ring], { opacity: 0, duration: 0.2 }) }
+        return
+      }
       if (!entered) {
         entered = true
         gsap.set([dot, ring], { x, y })
@@ -118,8 +121,8 @@ export default function App() {
       }
       dotX(x); dotY(y); ringX(x); ringY(y)
     }
-    const onLeave = () => gsap.to([dot, ring], { opacity: 0, duration: 0.25 })
-    const onEnter = () => { if (entered) gsap.to([dot, ring], { opacity: 1, duration: 0.25 }) }
+    const onLeave = () => { entered = false; gsap.to([dot, ring], { opacity: 0, duration: 0.25 }) }
+    const onEnter = () => {}
 
     const targets = rootRef.current.querySelectorAll('a, button')
     const onOver = () => {
@@ -176,7 +179,7 @@ export default function App() {
   }, [])
 
   return (
-    <main ref={rootRef} className="relative h-screen w-screen overflow-hidden bg-[#050505]">
+    <section ref={rootRef} id="top" className="hero relative h-[100svh] w-full overflow-hidden bg-[#050505]">
       <img
         src={`${import.meta.env.BASE_URL}poster.jpg`}
         alt=""
@@ -193,20 +196,6 @@ export default function App() {
       />
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_90%_at_50%_50%,transparent_55%,rgba(0,0,0,0.45)_100%)]" />
 
-      <header className="absolute top-0 left-0 z-20 flex w-full items-center justify-between px-5 py-5 md:px-12 md:py-7">
-        <a
-          href="#"
-          data-fade
-          aria-label="Zera Bytes"
-          className="font-display text-[26px] leading-none font-bold tracking-[-0.03em] md:text-[38px]"
-        >
-          ZERA BYTES
-        </a>
-        <a href={PORTFOLIO_URL} data-fade className="link-underline text-[17px] font-semibold text-white">
-          Our work
-        </a>
-      </header>
-
       <div data-parallax className="pointer-events-none absolute inset-0 z-10">
         <h1 className="font-display absolute top-[11%] left-[5vw] text-white md:top-[26%] md:left-[3vw]">
           <span data-headline className="headline block">Digital</span>
@@ -222,11 +211,11 @@ export default function App() {
           from day one.
         </p>
         <a
-          href={PORTFOLIO_URL}
+          href="#portfolio"
           data-fade
           className="link-underline mt-5 inline-block text-[17px] font-bold text-white md:mt-6 md:text-[18px]"
         >
-          See our work
+          See our work ↓
         </a>
       </div>
 
@@ -242,6 +231,6 @@ export default function App() {
         <span className="chev">◀</span>
         <span className="chev">▶</span>
       </div>
-    </main>
+    </section>
   )
 }

@@ -1,46 +1,30 @@
-# Zera Bytes — Portfolio Site
+# Zera Bytes website
 
-A dark portfolio website for **Zera Bytes** covering its three divisions: Zera Web & Experiences, Zera Automate and Zera Core ERP.
+The company website for **Zera Bytes**. It opens on a full-screen intro where the dog looks toward the pointer, then scrolls into About, Solutions, Portfolio (by category), Process and Contact, in the blue of the intro film.
 
-It's one static HTML file: no build step, no dependencies, no JavaScript libraries.
+Built with Vite, React, Tailwind and GSAP.
 
-![Preview](assets/img/preview-desktop.png)
-
-## Run locally
+## Run it
 
 ```bash
-python3 -m http.server 8080
+npm install
+npm run assets
+npm run dev
 ```
 
-Then open http://localhost:8080. Any static host works, including GitHub Pages, Netlify, Vercel and Cloudflare Pages.
+`npm run assets` downloads the intro video and poster and checks them against the hashes in `assets.json`. `npm run build` writes the finished site to `dist/`, which any static host can serve.
 
-## Structure
+## Where to edit
 
 ```
-index.html              The whole site: markup, styles and scripts in one file
-assets/img/             Put project screenshots / renders here
+src/data.js            Contact details, navigation, divisions, portfolio categories, process steps
+src/App.jsx            Page sections and the concept builds
+src/Hero.jsx           The intro screen (headline, paragraph, bottom labels)
+src/index.css          Colours (in :root) and all section styles
+src/gaze-frames.json   Gaze calibration for the supplied video; a different clip needs a new table
 ```
 
 ## Before sharing with clients
 
-Open `index.html` and edit the block marked `EDIT THESE BEFORE SHARING`:
-
-- `CONTACT.whatsapp`: your WhatsApp number, digits only with country code (e.g. `919876543210`). This turns on the WhatsApp buttons.
-- `CONTACT.email`: your real address. The current one is a placeholder.
-- `CONTACT.booking`: a Calendly or similar link for "Book a Call".
-- Case studies are plain HTML in the `#work` section (`article.case`). The UI mockups are HTML tables, so you can edit their figures directly.
-
-## Intro page (`hero/`)
-
-A single-screen intro where the dog looks toward the pointer. It's a separate Vite + React project.
-
-```bash
-cd hero
-npm install
-npm run assets
-npm run build
-```
-
-`npm run assets` downloads the video and poster and checks them against the hashes in `assets.json`. The built site lands in `hero/dist`. The "Our work" and "See our work" links point to `../` by default; set `VITE_PORTFOLIO_URL` at build time to send them somewhere else.
-
-Text lives in `hero/src/App.jsx`. The gaze table in `hero/src/gaze-frames.json` is calibrated to the supplied video, so a different clip needs a new table.
+- In `src/data.js`, fill in `CONTACT` (WhatsApp number, email, booking link). Empty values are hidden, and with all three empty the Contact section says "Contact details coming soon".
+- The three concept builds use sample data and are labelled "Concept". Replace them with client projects as you complete them.
