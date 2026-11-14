@@ -1,0 +1,14 @@
+[
+  {
+    "file": "public/azaka-scrub.mp4",
+    "url": "https://media.prettysites.io/products/azaka/v2/azaka-scrub.mp4",
+    "sha256": "64f9b8e2f91ca53cf3880ab1714502b2a6ffa40c4b6dc24f53e861ddc0c9c384",
+    "bytes": 9852175
+  },
+  {
+    "file": "public/poster.jpg",
+    "url": "https://media.prettysites.io/products/azaka/v2/poster.jpg",
+    "sha256": "fe24636c2ddd81b8286041897fabdb60f3c310feb0c72a7ae27837d5abf0251b",
+    "bytes": 77102
+  }
+]

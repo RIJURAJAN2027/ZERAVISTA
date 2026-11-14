@@ -1,0 +1,23 @@
+{
+  "name": "zerabytes-hero",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "assets": "node download-assets.mjs",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "gsap": "3.13.0"
+  },
+  "devDependencies": {
+    "vite": "6.4.2",
+    "@vitejs/plugin-react": "5.0.4",
+    "@tailwindcss/vite": "4.1.13",
+    "tailwindcss": "4.1.13"
+  }
+}

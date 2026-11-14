@@ -29,3 +29,18 @@ Open `index.html` and edit the block marked `EDIT THESE BEFORE SHARING`:
 - `CONTACT.email`: your real address. The current one is a placeholder.
 - `CONTACT.booking`: a Calendly or similar link for "Book a Call".
 - Case studies are plain HTML in the `#work` section (`article.case`). The UI mockups are HTML tables, so you can edit their figures directly.
+
+## Intro page (`hero/`)
+
+A single-screen intro where the dog looks toward the pointer. It's a separate Vite + React project.
+
+```bash
+cd hero
+npm install
+npm run assets
+npm run build
+```
+
+`npm run assets` downloads the video and poster and checks them against the hashes in `assets.json`. The built site lands in `hero/dist`. The "Our work" and "See our work" links point to `../` by default; set `VITE_PORTFOLIO_URL` at build time to send them somewhere else.
+
+Text lives in `hero/src/App.jsx`. The gaze table in `hero/src/gaze-frames.json` is calibrated to the supplied video, so a different clip needs a new table.
