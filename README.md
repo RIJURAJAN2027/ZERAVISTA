@@ -1,8 +1,8 @@
 # Zera Bytes — Portfolio Site
 
-A dark, glassmorphism portfolio website for **Zera Bytes**, covering its three divisions: Zera Web & Experiences, Zera Automate and Zera Core ERP.
+A dark portfolio website for **Zera Bytes** covering its three divisions: Zera Web & Experiences, Zera Automate and Zera Core ERP.
 
-It's a static site with no build step and no dependencies to install. Three.js r128 is vendored in `assets/vendor/`.
+It's one static HTML file: no build step, no dependencies, no JavaScript libraries.
 
 ![Preview](assets/img/preview-desktop.png)
 
@@ -18,7 +18,6 @@ Then open http://localhost:8080. Any static host works, including GitHub Pages, 
 
 ```
 index.html              The whole site: markup, styles and scripts in one file
-assets/vendor/          three.min.js (r128), used for the 3D hero background
 assets/img/             Put project screenshots / renders here
 ```
 
@@ -29,4 +28,4 @@ Open `index.html` and edit the block marked `EDIT THESE BEFORE SHARING`:
 - `CONTACT.whatsapp`: your WhatsApp number, digits only with country code (e.g. `919876543210`). This turns on the WhatsApp buttons.
 - `CONTACT.email`: your real address. The current one is a placeholder.
 - `CONTACT.booking`: a Calendly or similar link for "Book a Call".
-- `CASES`: each project's text, stack and outcomes. Set `image` to a real screenshot to replace the drawn mockup.
+- Case studies are plain HTML in the `#work` section (`article.case`). The UI mockups are HTML tables, so you can edit their figures directly.
