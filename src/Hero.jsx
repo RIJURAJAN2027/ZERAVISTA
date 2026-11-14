@@ -202,17 +202,16 @@ export default function Hero() {
 
       <div data-parallax className="pointer-events-none absolute inset-0 z-10">
         <h1 className="font-display absolute top-[11%] left-[5vw] text-white md:top-[26%] md:left-[3vw]">
-          <span data-headline className="headline block">Digital</span>
+          <span data-headline className="headline block">We build</span>
         </h1>
         <h1 className="font-display absolute top-[19%] left-[5vw] text-white md:top-[52%] md:left-auto md:right-[3vw]">
-          <span data-headline className="headline block">Systems</span>
+          <span data-headline className="headline block">your dream</span>
         </h1>
       </div>
 
       <div className="absolute bottom-[13%] left-5 right-5 z-20 md:top-[44%] md:right-auto md:bottom-auto md:left-12 md:max-w-[290px]">
         <p data-fade className="text-[17px] font-semibold leading-[1.45] text-white/90 md:text-[19px]">
-          We build the websites, automations and ERP that growing businesses run on, connected
-          from day one.
+          Websites, automation and business software for growing companies.
         </p>
       </div>
 

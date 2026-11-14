@@ -89,9 +89,6 @@ const Icon = {
   spark: (
     <svg viewBox="0 0 48 48" className="draw"><path d="M24 5c-8 0-13 6-13 12 0 5 3 8 6 11v5h14v-5c3-3 6-6 6-11 0-6-5-12-13-12z" /><path d="M19 39h10M21 44h6" /></svg>
   ),
-  logo: (
-    <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#fff" /><path d="M10 10h12L10 22h12" fill="none" stroke="#1f55c4" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round" /></svg>
-  ),
   back: (
     <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M11 6l-6 6 6 6" /></svg>
   ),
@@ -112,7 +109,7 @@ function Nav() {
   return (
     <header className="nav">
       <div className="nav__pill glass" {...glassProps}>
-        <a className="nav__brand" href="#top" onClick={() => setOpen(false)} aria-label="Zera Bytes">{Icon.logo}<span>Zera Bytes</span></a>
+        <a className="nav__brand" href="#top" onClick={() => setOpen(false)} aria-label="Zera Bytes"><img src={`${BASE}logo.png`} alt="" width="36" height="36" /><span>zera bytes</span></a>
         <nav className="nav__links" aria-label="Sections">
           {NAV.map(([label, href]) => <a key={href} href={href} className={current === href ? 'is-current' : ''}>{label}</a>)}
         </nav>
@@ -466,7 +463,7 @@ export default function App() {
           <About />
           <Special />
           <Contact />
-          <footer className="footer"><div className="wrap"><span>© {new Date().getFullYear()} Zera Bytes</span><nav aria-label="Policies">{Object.entries(POLICIES).map(([id, policy]) => <a key={id} href={`#${id}`}>{policy.title}</a>)}</nav></div></footer>
+          <footer className="footer"><div className="wrap"><span className="footer__brand"><img src={`${BASE}logo.png`} alt="" width="28" height="28" />© {new Date().getFullYear()} Zera Bytes · We build your dream</span><nav aria-label="Policies">{Object.entries(POLICIES).map(([id, policy]) => <a key={id} href={`#${id}`}>{policy.title}</a>)}</nav></div></footer>
         </div>
       </main>
       <Dock />
