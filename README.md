@@ -17,7 +17,8 @@ npm run dev
 ## Where to edit
 
 ```
-src/data.js            Contact details, menu, work filters, projects, divisions, process steps
+src/data.js            Phone number, menu, work filters, projects, solutions, business flow, specialities, clients
+src/policies.js        Privacy, Terms, Refund and Support policy text
 src/App.jsx            Sections, glass navigation, project popup and scroll animations
 src/Hero.jsx           The intro screen (headline, paragraph, bottom labels)
 src/index.css          Colours (in :root), liquid glass and all section styles
@@ -28,5 +29,5 @@ tools/render-work-screens.cjs   Script that drew the nine concept screens (needs
 
 ## Before sharing with clients
 
-- In `src/data.js`, fill in `CONTACT` (WhatsApp number, email, booking link). Empty values are hidden.
+- The policy pages in `src/policies.js` are starting templates. Have them reviewed, and add your registered business name and address.
 - The nine projects in the gallery are concept designs and are labelled "Concept". To add a real project, put its screenshot in `public/work/` and add an entry to `WORKS` in `src/data.js`.

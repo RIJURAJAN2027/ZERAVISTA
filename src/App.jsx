@@ -2,14 +2,16 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Hero from './Hero.jsx'
-import { CONTACT, NAV, FILTERS, WORKS, DIVISIONS, FLOW, PROCESS, CLIENTS, HOME_LIMIT } from './data.js'
+import { CONTACT, NAV, FILTERS, WORKS, DIVISIONS, FLOW, SPECIAL, CLIENTS, HOME_LIMIT } from './data.js'
+import { POLICIES, UPDATED } from './policies.js'
 
 gsap.registerPlugin(ScrollTrigger)
 
 const BASE = import.meta.env.BASE_URL
 const reduced = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches
 const digits = CONTACT.whatsapp.replace(/\D/g, '')
-const waLink = digits ? `https://wa.me/${digits}?text=${encodeURIComponent("Hi Zera Bytes, I'd like a free systems audit.")}` : ''
+const waLink = `https://wa.me/${digits}?text=${encodeURIComponent("Hi Zera Bytes, I'd like a quotation.")}`
+const telLink = `tel:+${digits}`
 
 /* Pointer-reactive glass: sets --mx/--my for the moving highlight and, with `tilt`, --rx/--ry. */
 function glassMove(event) {
@@ -68,6 +70,24 @@ const Icon = {
   ),
   chat: (
     <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M12 3c5 0 9 3.4 9 7.7s-4 7.7-9 7.7c-1 0-2-.1-2.9-.4L4.5 20l1.2-3.6C4 15 3 13 3 10.7 3 6.4 7 3 12 3z" /></svg>
+  ),
+  call: (
+    <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M6.5 3.5h3l1.5 4-2 1.5a12 12 0 0 0 6 6l1.5-2 4 1.5v3a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 4.5 5.7a2 2 0 0 1 2-2.2z" /></svg>
+  ),
+  support: (
+    <svg viewBox="0 0 48 48" className="draw"><path d="M24 6 39 12v11c0 9-6 16-15 19C15 39 9 32 9 23V12z" /><path d="M17 24l5 5 9-10" /></svg>
+  ),
+  quote: (
+    <svg viewBox="0 0 48 48" className="draw"><path d="M8 10h32v22H22l-9 8v-8H8z" /><path d="M16 18h16M16 24h10" /></svg>
+  ),
+  fast: (
+    <svg viewBox="0 0 48 48" className="draw"><circle cx="24" cy="26" r="15" /><path d="M24 26V16M19 5h10M35 13l3-3" /></svg>
+  ),
+  study: (
+    <svg viewBox="0 0 48 48" className="draw"><circle cx="21" cy="21" r="12" /><path d="M30 30l11 11M16 21h10M21 16v10" /></svg>
+  ),
+  spark: (
+    <svg viewBox="0 0 48 48" className="draw"><path d="M24 5c-8 0-13 6-13 12 0 5 3 8 6 11v5h14v-5c3-3 6-6 6-11 0-6-5-12-13-12z" /><path d="M19 39h10M21 44h6" /></svg>
   ),
   logo: (
     <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#fff" /><path d="M10 10h12L10 22h12" fill="none" stroke="#1f55c4" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round" /></svg>
@@ -297,15 +317,16 @@ function Solutions() {
 }
 
 function About() {
-  const words = 'One team builds your storefront, your automation and your ERP. They share the same data from day one.'.split(' ')
+  const words = 'We study your company first. Then we build what you imagine and make it live.'.split(' ')
   return (
     <section className="section" id="about">
       <div className="wrap">
         <p className="statement" aria-label={words.join(' ')}>
           {words.map((word, i) => <span key={i} data-word aria-hidden="true">{word} </span>)}
         </p>
+        <h2 className="title title--sm" data-reveal>Our business flow</h2>
         <ol className="chain glass" data-reveal {...glassProps}>
-          {FLOW.map((step) => <li key={step}><span className="chain__dot" />{step}</li>)}
+          {FLOW.map(([step, when]) => <li key={step}><span className="chain__dot" /><span><b>{step}</b><i>{when}</i></span></li>)}
           <li className="chain__line" aria-hidden="true"><i data-chain /></li>
         </ol>
       </div>
@@ -313,43 +334,70 @@ function About() {
   )
 }
 
-function Process() {
+function Special() {
   return (
-    <section className="section" id="process">
+    <section className="section" id="special">
       <div className="wrap">
-        <h2 className="title" data-reveal>Process</h2>
-        <div className="rail" aria-hidden="true"><i data-rail /></div>
-        <ol className="process">
-          {PROCESS.map(([name, text], i) => (
-            <li key={name} data-card><span className="process__n">{String(i + 1).padStart(2, '0')}</span><b>{name}</b><p>{text}</p></li>
+        <h2 className="title" data-reveal>Our specialities</h2>
+        <div className="specials">
+          {SPECIAL.map(([figure, name, line, icon]) => (
+            <article className={`special glass${figure ? ' special--fig' : ''}`} key={name} data-card data-tilt {...glassProps}>
+              <span className="sol__icon">{Icon[icon]}</span>
+              {figure && <span className="special__fig">{figure}</span>}
+              <h3>{name}</h3>
+              <p>{line}</p>
+            </article>
           ))}
-        </ol>
+        </div>
       </div>
     </section>
   )
 }
 
 function Contact() {
-  const [copied, setCopied] = useState(false)
-  const copy = () => {
-    try { navigator.clipboard.writeText(CONTACT.email).then(() => { setCopied(true); setTimeout(() => setCopied(false), 1500) }, () => {}) } catch { /* the address stays selectable */ }
-  }
-  const any = digits || CONTACT.email || CONTACT.booking
   return (
     <section className="section" id="contact">
       <div className="wrap">
         <div className="contact glass" data-reveal {...glassProps}>
           <h2 className="title">Let&apos;s build yours.</h2>
-          <p>Free 30-minute systems audit.</p>
+          <p className="contact__num select">{CONTACT.phone}</p>
           <div className="contact__row">
-            {digits && <a className="btn rip" href={waLink} target="_blank" rel="noopener">WhatsApp</a>}
-            {CONTACT.booking && <a className="btn btn--glass rip" href={CONTACT.booking} target="_blank" rel="noopener">Book a call</a>}
-            {CONTACT.email && <button className="btn btn--glass rip" type="button" onClick={copy}><span className="select">{copied ? 'Copied' : CONTACT.email}</span></button>}
-            {!any && <span className="chip chip--soft">Contact details coming soon</span>}
+            <a className="btn rip" href={telLink}>{Icon.call} Call</a>
+            <a className="btn btn--glass rip" href={waLink} target="_blank" rel="noopener">{Icon.wa} WhatsApp</a>
           </div>
         </div>
       </div>
     </section>
+  )
+}
+
+/* Full-screen policy page. Opens at #privacy, #terms, #refund or #support. */
+function Policy({ id }) {
+  const ref = useRef(null)
+  const policy = POLICIES[id]
+  useLayoutEffect(() => {
+    document.documentElement.style.overflow = 'hidden'
+    ref.current.scrollTop = 0
+    let tween
+    if (!reduced()) tween = gsap.fromTo(ref.current, { clipPath: 'circle(0% at 50% 100%)' }, { clipPath: 'circle(150% at 50% 100%)', duration: 0.9, ease: 'expo.out', clearProps: 'clipPath' })
+    const onKey = (event) => { if (event.key === 'Escape') window.location.hash = 'contact' }
+    window.addEventListener('keydown', onKey)
+    return () => { document.documentElement.style.overflow = ''; window.removeEventListener('keydown', onKey); if (tween) tween.kill() }
+  }, [id])
+  return (
+    <div className="all" ref={ref} role="dialog" aria-modal="true" aria-label={policy.title}>
+      <div className="wrap policy">
+        <div className="all__bar">
+          <a className="all__back glass rip" href="#contact">{Icon.back}<span>Back</span></a>
+          <span className="mono">Updated {UPDATED}</span>
+        </div>
+        <h2 className="title title--sm">{policy.title}</h2>
+        <div className="policy__body glass">
+          {policy.sections.map(([heading, text]) => <section key={heading}><h3>{heading}</h3><p>{text}</p></section>)}
+          <section><h3>Contact</h3><p>Zera Bytes · Call or WhatsApp <span className="select">{CONTACT.phone}</span></p></section>
+        </div>
+      </div>
+    </div>
   )
 }
 
@@ -363,8 +411,8 @@ function Dock() {
   }, [])
   return (
     <div className="dock glass" {...glassProps}>
-      <a className="dock__btn rip" href={waLink || '#contact'} {...(waLink ? { target: '_blank', rel: 'noopener' } : {})} aria-label="WhatsApp">{Icon.wa}</a>
-      <a className="dock__btn dock__btn--solid rip" href="#contact" aria-label="Contact">{Icon.chat}</a>
+      <a className="dock__btn rip" href={waLink} target="_blank" rel="noopener" aria-label="WhatsApp">{Icon.wa}</a>
+      <a className="dock__btn dock__btn--solid rip" href={telLink} aria-label={`Call ${CONTACT.phone}`}>{Icon.call}</a>
       {top && <a className="dock__btn rip" href="#top" aria-label="Back to top">{Icon.up}</a>}
     </div>
   )
@@ -397,7 +445,6 @@ export default function App() {
       })
       gsap.fromTo('[data-word]', { opacity: 0.28 }, { opacity: 1, stagger: 0.08, ease: 'none', scrollTrigger: { trigger: '.statement', start: 'top 80%', end: 'bottom 45%', scrub: true } })
       gsap.fromTo('[data-chain]', { scaleX: 0 }, { scaleX: 1, ease: 'none', scrollTrigger: { trigger: '.chain', start: 'top 85%', end: 'top 45%', scrub: true } })
-      gsap.fromTo('[data-rail]', { scaleX: 0 }, { scaleX: 1, ease: 'none', scrollTrigger: { trigger: '.process', start: 'top 85%', end: 'top 35%', scrub: true } })
       gsap.utils.toArray('.draw').forEach((svg) => {
         const paths = svg.querySelectorAll('path, circle, ellipse')
         paths.forEach((path) => { const len = path.getTotalLength(); path.style.strokeDasharray = len; path.style.strokeDashoffset = len })
@@ -417,12 +464,13 @@ export default function App() {
           <Clients />
           <Solutions />
           <About />
-          <Process />
+          <Special />
           <Contact />
-          <footer className="footer"><div className="wrap"><span>© {new Date().getFullYear()} Zera Bytes</span><span>Web · Automate · Core ERP</span></div></footer>
+          <footer className="footer"><div className="wrap"><span>© {new Date().getFullYear()} Zera Bytes</span><nav aria-label="Policies">{Object.entries(POLICIES).map(([id, policy]) => <a key={id} href={`#${id}`}>{policy.title}</a>)}</nav></div></footer>
         </div>
       </main>
       <Dock />
+      {POLICIES[hash.slice(1)] && <Policy id={hash.slice(1)} />}
       {hash === '#all-works' && <AllWorks filter={filter} setFilter={setFilter} onOpen={openWork} />}
       {open && <WorkModal work={open.work} origin={open.origin} onClose={() => setOpen(null)} />}
     </>

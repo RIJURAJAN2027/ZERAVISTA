@@ -1,9 +1,7 @@
 // ============ EDIT THESE BEFORE SHARING ============
-// Leave a value empty to hide that contact option.
 export const CONTACT = {
-  whatsapp: '', // digits with country code, e.g. '919876543210'
-  email: '',    // e.g. 'hello@yourdomain.com'
-  booking: '',  // e.g. a Calendly link
+  phone: '+91 93603 25702',   // shown on the page
+  whatsapp: '919360325702',   // digits with country code
 }
 // ===================================================
 
@@ -11,7 +9,7 @@ export const NAV = [
   ['Work', '#work'],
   ['Solutions', '#solutions'],
   ['About', '#about'],
-  ['Process', '#process'],
+  ['Specialities', '#special'],
 ]
 
 export const FILTERS = [
@@ -40,16 +38,24 @@ export const WORKS = [
 export const DIVISIONS = [
   { id: 'web', name: 'Zera Web', line: 'Sites and stores that sell.', points: ['Professional website', '3D website', 'Web3 commerce', 'Marketplace'] },
   { id: 'auto', name: 'Zera Automate', line: 'Workflows that run themselves.', points: ['WhatsApp and Instagram', 'Lead routing', 'Business workflow'] },
-  { id: 'erp', name: 'Zera Core ERP', line: 'Books, stock and tax in order.', points: ['GST and e-way bills', 'Live inventory', 'Owner dashboard'] },
+  { id: 'erp', name: 'Zera Core', line: 'Books, stock and tax in order.', points: ['GST and e-way bills', 'Live inventory', 'Owner dashboard'] },
 ]
 
-export const FLOW = ['Order', 'WhatsApp update', 'Stock', 'GST invoice', 'Report']
+// Our business flow: [step, timing]
+export const FLOW = [
+  ['Order', 'You tell us what you need'],
+  ['Quotation', 'On WhatsApp within 24 hours'],
+  ['Website creation', '4 to 10 days'],
+  ['Final output', 'Your site goes live'],
+]
 
-export const PROCESS = [
-  ['Audit', 'We map your tools and manual work.'],
-  ['Plan', 'A phased plan with a target for each phase.'],
-  ['Build', 'Two-week sprints on a live preview.'],
-  ['Support', 'Monitoring, fixes and the next phase.'],
+// Our specialities: [big figure or '', title, line, icon]
+export const SPECIAL = [
+  ['1 year', 'Free support', 'Included with every project.', 'support'],
+  ['24 hrs', 'Quotation', 'Sent to you on WhatsApp.', 'quote'],
+  ['4–10 days', 'Website delivery', 'From order to final output.', 'fast'],
+  ['', 'We study your company', 'The solution is built around how your business works.', 'study'],
+  ['', 'What you imagine, live', 'Describe it, and we build it and put it online.', 'spark'],
 ]
 
 // Shown in the moving "Our clients" strip.
