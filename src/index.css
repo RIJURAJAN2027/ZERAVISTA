@@ -544,13 +544,20 @@ html.lenis.lenis-smooth { scroll-behavior: auto !important; }
   .dock__menu-in > a[href='#faq'] { display: none; }
   .hero { padding-top: calc(34px + env(safe-area-inset-top, 0px)); }
   .statement { padding: 60px 22px 70px; }
+  /* The tagline: small and in the plain font on phones */
+  .cta__tag { font-family: var(--sans); font-style: normal; font-size: 15px; line-height: 1.4; letter-spacing: 0.01em; opacity: 0.72; }
 
-  /* What we build: a slow strip of words and screens, in place of the client cards */
-  .mstrip { overflow: hidden; padding: 24px 0; border-block: 1px solid var(--line); -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent); mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent); }
-  .mstrip__track { display: flex; align-items: center; gap: 30px; width: max-content; animation: slide 40s linear infinite; }
-  .mstrip__item { display: inline-flex; align-items: center; gap: 14px; }
-  .mstrip__item img { width: 84px; height: 50px; border-radius: 999px; object-fit: cover; object-position: 50% 30%; box-shadow: 0 10px 22px -12px rgba(0, 0, 0, 0.45); }
-  .mstrip__item i { font-family: var(--serif); font-style: italic; font-size: 42px; line-height: 1.05; letter-spacing: -0.01em; white-space: nowrap; }
+  /* One year of free support: one small box */
+  .support { margin: 0 16px 70px; padding: 26px 16px 16px; border-radius: 28px; background: #fff; border: 1px solid rgba(0, 0, 0, 0.06); box-shadow: 0 24px 50px -32px rgba(0, 0, 0, 0.35); }
+  .support .head { gap: 8px; margin-bottom: 18px; padding-inline: 4px; }
+  .support .h2 { font-size: 24px; line-height: 1.2; }
+  .support .head .t-large { font-size: 15px; }
+  .support__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .support__card { min-height: 0; padding: 14px 12px; gap: 8px; border-radius: 16px; }
+  .support__ic { margin-bottom: 0; }
+  .support__ic svg { width: 20px; height: 20px; }
+  .support__card b { font-size: 15px; line-height: 1.25; letter-spacing: -0.01em; text-wrap: balance; }
+  .support__card .t-small { display: none; }
 
   /* Business flow: the four steps, nothing more */
   .flow { padding: 30px 20px 56px; }
@@ -575,15 +582,16 @@ html.lenis.lenis-smooth { scroll-behavior: auto !important; }
   .footer :focus-visible { outline-color: #fff; }
   .footer__mini { display: grid; justify-items: center; gap: 10px; text-align: center; padding-top: 36px; border-top: 1px solid rgba(255, 255, 255, 0.14); }
   .footer__mini .logo { color: #fff; font-size: 22px; }
-  .footer__mini-tag { font-family: var(--serif); font-style: italic; font-size: 28px; line-height: 1.1; }
+  .footer__mini-tag { font-size: 15px; line-height: 1.4; letter-spacing: 0.01em; color: rgba(255, 255, 255, 0.72); }
   .footer__mini-line { font-size: 15px; color: rgba(255, 255, 255, 0.7); }
   .footer__mini-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 20px; max-width: 330px; margin-top: 12px; font-size: 15px; color: rgba(255, 255, 255, 0.86); }
   .footer__mini-links button { font-size: inherit; }
   .footer__mini-copy { margin-top: 10px; font-size: 13px; color: rgba(255, 255, 255, 0.5); }
 }
-@media (max-width: 760px) and (prefers-reduced-motion: reduce) {
-  .mstrip { -webkit-mask-image: none; mask-image: none; }
-  .mstrip__track { animation: none; width: auto; flex-wrap: wrap; justify-content: center; gap: 14px 22px; padding-inline: 20px; }
-  .mstrip__item[aria-hidden] { display: none; }
-  .mstrip__item i { font-size: 30px; }
+/* Phones tall enough to stack: specialities pile up like cards, services slide over each other. */
+@media (max-width: 760px) and (min-height: 640px) {
+  .spec__card { position: sticky; top: calc(70px + var(--i, 0) * 12px); }
+  /* a covered card darkens under this veil (opaque, so the cards below never show through) */
+  .spec__card::after { content: ''; position: absolute; inset: 0; border-radius: inherit; background: #000; opacity: var(--dim, 0); pointer-events: none; }
+  .svc { position: sticky; top: 0; }
 }

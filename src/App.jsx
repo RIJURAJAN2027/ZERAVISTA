@@ -200,23 +200,6 @@ function Clients() {
   )
 }
 
-/* ---------- phones: what we build, a slow strip of words and screens ---------- */
-const STRIP = [['Websites', 'zerafinance-1'], ['Online stores', 'kripkart-1'], ['Mobile apps', 'jula-m'], ['3D pages', 'auralis'], ['Software', 'apex'], ['Automation', 'drift'], ['ERP', 'ledgerly']]
-function Strip() {
-  return (
-    <section className="mstrip m-only" aria-label="What we build">
-      <div className="mstrip__track">
-        {[...STRIP, ...STRIP].map(([word, shot], i) => (
-          <span className="mstrip__item" key={i} aria-hidden={i >= STRIP.length || undefined}>
-            <img src={img(shot)} alt="" loading="lazy" width="84" height="50" />
-            <i>{word}</i>
-          </span>
-        ))}
-      </div>
-    </section>
-  )
-}
-
 /* ---------- one team ---------- */
 const FLOATS = ['kripkart-1', 'apex', 'jula-m', 'oakloom', 'zerafinance-1', 'kripkart-m']
 function OneTeam() {
@@ -379,7 +362,7 @@ function Specials() {
           <h2 className="h-st">We Help Growing Businesses Design, Build, Launch And Automate.</h2>
         </div>
         {SPECIALS.map(([title, text, kind], i) => (
-          <article className={`spec__card${i % 2 ? ' spec__card--dark' : ''}`} key={kind}>
+          <article className={`spec__card${i % 2 ? ' spec__card--dark' : ''}`} key={kind} style={{ '--i': i }}>
             <h3 className="h2">{lines(title)}</h3>
             <p className="t-body">{text}</p>
             <Illo kind={kind} />
@@ -814,6 +797,17 @@ export default function App() {
   }, [])
   // Headings print in, letter by letter. Runs before paint so nothing flashes.
   useLayoutEffect(() => startTitlePrint(root.current), [])
+  // Phones: the hero arrives. The badge drops in, the dog rises under the headline, the buttons and dock follow.
+  useLayoutEffect(() => {
+    if (reduced() || !window.matchMedia('(max-width: 760px)').matches) return undefined
+    const done = { clearProps: 'transform,opacity,visibility' }
+    const intro = gsap.timeline({ defaults: { ease: 'power3.out' } })
+      .from('.hero__badge', { y: -14, autoAlpha: 0, duration: 0.8, ...done }, 0.1)
+      .from('.hero__film', { y: 90, scale: 0.9, autoAlpha: 0, duration: 1.5, ...done }, 0.3)
+      .from('.hero__btns > *', { y: 20, autoAlpha: 0, duration: 0.8, stagger: 0.08, ...done }, 0.75)
+      .from('.dock__bar', { y: 90, autoAlpha: 0, duration: 1, ease: 'expo.out', ...done }, 1)
+    return () => intro.revert()
+  }, [])
 
   // Scroll motion.
   useEffect(() => {
@@ -831,6 +825,31 @@ export default function App() {
         gsap.timeline({ scrollTrigger: { trigger: '.clients', start: 'top bottom', end: 'top 12%', scrub: true } })
           .to('.hero__copy', { autoAlpha: 0, y: -60, filter: 'blur(6px)', ease: 'none', duration: 0.6 }, 0)
           .to('.hero__film', { autoAlpha: 0, scale: 1.04, filter: 'blur(14px)', ease: 'none', duration: 1 }, 0)
+      })
+      // Phones: more motion while scrolling. Transforms and opacity only, so it stays smooth.
+      mm.add('(max-width: 760px) and (min-height: 640px)', () => {
+        // Specialities stack up; each card shrinks and dims a little as the next one covers it.
+        const specs = gsap.utils.toArray('.spec__card')
+        specs.forEach((card, i) => {
+          const next = specs[i + 1]
+          if (!next) return
+          gsap.to(card, { scale: 0.9, '--dim': 0.55, transformOrigin: '50% 0%', ease: 'none', scrollTrigger: { trigger: next, start: 'top bottom', end: () => `top ${70 + (i + 1) * 12}px`, scrub: true } })
+        })
+      })
+      mm.add('(max-width: 760px)', () => {
+        // Featured work: each screenshot slides up into its frame and the phone tilts up into place.
+        gsap.utils.toArray('.case').forEach((card) => {
+          const range = () => ({ trigger: card, start: 'top bottom', end: 'top 25%', scrub: true })
+          gsap.fromTo(card.querySelector('.case__media > img'), { y: 60 }, { y: 0, ease: 'none', scrollTrigger: range() })
+          const phone = card.querySelector('.case__phone')
+          if (phone) gsap.fromTo(phone, { yPercent: 35, rotate: 7 }, { yPercent: 0, rotate: 0, ease: 'none', scrollTrigger: range() })
+        })
+        // Business flow: the four steps slide in one after another and their numbers pop.
+        gsap.timeline({ scrollTrigger: { trigger: '.flow__steps', start: 'top 86%', once: true } })
+          .from('.flow__steps li', { x: -40, autoAlpha: 0, duration: 0.7, ease: 'power3.out', stagger: 0.12 })
+          .from('.flow__steps b', { scale: 0, duration: 0.5, ease: 'back.out(2.4)', stagger: 0.12 }, 0.15)
+        // Footer: its lines rise in one after another.
+        gsap.from('.footer__mini > *', { y: 16, autoAlpha: 0, duration: 0.7, ease: 'power3.out', stagger: 0.06, scrollTrigger: { trigger: '.footer__mini', start: 'top 92%', once: true } })
       })
       // Gallery pictures sharpen in from a soft blur, column by column, then catch a light sweep.
       const items = gsap.utils.toArray('.gallery__item')
@@ -862,7 +881,6 @@ export default function App() {
           <Hero waLink={waLink} telLink={telLink} />
           <Clients />
         </div>
-        <Strip />
         <OneTeam />
         <Works onOpen={openWork} />
         <Statement />

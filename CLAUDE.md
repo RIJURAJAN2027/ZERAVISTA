@@ -58,7 +58,7 @@ npm run build   # writes dist/
 - A premium look with few words. Let images and motion carry the page.
 - The dog hero on a white background. The dog follows the pointer; on phones it looks around on its own.
 - Nothing that looks AI-made: no sparkle icons, no gradient text, no invented stats or reviews, plain English.
-- Fonts: Inter Tight, plus Instrument Serif italic for the tagline.
+- Fonts: Inter Tight, plus Instrument Serif italic for the tagline on PC. On phones the tagline is small Inter Tight.
 - Concept projects stay labelled "Concept". Real client sites are labelled "Live" and link out.
 - Short, plain explanations. Push to `main` only when the owner asks.
 
@@ -94,10 +94,20 @@ The owner wants a shorter phone page and the PC version left exactly as it is.
   - The FAQ section and its menu link.
   - The PC footer.
 - **Phone only:**
-  - A slow strip of what we build (words and small screens) after the hero.
+  - Nothing runs under the dog: the owner removed the moving text strip that was there.
+  - "We build your dream" is small and in Inter Tight (not the serif) wherever it shows.
+  - "One Year Of Free Support" is one small box with four small tiles.
   - The business flow as four steps.
   - An FAQ button in the dock that opens its own panel.
   - A short, black, centred footer.
+- **Phone motion:**
+  - The hero arrives: the badge drops in, the dog rises, then the buttons and the dock.
+  - Specialities stack like cards; a covered card shrinks and darkens.
+  - Service bands slide over each other.
+  - Featured-work screens slide up into their frames.
+  - Flow steps slide in with their numbers popping.
+  - Footer lines rise in.
+  - The stacking needs a screen at least 640px tall.
 - **How it is built:** `.m-only` shows an element on phones only and `.d-only` hides it on phones. The phone rules are at the end of `src/index.css`.
 - **After any phone change:** compare full-page PC screenshots before and after to prove PC did not move.
 
