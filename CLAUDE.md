@@ -14,7 +14,10 @@ It is a single-page site built with React 19, Vite 6 and GSAP, on a light theme.
   - `claude/jolly-fermi-nqvth4` is the repo's default branch and where work happens.
   - `main` is what GitHub Pages deploys.
   - When the owner asks to publish, fast-forward `main` to the working branch.
-- **Deploy:** `.github/workflows/pages.yml` builds and deploys on every push to `main`. The build passes. The deploy step fails until GitHub Pages is switched on: repo Settings → Pages → Source: **GitHub Actions**. Once that is on, re-run the latest workflow.
+- **Deploy:** `.github/workflows/pages.yml` builds and deploys on every push to `main`. The live site is https://jeromjojuk-jkj.github.io/zerabytes/.
+  - Pages is switched on, but its Source is "Deploy from a branch". That publishes the raw source files, which show a blank page, and it races the real deploy on every push to `main`.
+  - Fix: repo Settings → Pages → Source: **GitHub Actions**.
+  - Until then, after each push to `main`, check that "Deploy to GitHub Pages" finished after "pages build and deployment". If it didn't, run "Deploy to GitHub Pages" again.
 - **Preview:** https://claude.ai/artifact/DQVZ1AdpdB4s5sQQo7Rk4R is private to the owner's original Claude account.
 
 ## Run it
