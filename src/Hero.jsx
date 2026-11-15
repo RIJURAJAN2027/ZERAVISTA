@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import gazeFrames from './gaze-frames.json'
 import { BADGES, BRAND } from './data.js'
+import { Roll } from './bits.jsx'
 
 const BASE = import.meta.env.BASE_URL
 
@@ -18,19 +19,31 @@ function poseToTime(pose) {
 }
 const FORWARD_TIME = poseToTime(0)
 
-const Icon = {
-  spark: <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.500 2.500M15.500 15.500 18 18M18 6l-2.500 2.500M8.500 15.500 6 18" fill="none" stroke="currentColor" strokeWidth="1.700" strokeLinecap="round" /></svg>,
+const svg = (d) => <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.700" strokeLinecap="round" strokeLinejoin="round"><path d={d} /></svg>
+const BADGE_ICONS = [
+  svg('M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM12 7v5l3.500 2'),                               // clock
+  svg('M5 5h14a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zM4 10h16M8 3v4M16 3v4'), // calendar
+  svg('M12 3l8 3v6c0 5-3.400 8.300-8 9.500C7.400 20.300 4 17 4 12V6l8-3z'),                      // shield
+]
+
+// Rotating promise above the headline. Kept apart so the hero itself never re-renders.
+function Badge() {
+  const [i, setI] = useState(0)
+  useEffect(() => {
+    const id = setInterval(() => setI((b) => (b + 1) % BADGES.length), 2800)
+    return () => clearInterval(id)
+  }, [])
+  return (
+    <div className="pill hero__badge" aria-live="polite">
+      <span className="pill__ic" key={`i${i}`}>{BADGE_ICONS[i % BADGE_ICONS.length]}</span>
+      <span key={i} className="hero__badge-text">{BADGES[i]}</span>
+    </div>
+  )
 }
 
 export default function Hero({ waLink, telLink }) {
   const videoRef = useRef(null)
   const [ready, setReady] = useState(false)
-  const [badge, setBadge] = useState(0)
-
-  useEffect(() => {
-    const id = setInterval(() => setBadge((b) => (b + 1) % BADGES.length), 2800)
-    return () => clearInterval(id)
-  }, [])
 
   // The dog film is seeked, never played: the pointer decides which frame shows.
   useEffect(() => {
@@ -81,21 +94,20 @@ export default function Hero({ waLink, telLink }) {
   return (
     <section className="hero" id="top">
       <div className="hero__copy">
-        <div className="pill hero__badge" aria-live="polite">
-          <span className="pill__ic">{Icon.spark}</span>
-          <span key={badge} className="hero__badge-text">{BADGES[badge]}</span>
-        </div>
+        <Badge />
         <h1 className="h1">Product Design &amp; Dev Agency For <br className="br-d" />B2B SaaS Companies</h1>
         <p className="hero__text">We design and build websites, software, automation and ERP for growing businesses. Tell us what you imagine, and we make it live.</p>
         <p className="hero__tag"><img src={`${BASE}logo.png`} alt="" width="30" height="30" /><span>{BRAND.tagline}</span></p>
         <div className="hero__btns">
-          <a className="btn" href={telLink}>Book a Free Call</a>
-          <a className="btn btn--light" href={waLink} target="_blank" rel="noopener">Chat on WhatsApp</a>
+          <a className="btn" href={telLink}><Roll>Book a Free Call</Roll></a>
+          <a className="btn btn--light" href={waLink} target="_blank" rel="noopener"><Roll>Chat on WhatsApp</Roll></a>
         </div>
       </div>
       <div className="hero__dog" aria-hidden="true">
-        <img src={`${BASE}dog-white.jpg`} alt="" style={{ opacity: ready ? 0 : 1 }} />
-        <video ref={videoRef} muted playsInline preload="auto" style={{ opacity: ready ? 1 : 0 }} />
+        <div className="hero__film">
+          <img src={`${BASE}dog-white.jpg`} alt="" style={{ opacity: ready ? 0 : 1 }} />
+          <video ref={videoRef} muted playsInline preload="auto" style={{ opacity: ready ? 1 : 0 }} />
+        </div>
       </div>
     </section>
   )
