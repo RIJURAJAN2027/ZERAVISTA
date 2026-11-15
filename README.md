@@ -1,33 +1,37 @@
-# Zera Bytes website
+# Zera Studio website
 
-The company website for **Zera Bytes**. It opens on a full-screen intro where the dog looks toward the pointer, then scrolls into a filterable Works gallery, Solutions, About, Process and Contact, in blue liquid glass.
+The company website for **Zera Studio**: *We build your dream.*
 
-Built with Vite, React, Tailwind and GSAP.
+One page: a hero with the pointer-following dog on a white backdrop, clients, a works carousel, specialities, automation, business flow, featured live work, services, gallery, support, FAQ and contact, plus Privacy, Terms, Refund and Support policy pages (`#privacy`, `#terms`, `#refund`, `#support`).
+
+Built with Vite, React and GSAP.
 
 ## Run it
 
 ```bash
 npm install
-npm run assets
 npm run dev
 ```
 
-`npm run assets` downloads the intro video and poster and checks them against the hashes in `assets.json`. `npm run build` writes the finished site to `dist/`, which any static host can serve.
+`npm run build` writes the finished site to `dist/`. Pushing to `main` deploys it to GitHub Pages through `.github/workflows/pages.yml`.
 
 ## Where to edit
 
 ```
-src/data.js            Phone number, menu, work filters, projects, solutions, business flow, specialities, clients
-src/policies.js        Privacy, Terms, Refund and Support policy text
-src/App.jsx            Sections, glass navigation, project popup and scroll animations
-src/Hero.jsx           The intro screen (headline, paragraph, bottom labels)
-src/index.css          Colours (in :root), liquid glass and all section styles
-src/gaze-frames.json   Gaze calibration for the supplied video; a different clip needs a new table
-public/work/           Project images shown in the Works gallery
-tools/render-work-screens.cjs   Script that drew the nine concept screens (needs Playwright)
+src/data.js       Phone, WhatsApp, email, address, social links, clients, works, specialities, business flow, services, FAQ
+src/policies.js   Policy text
+src/App.jsx       Sections and interactions
+src/Hero.jsx      Hero and the dog motion
+src/index.css     Styles
+public/work/      Work images (real client screenshots and concept screens)
 ```
 
-## Before sharing with clients
+## Before sharing
 
-- The policy pages in `src/policies.js` are starting templates. Have them reviewed, and add your registered business name and address.
-- The nine projects in the gallery are concept designs and are labelled "Concept". To add a real project, put its screenshot in `public/work/` and add an entry to `WORKS` in `src/data.js`.
+- Add your email, office address and social links in `src/data.js`. Anything left empty is not shown.
+- The policy pages are starting templates. Have them reviewed.
+
+## Tools
+
+- `tools/make-white-dog.py` rebuilds `public/dog-white.mp4` and `src/gaze-frames.json` from the original film. Run `npm run assets` first to download it into `source/`.
+- `tools/renders/` holds the sources of the concept screens (3D product pages, dashboards, automation, invoicing). Serve that folder with Three.js 0.170 in `node_modules`, then run `node shoot.cjs <page>`.
