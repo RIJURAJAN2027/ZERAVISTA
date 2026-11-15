@@ -67,7 +67,7 @@ The motion follows the reference site's behaviour, written in our own code with 
 - Big headings print in letter by letter: blur, then a colour wave, then the final colour.
 - Bracket cursor `[ ]` on desktop. It hides over links, buttons and the works wheel.
 - Button labels roll up on hover (`Roll` in `src/bits.jsx`).
-- The hero stays pinned and fades to white as the client cards rise over it.
+- The hero stays pinned and fades to white as the client cards rise over it (PC only).
 - Works sit on an endless wheel: drag, swipe, sideways trackpad, arrow buttons or Tab.
 - Featured work is a deck of cards that peel away on scroll (desktop, 1000px+ wide).
 - The menu grows out of the dock, with a scrambled Menu/Close label and a blurred backdrop.
@@ -77,6 +77,26 @@ The motion follows the reference site's behaviour, written in our own code with 
 Two rules learned the hard way:
 - The print effect wraps letters in `span.pw` and `span.pc`. Never style headings with a bare `h2 span` selector; use a class (two-line titles use `.ln`).
 - Card focus on the wheel reacts to keyboard focus only (`:focus-visible`), or it fights a mouse drag.
+
+## Phone layout (760px wide and below)
+
+The owner wants a shorter phone page and the PC version left exactly as it is.
+
+- **Hidden on phones:**
+  - Top bar and the hero's "We build your dream" row.
+  - Client cards and the hero fade.
+  - Statement chips and the stats row.
+  - Founder and promise cards ("The People And Promises").
+  - The Brand Identity service.
+  - The FAQ section and its menu link.
+  - The PC footer.
+- **Phone only:**
+  - A slow strip of what we build (words and small screens) after the hero.
+  - The business flow as four steps.
+  - An FAQ button in the dock that opens its own panel.
+  - A short, black, centred footer.
+- **How it is built:** `.m-only` shows an element on phones only and `.d-only` hides it on phones. The phone rules are at the end of `src/index.css`.
+- **After any phone change:** compare full-page PC screenshots before and after to prove PC did not move.
 
 ## Files
 

@@ -64,20 +64,45 @@ function TopBar() {
   )
 }
 
+// A panel that grows up out of the dock; its items rise in after it.
+function useGrow(ref, on) {
+  const mounted = useRef(false)
+  useLayoutEffect(() => {
+    const panel = ref.current
+    const items = panel.querySelectorAll('[data-mi]')
+    if (!mounted.current) { mounted.current = true; gsap.set(panel, { height: 0, autoAlpha: 0 }); return }
+    gsap.killTweensOf([panel, ...items])
+    if (on) {
+      gsap.set(panel, { height: 'auto', autoAlpha: 1 })
+      const height = panel.offsetHeight
+      if (!reduced()) {
+        gsap.fromTo(panel, { height: 0, autoAlpha: 0 }, { height, autoAlpha: 1, duration: 0.5, ease: 'power3.out', onComplete: () => gsap.set(panel, { height: 'auto' }) })
+        gsap.fromTo(items, { autoAlpha: 0, y: 10 }, { autoAlpha: 1, y: 0, duration: 0.4, stagger: 0.04, delay: 0.12, ease: 'power2.out' })
+      }
+      return
+    }
+    gsap.to(panel, { height: 0, autoAlpha: 0, duration: reduced() ? 0 : 0.35, ease: 'power2.inOut' })
+  }, [on])
+}
+
 function Dock() {
   const [pct, setPct] = useState(0)
   const [light, setLight] = useState(false)
-  const [open, setOpen] = useState(false)
+  const [panel, setPanel] = useState(null)   // 'menu', 'faq' (phones only) or null
+  const [question, setQuestion] = useState(-1)
   const menu = useRef(null)
+  const faq = useRef(null)
   const label = useRef(null)
-  const mounted = useRef(false)
+  const open = panel !== null
   useEffect(() => {
+    const phone = window.matchMedia('(max-width: 760px)')
     const update = () => {
       const max = document.documentElement.scrollHeight - window.innerHeight
       setPct(max > 0 ? Math.min(100, Math.round((window.scrollY / max) * 100)) : 0)
       const y = window.innerHeight - 46
       let dark = false
-      document.querySelectorAll('[data-dark]').forEach((el) => { const r = el.getBoundingClientRect(); if (r.top <= y && r.bottom >= y) dark = true })
+      // On phones the footer is black as well.
+      document.querySelectorAll(phone.matches ? '[data-dark], .footer' : '[data-dark]').forEach((el) => { const r = el.getBoundingClientRect(); if (r.top <= y && r.bottom >= y) dark = true })
       setLight(dark)
     }
     update()
@@ -85,9 +110,15 @@ function Dock() {
     window.addEventListener('resize', update)
     return () => { window.removeEventListener('scroll', update); window.removeEventListener('resize', update) }
   }, [])
+  // The footer's FAQ link (phones) opens the questions panel.
+  useEffect(() => {
+    const onFaq = () => setPanel('faq')
+    window.addEventListener('zera:faq', onFaq)
+    return () => window.removeEventListener('zera:faq', onFaq)
+  }, [])
   useEffect(() => {
     if (!open) return
-    const onKey = (event) => { if (event.key === 'Escape') setOpen(false) }
+    const onKey = (event) => { if (event.key === 'Escape') setPanel(null) }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [open])
@@ -106,42 +137,49 @@ function Dock() {
     }, 20)
     return () => { clearInterval(id); el.textContent = next }
   }, [open])
-  // The panel grows up out of the bar; its items rise in after it.
+  // The page behind an open panel stays still.
   useLayoutEffect(() => {
-    const panel = menu.current
-    const items = panel.querySelectorAll('[data-mi]')
-    if (!mounted.current) { mounted.current = true; gsap.set(panel, { height: 0, autoAlpha: 0 }); return }
-    gsap.killTweensOf([panel, ...items])
-    if (open) {
-      lockScroll()
-      gsap.set(panel, { height: 'auto', autoAlpha: 1 })
-      const height = panel.offsetHeight
-      if (!reduced()) {
-        gsap.fromTo(panel, { height: 0, autoAlpha: 0 }, { height, autoAlpha: 1, duration: 0.5, ease: 'power3.out', onComplete: () => gsap.set(panel, { height: 'auto' }) })
-        gsap.fromTo(items, { autoAlpha: 0, y: 10 }, { autoAlpha: 1, y: 0, duration: 0.4, stagger: 0.04, delay: 0.12, ease: 'power2.out' })
-      }
-      return () => unlockScroll()
-    }
-    gsap.to(panel, { height: 0, autoAlpha: 0, duration: reduced() ? 0 : 0.35, ease: 'power2.inOut' })
+    if (!open) return undefined
+    lockScroll()
+    return () => unlockScroll()
   }, [open])
+  useGrow(menu, panel === 'menu')
+  useGrow(faq, panel === 'faq')
   return (
     <>
-      <div className={`menu-backdrop${open ? ' is-on' : ''}`} onClick={() => setOpen(false)} aria-hidden="true" />
+      <div className={`menu-backdrop${open ? ' is-on' : ''}`} onClick={() => setPanel(null)} aria-hidden="true" />
       <div className={`dock${light && !open ? ' is-light' : ''}`}>
-        <nav className="dock__menu" aria-label="Menu" ref={menu} inert={!open} data-lenis-prevent>
+        <nav className="dock__menu" aria-label="Menu" ref={menu} inert={panel !== 'menu'} data-lenis-prevent>
           <div className="dock__menu-in">
             <span className="cap" data-mi>Menu</span>
-            {NAV.map(([text, href]) => <a key={href} href={href} data-mi onClick={() => setOpen(false)}><Roll>{text}</Roll><span>{I.arrow}</span></a>)}
+            {NAV.map(([text, href]) => <a key={href} href={href} data-mi onClick={() => setPanel(null)}><Roll>{text}</Roll><span>{I.arrow}</span></a>)}
             <div className="dock__contact" data-mi>
               <a className="btn btn--sm" href={telLink}>{I.phone} <Roll>Call</Roll></a>
               <a className="btn btn--sm btn--light" href={waLink} target="_blank" rel="noopener">{I.wa} <Roll>WhatsApp</Roll></a>
             </div>
           </div>
         </nav>
+        {/* Phones: the questions live in their own panel instead of a page section. */}
+        <div className="dock__menu dock__faq m-only" ref={faq} inert={panel !== 'faq'} data-lenis-prevent role="region" aria-label="Frequently asked questions">
+          <div className="dock__faq-in">
+            <span className="cap" data-mi>FAQ</span>
+            {FAQ.map(([q, a], i) => (
+              <div className={`faq__item${question === i ? ' is-open' : ''}`} key={q} data-mi>
+                <button type="button" aria-expanded={question === i} onClick={() => setQuestion(question === i ? -1 : i)}><span>{q}</span><span className="faq__plus">{I.plus}</span></button>
+                <div className="faq__answer"><p className="t-body">{a}</p></div>
+              </div>
+            ))}
+            <div className="dock__contact" data-mi>
+              <a className="btn btn--sm" href={telLink}>{I.phone} Call</a>
+              <a className="btn btn--sm btn--light" href={waLink} target="_blank" rel="noopener">{I.wa} WhatsApp</a>
+            </div>
+          </div>
+        </div>
         <div className="dock__bar">
-          <a className="dock__logo" href="#top" onClick={() => setOpen(false)} aria-label="Back to top"><img src={`${BASE}logo.png`} alt="" width="30" height="30" /></a>
+          <a className="dock__logo" href="#top" onClick={() => setPanel(null)} aria-label="Back to top"><img src={`${BASE}logo.png`} alt="" width="30" height="30" /></a>
           <span className="dock__pct">{pct}%</span>
-          <button className="dock__btn" type="button" aria-expanded={open} aria-label={open ? 'Close menu' : 'Open menu'} onClick={() => setOpen(!open)}>
+          <button className="dock__btn dock__faq-btn m-only" type="button" aria-expanded={panel === 'faq'} aria-label={panel === 'faq' ? 'Close questions' : 'Questions'} onClick={() => setPanel(panel === 'faq' ? null : 'faq')}>FAQ</button>
+          <button className="dock__btn" type="button" aria-expanded={open} aria-label={open ? 'Close menu' : 'Open menu'} onClick={() => setPanel(open ? null : 'menu')}>
             <span className="dock__burger" aria-hidden="true"><i /><i /></span><span className="dock__label" ref={label} aria-hidden="true" />
           </button>
         </div>
@@ -158,6 +196,23 @@ function Clients() {
         {CLIENTS.map((name) => <div className="clients__card" key={name} data-reveal>{name}</div>)}
       </div>
       <p className="t-large center">Our clients</p>
+    </section>
+  )
+}
+
+/* ---------- phones: what we build, a slow strip of words and screens ---------- */
+const STRIP = [['Websites', 'zerafinance-1'], ['Online stores', 'kripkart-1'], ['Mobile apps', 'jula-m'], ['3D pages', 'auralis'], ['Software', 'apex'], ['Automation', 'drift'], ['ERP', 'ledgerly']]
+function Strip() {
+  return (
+    <section className="mstrip m-only" aria-label="What we build">
+      <div className="mstrip__track">
+        {[...STRIP, ...STRIP].map(([word, shot], i) => (
+          <span className="mstrip__item" key={i} aria-hidden={i >= STRIP.length || undefined}>
+            <img src={img(shot)} alt="" loading="lazy" width="84" height="50" />
+            <i>{word}</i>
+          </span>
+        ))}
+      </div>
     </section>
   )
 }
@@ -377,6 +432,9 @@ function Flow() {
         <h2 className="h2">Our Business Flow</h2>
         <p className="t-large" data-reveal>Four steps from your first message to a live website.</p>
       </div>
+      <ol className="flow__steps m-only">
+        {FLOW.map(([name], i) => <li key={name}><b>{i + 1}</b>{name}</li>)}
+      </ol>
       <div className="flow__panel" data-reveal>
         <div className="flow__tabs" role="tablist" aria-label="Business flow steps">
           {FLOW.map(([name], i) => <button key={name} type="button" role="tab" aria-selected={tab === i} className="flow__tab" onClick={() => { setTab(i); setAuto(false) }}><b>{i + 1}</b>{name}</button>)}
@@ -515,7 +573,7 @@ function Services({ onOpen }) {
   return (
     <section className="svcs" id="services">
       {SERVICES.map(([title, bullet, text, color, shots], i) => (
-        <article className="svc" key={title} style={{ '--c': color }} data-dark>
+        <article className={`svc${title.startsWith('Brand') ? ' d-only' : ''}`} key={title} style={{ '--c': color }} data-dark>
           <div className="svc__in">
             <div className="svc__head"><h2 className="h-st">{lines(title)}</h2><span className="h-st svc__no">/{String(i + 1).padStart(2, '0')}</span></div>
             <div className="svc__panel">
@@ -644,6 +702,22 @@ function Footer() {
         </div>
       </div>
       {CONTACT.address && <div className="footer__loc"><span className="cap">Our location</span><p className="t-small">{CONTACT.address}</p></div>}
+      <div className="footer__mini m-only">
+        <Logo />
+        <p className="footer__mini-tag">{BRAND.tagline}</p>
+        <p className="footer__mini-line">Quotation in 24 hours. Websites in 4 to 10 days.</p>
+        {CONTACT.email && <p className="footer__mini-line select">{CONTACT.email}</p>}
+        {CONTACT.address && <p className="footer__mini-line">{CONTACT.address}</p>}
+        <nav className="footer__mini-links" aria-label="Links">
+          <a href="#work">Work</a>
+          <a href="#services">Services</a>
+          <button type="button" onClick={() => window.dispatchEvent(new Event('zera:faq'))}>FAQ</button>
+          <a href="#contact">Contact</a>
+          {[['privacy', 'Privacy'], ['terms', 'Terms'], ['refund', 'Refunds'], ['support', 'Support']].map(([id, text]) => POLICIES[id] && <a key={id} href={`#${id}`}>{text}</a>)}
+          {socials.map(([name, url]) => <a key={name} href={url} target="_blank" rel="noopener">{name}</a>)}
+        </nav>
+        <p className="footer__mini-copy">© {new Date().getFullYear()} Zera Studio</p>
+      </div>
       <div className="footer__bar">
         <span>© {new Date().getFullYear()}, Zera Studio | All Rights Reserved.</span>
         <nav aria-label="Policies">{['terms', 'privacy', 'refund'].map((id) => <a key={id} href={`#${id}`}><Roll>{POLICIES[id].title}</Roll></a>)}</nav>
@@ -745,15 +819,19 @@ export default function App() {
   useEffect(() => {
     if (reduced()) return
     let galleryWatch = null
+    const mm = gsap.matchMedia(root.current)
     const context = gsap.context(() => {
       ScrollTrigger.batch('[data-reveal]', { start: 'top 92%', once: true, onEnter: (batch) => gsap.from(batch, { y: 44, duration: 0.9, ease: 'expo.out', stagger: 0.07, clearProps: 'transform' }) })
       gsap.utils.toArray('[data-float]').forEach((el) => {
         gsap.fromTo(el, { y: -Number(el.dataset.float) }, { y: Number(el.dataset.float), ease: 'none', scrollTrigger: { trigger: el.parentElement, start: 'top bottom', end: 'bottom top', scrub: true } })
       })
       // The hero stays pinned and dissolves into a white haze while the client cards rise over it.
-      gsap.timeline({ scrollTrigger: { trigger: '.clients', start: 'top bottom', end: 'top 12%', scrub: true } })
-        .to('.hero__copy', { autoAlpha: 0, y: -60, filter: 'blur(6px)', ease: 'none', duration: 0.6 }, 0)
-        .to('.hero__film', { autoAlpha: 0, scale: 1.04, filter: 'blur(14px)', ease: 'none', duration: 1 }, 0)
+      // Phones have no client cards, so the hero simply scrolls away there.
+      mm.add('(min-width: 761px)', () => {
+        gsap.timeline({ scrollTrigger: { trigger: '.clients', start: 'top bottom', end: 'top 12%', scrub: true } })
+          .to('.hero__copy', { autoAlpha: 0, y: -60, filter: 'blur(6px)', ease: 'none', duration: 0.6 }, 0)
+          .to('.hero__film', { autoAlpha: 0, scale: 1.04, filter: 'blur(14px)', ease: 'none', duration: 1 }, 0)
+      })
       // Gallery pictures sharpen in from a soft blur, column by column, then catch a light sweep.
       const items = gsap.utils.toArray('.gallery__item')
       const columns = window.innerWidth >= 1000 ? 3 : 2
@@ -773,7 +851,7 @@ export default function App() {
     const refresh = () => ScrollTrigger.refresh()
     window.addEventListener('load', refresh)
     document.fonts?.ready.then(refresh)
-    return () => { window.removeEventListener('load', refresh); galleryWatch?.disconnect(); context.revert() }
+    return () => { window.removeEventListener('load', refresh); galleryWatch?.disconnect(); mm.revert(); context.revert() }
   }, [])
 
   return (
@@ -784,6 +862,7 @@ export default function App() {
           <Hero waLink={waLink} telLink={telLink} />
           <Clients />
         </div>
+        <Strip />
         <OneTeam />
         <Works onOpen={openWork} />
         <Statement />
