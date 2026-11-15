@@ -1,0 +1,137 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0}
+body{width:1200px;height:780px;overflow:hidden;font-family:Inter,sans-serif;color:#10231a;background:#eef2ef;-webkit-font-smoothing:antialiased;font-size:13px;display:grid;grid-template-columns:56px 262px minmax(0,1fr) 256px}
+i[data-ic]{display:inline-flex}
+.rail{background:#0c2a1c;display:flex;flex-direction:column;align-items:center;padding:14px 0;gap:6px;color:#7fa391}
+.rail b{width:32px;height:32px;border-radius:10px;background:#34d399;color:#0c2a1c;display:grid;place-items:center;font-weight:800;margin-bottom:14px}
+.rail i{width:38px;height:38px;border-radius:10px;display:grid;place-items:center}.rail i.on{background:#17402c;color:#fff}.rail .sp{margin-top:auto}
+.list{background:#fff;border-right:1px solid #e3e9e5;display:flex;flex-direction:column;min-height:0}
+.lh{padding:16px 16px 10px;display:flex;align-items:center}
+.lh h1{font-size:18px;font-weight:700;letter-spacing:-.02em}
+.lh span{margin-left:auto;height:32px;padding:0 11px;border-radius:9px;background:#0c2a1c;color:#fff;font-weight:600;font-size:12.5px;display:flex;align-items:center;gap:6px}
+.tabs{display:flex;gap:16px;padding:0 16px;border-bottom:1px solid #e3e9e5;font-weight:500;color:#6b7c73}
+.tabs span{padding:8px 0}.tabs span.on{color:#10231a;box-shadow:inset 0 -2px 0 #10231a}
+.tabs em{font-style:normal;font-size:11px;background:#eef2ef;border-radius:999px;padding:1px 6px;margin-left:4px}
+.it{padding:11px 16px;border-bottom:1px solid #eff3f0;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:3px 8px}
+.it.on{background:#eefaf3;box-shadow:inset 3px 0 0 #12a150}
+.it b{font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.it strong{font-weight:600;font-variant-numeric:tabular-nums}
+.it span{font-size:11.5px;color:#6b7c73;font-family:'JetBrains Mono',monospace}
+.st{justify-self:end;font-size:11px;font-weight:600;padding:1px 8px;border-radius:999px}
+.g{background:#e3f6ea;color:#0f7a3d}.a{background:#fff3da;color:#925c00}.r{background:#fde8e8;color:#b02a2a}.d{background:#eef0f2;color:#58636b}
+.doc{display:flex;flex-direction:column;min-height:0}
+.tb{height:56px;display:flex;align-items:center;gap:8px;padding:0 20px;flex:none}
+.tb b{font-size:15px;font-weight:600;margin-right:auto;font-family:'JetBrains Mono',monospace;letter-spacing:-.02em}
+.btn{height:34px;padding:0 12px;border-radius:9px;border:1px solid #d6dfd9;background:#fff;display:flex;align-items:center;gap:7px;font-weight:600;font-size:12.5px}
+.btn.w{background:#12a150;border-color:#12a150;color:#fff}
+.paper{margin:0 20px;background:#fff;border-radius:6px 6px 0 0;box-shadow:0 18px 50px rgba(12,42,28,.16),0 2px 6px rgba(12,42,28,.08);padding:26px 28px;flex:1;min-height:0;font-size:11px;color:#1c2b23;overflow:hidden}
+.ph{display:flex;align-items:flex-start;gap:12px;padding-bottom:14px;border-bottom:2px solid #10231a}
+.ph .mk{width:38px;height:38px;border-radius:10px;background:#10231a;color:#fff;display:grid;place-items:center;font-weight:800;font-size:15px;flex:none}
+.ph b{display:block;font-size:15px;font-weight:700;letter-spacing:-.01em}.ph span{color:#5c6d64;line-height:1.5;display:block}
+.ph .ti{margin-left:auto;text-align:right}.ph .ti b{font-size:17px;letter-spacing:.06em}
+.mono{font-family:'JetBrains Mono',monospace}
+.pt{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;padding:12px 0}
+.pt small{display:block;font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:#7e8d85;margin-bottom:3px}
+.pt b{display:block;font-size:11.5px;font-weight:600}.pt span{display:block;color:#5c6d64;line-height:1.5}
+table{width:100%;border-collapse:collapse}
+th{font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:#5c6d64;text-align:left;padding:7px 8px;background:#f1f5f2;font-weight:600}
+td{padding:8px;border-bottom:1px solid #e8eeea;white-space:nowrap}
+.n{text-align:right;font-variant-numeric:tabular-nums}
+td b{font-weight:600}
+.bot{display:grid;grid-template-columns:minmax(0,1fr) 216px;gap:18px;margin-top:12px}
+.tot{display:grid;gap:5px}
+.tot div{display:flex}.tot span{color:#5c6d64}.tot b{margin-left:auto;font-variant-numeric:tabular-nums;font-weight:500}
+.tot .gt{border-top:2px solid #10231a;padding-top:8px;margin-top:4px;font-size:14px}.tot .gt b,.tot .gt span{font-weight:700;color:#10231a}
+.irn{display:flex;gap:12px;align-items:center}
+.irn canvas{width:74px;height:74px;flex:none;image-rendering:pixelated}
+.irn small{display:block;font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:#7e8d85}
+.irn span{display:block;line-height:1.55;color:#33443b}
+.words{margin-top:10px;padding:8px 10px;border-radius:6px;background:#f1f5f2;color:#33443b}
+.side{padding:16px 16px 16px 0;display:flex;flex-direction:column;gap:10px;min-height:0}
+.card{background:#fff;border:1px solid #e3e9e5;border-radius:13px;padding:12px 13px}
+.card h3{font-size:12.5px;font-weight:600;display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.card h3 i{width:26px;height:26px;border-radius:8px;display:grid;place-items:center}
+.card h3 em{margin-left:auto;font-style:normal}
+.kv{display:grid;gap:5px;font-size:12px}.kv div{display:flex;color:#6b7c73}.kv b{margin-left:auto;color:#10231a;font-weight:600}
+.tl{display:grid;gap:0;font-size:12px}
+.tl div{display:grid;grid-template-columns:16px minmax(0,1fr) auto;gap:9px;padding-bottom:10px;position:relative}
+.tl div::before{content:'';position:absolute;left:7px;top:14px;bottom:-2px;width:2px;background:#dfe7e2}
+.tl div:last-child::before{display:none}
+.tl u{width:16px;height:16px;border-radius:50%;background:#12a150;color:#fff;display:grid;place-items:center;text-decoration:none;position:relative}
+.tl b{font-weight:500}.tl em{font-style:normal;color:#6b7c73;font-size:11px}
+</style></head>
+<body>
+<div class="rail"><b>L</b><i data-ic="home"></i><i class="on" data-ic="receipt"></i><i data-ic="users"></i><i data-ic="box"></i><i data-ic="percent"></i><i data-ic="chart"></i><i class="sp" data-ic="settings"></i></div>
+<section class="list">
+  <div class="lh"><h1>Invoices</h1><span><i data-ic="plus" data-s="14" data-w="2.2"></i>New</span></div>
+  <div class="tabs"><span class="on">All<em>128</em></span><span>Unpaid<em>9</em></span><span>Drafts<em>2</em></span></div>
+  <div id="items"></div>
+</section>
+<section class="doc">
+  <div class="tb"><b>APX/26-27/0412</b><span class="btn"><i data-ic="download" data-s="14"></i>PDF</span><span class="btn"><i data-ic="mail" data-s="14"></i>Email</span><span class="btn w"><i data-ic="chat" data-s="14"></i>Send on WhatsApp</span></div>
+  <div class="paper">
+    <div class="ph"><span class="mk">A</span><div><b>Apex Retail Pvt Ltd</b><span>42, 2nd Avenue, Anna Nagar, Chennai 600040<br><span class="mono" style="display:inline">GSTIN 33AAKCA4821M1Z3</span> · PAN AAKCA4821M</span></div>
+      <div class="ti"><b>TAX INVOICE</b><span class="mono">APX/26-27/0412<br>14 Nov 2026 · Due 20 Nov 2026</span></div></div>
+    <div class="pt">
+      <div><small>Bill to</small><b>Stride Sports LLP</b><span>18, Cathedral Road, Chennai 600086<br><span class="mono" style="display:inline">GSTIN 33ACVFS9310K1ZP</span></span></div>
+      <div><small>Ship to</small><b>Stride Sports, T. Nagar</b><span>7, Pondy Bazaar, Chennai 600017</span></div>
+      <div><small>Supply</small><b>Tamil Nadu (33)</b><span>Intra-state · Road · TN 09 CK 4471</span></div>
+    </div>
+    <table>
+      <tr><th>#</th><th>Item</th><th>HSN</th><th class="n">Qty</th><th class="n">Rate</th><th class="n">Taxable</th><th class="n">GST</th><th class="n">Amount</th></tr>
+      <tr><td>1</td><td><b>AeroDrift running shoe</b></td><td class="mono">6404</td><td class="n">12</td><td class="n">2,499.00</td><td class="n">29,988.00</td><td class="n">18%</td><td class="n">35,385.84</td></tr>
+      <tr><td>2</td><td><b>Leather backpack</b></td><td class="mono">4202</td><td class="n">6</td><td class="n">1,850.00</td><td class="n">11,100.00</td><td class="n">18%</td><td class="n">13,098.00</td></tr>
+      <tr><td>3</td><td><b>Shoe care kit</b></td><td class="mono">3405</td><td class="n">10</td><td class="n">450.00</td><td class="n">4,500.00</td><td class="n">18%</td><td class="n">5,310.00</td></tr>
+    </table>
+    <div class="bot">
+      <div>
+        <div class="irn"><canvas id="qr" width="29" height="29"></canvas><div><small>e-Invoice</small><span class="mono">IRN a3f91c0e7b52…d84c41e<br>Ack 112610045873291 · 14 Nov 2026, 21:42</span><small style="margin-top:5px">e-Way bill</small><span class="mono">3410 0921 7765 · valid to 15 Nov</span></div></div>
+        <div class="words"><b>In words:</b> Fifty-three thousand seven hundred and ninety-four rupees only</div>
+      </div>
+      <div class="tot">
+        <div><span>Taxable value</span><b>45,588.00</b></div>
+        <div><span>CGST 9%</span><b>4,102.92</b></div>
+        <div><span>SGST 9%</span><b>4,102.92</b></div>
+        <div><span>Round off</span><b>0.16</b></div>
+        <div class="gt"><span>Total</span><b>₹53,794.00</b></div>
+      </div>
+    </div>
+    <div class="pt" style="grid-template-columns:1.2fr 1fr 1fr;margin-top:14px;padding-top:14px;border-top:1px solid #e8eeea">
+      <div><small>Bank details</small><b>Apex Retail Pvt Ltd</b><span class="mono">A/c •••• •••• 8876 · IFSC ••••0001234<br>UPI apexretail@upi</span></div>
+      <div><small>Terms</small><span>Payment due in 7 days. Goods once sold are exchanged within 7 days with this invoice.</span></div>
+      <div style="text-align:right"><small>For Apex Retail Pvt Ltd</small><svg width="120" height="34" viewBox="0 0 120 34" style="margin-left:auto;display:block"><path d="M6 24c8-14 14-18 17-12s-6 16-2 14 10-20 15-18-2 14 2 14 8-12 13-12-1 10 4 10 9-9 14-11 4 8 9 7 12-6 22-8" fill="none" stroke="#1b3a8a" stroke-width="1.6" stroke-linecap="round"/></svg><span>Authorised signatory</span></div>
+    </div>
+  </div>
+</section>
+<aside class="side">
+  <div class="card"><h3><i style="background:#e3f6ea;color:#0f7a3d" data-ic="check" data-s="15" data-w="2.4"></i>Paid in full<em class="st g">₹53,794</em></h3>
+    <div class="kv"><div>Received<b>14 Nov, 22:10</b></div><div>Method<b>UPI</b></div><div>Reference<b class="mono" style="font-size:11px">431822907164</b></div></div></div>
+  <div class="card"><h3><i style="background:#e8f0ff;color:#1d4ed8" data-ic="shield" data-s="15"></i>e-Invoice<em class="st g">IRN issued</em></h3>
+    <div class="kv"><div>Ack no.<b class="mono" style="font-size:11px">112610045873291</b></div><div>Added to<b>GSTR-1 · Nov</b></div></div></div>
+  <div class="card"><h3><i style="background:#fff3da;color:#925c00" data-ic="truck" data-s="15"></i>e-Way bill<em class="st a">In transit</em></h3>
+    <div class="kv"><div>Number<b class="mono" style="font-size:11px">3410 0921 7765</b></div><div>Valid until<b>15 Nov, 23:59</b></div></div></div>
+  <div class="card" style="flex:1;min-height:0;overflow:hidden"><h3>Activity</h3>
+    <div class="tl">
+      <div><u><i data-ic="check" data-s="10" data-w="3"></i></u><b>Payment received</b><em>22:10</em></div>
+      <div><u><i data-ic="check" data-s="10" data-w="3"></i></u><b>Sent on WhatsApp</b><em>21:43</em></div>
+      <div><u><i data-ic="check" data-s="10" data-w="3"></i></u><b>e-Way bill generated</b><em>21:42</em></div>
+      <div><u><i data-ic="check" data-s="10" data-w="3"></i></u><b>IRN generated</b><em>21:42</em></div>
+      <div><u><i data-ic="check" data-s="10" data-w="3"></i></u><b>Invoice created</b><em>21:41</em></div>
+    </div></div>
+</aside>
+<script type="module">
+import { hydrateIcons, $ } from '/ui.js';
+const rows = [['Stride Sports LLP', '₹53,794', 'APX-0412 · 14 Nov', 'Paid', 'g', 1], ['Meera Kitchens', '₹18,420', 'APX-0411 · 14 Nov', 'Due 20 Nov', 'a'], ['Greenfield Traders', '₹1,12,600', 'APX-0410 · 13 Nov', 'Paid', 'g'], ['Nila Home Store', '₹9,860', 'APX-0409 · 12 Nov', 'Overdue', 'r'], ['Kaveri Fitness', '₹27,300', 'APX-0408 · 12 Nov', 'Paid', 'g'], ['Orbit Electronics', '₹64,150', 'APX-0407 · 11 Nov', 'Paid', 'g'], ['Lotus Boutique', '₹12,980', 'APX-0406 · 11 Nov', 'Draft', 'd'], ['Sundar & Sons', '₹41,200', 'APX-0405 · 10 Nov', 'Paid', 'g'], ['Bluebell Cafe', '₹7,640', 'APX-0404 · 10 Nov', 'Paid', 'g'], ['Marina Hardware', '₹88,300', 'APX-0403 · 9 Nov', 'Paid', 'g']];
+$('#items').innerHTML = rows.map(([n, a, m, s, c, on]) => `<div class="it${on ? ' on' : ''}"><b>${n}</b><strong>${a}</strong><span>${m}</span><em class="st ${c}" style="font-style:normal">${s}</em></div>`).join('');
+// QR-style code: finder squares plus a deterministic module pattern.
+const c = $('#qr'), g = c.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, 29, 29); g.fillStyle = '#10231a';
+let seed = 20419; const rnd = () => { seed = (seed * 1103515245 + 12345) & 0x7fffffff; return seed / 0x7fffffff; };
+for (let y = 0; y < 29; y++) for (let x = 0; x < 29; x++) if (rnd() > 0.52) g.fillRect(x, y, 1, 1);
+const finder = (x, y) => { g.fillStyle = '#fff'; g.fillRect(x - 1, y - 1, 9, 9); g.fillStyle = '#10231a'; g.fillRect(x, y, 7, 7); g.fillStyle = '#fff'; g.fillRect(x + 1, y + 1, 5, 5); g.fillStyle = '#10231a'; g.fillRect(x + 2, y + 2, 3, 3); };
+finder(0, 0); finder(22, 0); finder(0, 22);
+hydrateIcons();
+window.__done = true;
+</script>
+</body></html>

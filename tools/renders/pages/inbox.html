@@ -1,0 +1,146 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0}
+body{width:1200px;height:780px;overflow:hidden;font-family:Inter,sans-serif;color:#171a2b;background:#fff;-webkit-font-smoothing:antialiased;font-size:13px;display:grid;grid-template-columns:64px 292px minmax(0,1fr) 264px}
+i[data-ic]{display:inline-flex}
+.rail{background:#1b1640;display:flex;flex-direction:column;align-items:center;padding:14px 0;gap:8px}
+.rail .lg{width:34px;height:34px;border-radius:11px;background:#7c5cff;color:#fff;display:grid;place-items:center;font-weight:700;margin-bottom:12px}
+.ch{position:relative;width:42px;height:42px;border-radius:13px;display:grid;place-items:center;color:#fff}
+.ch.on{outline:2px solid #fff;outline-offset:2px}
+.ch em{position:absolute;right:-5px;top:-5px;min-width:18px;height:18px;padding:0 4px;border-radius:999px;background:#ff4d6d;color:#fff;font:600 10px/18px Inter;text-align:center;font-style:normal;border:2px solid #1b1640;box-sizing:content-box}
+.rail .me{margin-top:auto;width:34px;height:34px;border-radius:50%;background:#f59e0b;color:#1b1640;display:grid;place-items:center;font-weight:700;font-size:12px}
+.list{border-right:1px solid #eceef4;display:flex;flex-direction:column;min-height:0}
+.lh{padding:16px 16px 10px}
+.lh h1{font-size:19px;font-weight:700;letter-spacing:-.02em;display:flex;align-items:center}
+.lh h1 span{margin-left:auto;width:30px;height:30px;border-radius:9px;background:#f3f1ff;color:#5b3df0;display:grid;place-items:center}
+.tabs{display:flex;gap:6px;margin-top:12px}
+.tabs span{padding:5px 10px;border-radius:999px;font-weight:500;color:#646a80;background:#f3f4f8;font-size:12px}
+.tabs span.on{background:#5b3df0;color:#fff}
+.srch{margin:10px 16px 6px;height:36px;border-radius:10px;background:#f3f4f8;display:flex;align-items:center;gap:8px;padding:0 11px;color:#9096a8}
+.cv{display:flex;gap:11px;padding:11px 16px;position:relative}
+.cv.on{background:#f3f1ff}.cv.on::before{content:'';position:absolute;left:0;top:8px;bottom:8px;width:3px;border-radius:0 3px 3px 0;background:#5b3df0}
+.av{position:relative;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:600;font-size:13px;flex:none}
+.av u{position:absolute;right:-3px;bottom:-3px;width:16px;height:16px;border-radius:50%;border:2px solid #fff;display:grid;place-items:center;color:#fff;text-decoration:none}
+.cv.on .av u{border-color:#f3f1ff}
+.cv div{min-width:0;flex:1}
+.cv b{display:flex;font-weight:600;font-size:13px}.cv b time{margin-left:auto;font-weight:400;font-size:11px;color:#9096a8}
+.cv p{display:flex;color:#646a80;font-size:12.5px;margin-top:2px}.cv p span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cv p em{margin-left:auto;flex:none;min-width:18px;height:18px;border-radius:999px;background:#5b3df0;color:#fff;font:600 10.5px/18px Inter;text-align:center;font-style:normal;padding:0 5px}
+.chat{display:flex;flex-direction:column;min-height:0;background:#f7f7fb}
+.hd{height:64px;display:flex;align-items:center;gap:11px;padding:0 18px;background:#fff;border-bottom:1px solid #eceef4;flex:none}
+.hd b{display:block;font-size:14.5px;font-weight:600}.hd span.s{font-size:12px;color:#646a80;display:flex;align-items:center;gap:5px}
+.hd .r{margin-left:auto;display:flex;gap:8px;align-items:center}
+.btn{height:34px;padding:0 12px;border-radius:9px;border:1px solid #e1e4ee;background:#fff;display:flex;align-items:center;gap:7px;font-weight:600;font-size:12.5px}
+.btn.g{background:#12a150;border-color:#12a150;color:#fff}
+.msgs{flex:1;min-height:0;padding:14px 20px;display:flex;flex-direction:column;gap:9px;overflow:hidden}
+.day{align-self:center;font-size:11px;color:#646a80;background:#ecedf4;border-radius:999px;padding:3px 10px}
+.m{max-width:66%;padding:9px 12px;border-radius:14px;font-size:13.5px;line-height:1.42;box-shadow:0 1px 1px rgba(23,26,43,.05)}
+.m.in{align-self:flex-start;background:#fff;border-bottom-left-radius:4px}
+.m.out{align-self:flex-end;background:#dcf8c6;border-bottom-right-radius:4px}
+.m small{display:flex;justify-content:flex-end;align-items:center;gap:4px;font-size:10.5px;color:#7d8399;margin-top:3px}
+.m small i{color:#34b7f1}
+.m .bot{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:600;color:#5b3df0;margin-bottom:3px}
+.pay{align-self:flex-end;width:268px;background:#fff;border-radius:14px;border-bottom-right-radius:4px;overflow:hidden;box-shadow:0 1px 1px rgba(23,26,43,.05)}
+.pay .t{padding:11px 13px;display:flex;gap:11px;align-items:center;border-bottom:1px solid #f0f1f6}
+.pay .im{width:46px;height:46px;border-radius:10px;background:#eef0ff;display:grid;place-items:center;color:#5b3df0;flex:none}
+.pay b{display:block;font-size:13px}.pay span{font-size:12px;color:#646a80}
+.pay .amt{display:flex;align-items:center;padding:9px 13px;font-weight:600}
+.pay .amt em{margin-left:auto;font-style:normal;color:#12a150;display:flex;align-items:center;gap:5px;font-size:12.5px}
+.sug{margin:0 20px;padding:9px 12px;border-radius:12px;background:#f3f1ff;border:1px dashed #b9abff;display:flex;gap:10px;align-items:center;font-size:12.5px;color:#3d2bb0}
+.sug b{flex:none;display:flex;align-items:center;gap:5px;font-weight:600}
+.sug span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sug em{margin-left:auto;flex:none;font-style:normal;font-weight:600;background:#5b3df0;color:#fff;border-radius:7px;padding:4px 9px}
+.comp{margin:10px 20px 14px;background:#fff;border:1px solid #e1e4ee;border-radius:14px;padding:10px 12px}
+.comp .in{color:#9096a8;font-size:13.5px;padding:2px 2px 10px}
+.comp .bar{display:flex;align-items:center;gap:10px;color:#7d8399}
+.qr{display:flex;gap:6px;margin-left:6px}
+.qr span{padding:4px 10px;border-radius:999px;background:#f3f4f8;color:#3b4057;font-weight:500;font-size:12px;white-space:nowrap}
+.snd{margin-left:auto;width:36px;height:36px;border-radius:11px;background:#5b3df0;color:#fff;display:grid;place-items:center}
+.side{border-left:1px solid #eceef4;padding:18px 16px;display:flex;flex-direction:column;gap:14px;min-height:0;overflow:hidden}
+.prof{text-align:center}
+.prof .av{width:58px;height:58px;font-size:19px;margin:0 auto 9px}
+.prof b{font-size:15px;font-weight:600}.prof > span:not(.av){display:block;font-size:12px;color:#646a80;margin-top:2px}
+.tags{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-top:9px}
+.tags span{font-size:11.5px;font-weight:500;padding:3px 9px;border-radius:999px;background:#eef7f0;color:#12733c}
+.tags span+span{background:#fff4e5;color:#a35a00}
+.st3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border:1px solid #eceef4;border-radius:12px}
+.st3 div{padding:9px 6px;text-align:center}.st3 div+div{border-left:1px solid #eceef4}
+.st3 b{display:block;font-size:14.5px;font-weight:700;letter-spacing:-.01em}.st3 span{font-size:10.5px;color:#646a80}
+.cap{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#9096a8}
+.ord{display:grid;gap:8px}
+.or{display:flex;align-items:center;gap:9px;font-size:12.5px}
+.or i{width:30px;height:30px;border-radius:9px;background:#f3f4f8;display:grid;place-items:center;color:#646a80;flex:none}
+.or b{display:block;font-weight:600}.or span{font-size:11.5px;color:#646a80}
+.or em{margin-left:auto;font-style:normal;font-size:11px;font-weight:600;padding:2px 8px;border-radius:999px}
+.g{background:#eef7f0;color:#12733c}.a{background:#fff4e5;color:#a35a00}.b{background:#eef0ff;color:#3d2bb0}
+.kv{display:grid;gap:8px;font-size:12.5px}
+.kv div{display:flex;align-items:center;color:#646a80}.kv b{margin-left:auto;color:#171a2b;font-weight:600;display:flex;align-items:center;gap:6px}
+.kv .mini{width:20px;height:20px;border-radius:50%;background:#db2777;color:#fff;font-size:9px;font-weight:700;display:grid;place-items:center}
+.note{background:#fffbea;border:1px solid #f5e6a8;border-radius:11px;padding:9px 11px;font-size:12px;color:#5c4a00;line-height:1.45}
+</style></head>
+<body>
+<div class="rail">
+  <span class="lg">P</span>
+  <span class="ch on" style="background:#25d366"><i data-ic="chat" data-s="20"></i><em>12</em></span>
+  <span class="ch" style="background:#e1306c"><i data-ic="heart" data-s="20"></i><em>5</em></span>
+  <span class="ch" style="background:#ff0033"><i data-ic="play" data-s="18"></i><em>3</em></span>
+  <span class="ch" style="background:#3b4057"><i data-ic="mail" data-s="19"></i></span>
+  <span class="ch" style="background:#2a2458;color:#a79cf0"><i data-ic="chart" data-s="19"></i></span>
+  <span class="me">PR</span>
+</div>
+<section class="list">
+  <div class="lh"><h1>Inbox<span><i data-ic="filter" data-s="15"></i></span></h1>
+    <div class="tabs"><span class="on">Open 24</span><span>Mine 8</span><span>Unassigned 5</span></div></div>
+  <div class="srch"><i data-ic="search" data-s="15"></i>Search name, order, phone</div>
+  <div id="cvs"></div>
+</section>
+<section class="chat">
+  <div class="hd"><span class="av" style="background:#0ea5e9">AR<u style="background:#25d366"><i data-ic="chat" data-s="9" data-w="2.4"></i></u></span>
+    <div><b>Aisha Rahman</b><span class="s">WhatsApp · +91 98•• 2231</span></div>
+    <div class="r"><span class="btn"><span class="mini" style="width:20px;height:20px;border-radius:50%;background:#db2777;color:#fff;font-size:9px;display:grid;place-items:center">PR</span>Priya<i data-ic="down" data-s="13"></i></span><span class="btn g"><i data-ic="check" data-s="14" data-w="2.4"></i>Resolve</span></div></div>
+  <div class="msgs">
+    <span class="day">Today</span>
+    <div class="m in">Hi, is the Aero Drift in blue still in stock? Size 8.<small>10:41</small></div>
+    <div class="m out"><span class="bot"><i data-ic="zap" data-s="11" data-w="2.2"></i>Auto-reply</span><br>Hi Aisha! Yes, 6 pairs left in blue, size 8. Shall I hold one for you?<small>10:41 <i data-ic="check" data-s="12" data-w="2.6"></i></small></div>
+    <div class="m in">Yes please. Can I pay by UPI and collect tomorrow?<small>10:43</small></div>
+    <div class="m out">Done, held for 30 minutes. Here is your payment link. Store pickup is open 10 to 8.<small>10:44 <i data-ic="check" data-s="12" data-w="2.6"></i></small></div>
+    <div class="pay"><div class="t"><span class="im"><i data-ic="bag" data-s="22"></i></span><div><b>Aero Drift V2 · Blue · UK 8</b><span>Order #20419 · Pickup, Anna Nagar</span></div></div><div class="amt">₹8,499<em><i data-ic="check" data-s="14" data-w="2.6"></i>Paid by UPI</em></div></div>
+    <div class="m in">Paid. Thank you so much!<small>10:47</small></div>
+  </div>
+  <div class="sug"><b><i data-ic="zap" data-s="13" data-w="2.2"></i>Suggested</b><span>Thanks Aisha! Your pair is packed and ready for pickup tomorrow after 10 am.</span><em>Use</em></div>
+  <div class="comp"><div class="in">Type a reply, or press / for saved replies</div>
+    <div class="bar"><i data-ic="paperclip" data-s="17"></i><i data-ic="smile" data-s="17"></i><i data-ic="mic" data-s="17"></i><div class="qr"><span>Send catalogue</span><span>Payment link</span><span>Book a call</span></div><span class="snd"><i data-ic="send" data-s="16"></i></span></div></div>
+</section>
+<aside class="side">
+  <div class="prof"><span class="av" style="background:#0ea5e9">AR</span><b>Aisha Rahman</b><span>+91 98•• 2231 · Chennai</span><div class="tags"><span>Repeat buyer</span><span>Prefers UPI</span></div></div>
+  <div class="st3"><div><b>6</b><span>Orders</span></div><div><b>₹38,400</b><span>Spent</span></div><div><b>4.9</b><span>Rating</span></div></div>
+  <span class="cap">Recent orders</span>
+  <div class="ord">
+    <div class="or"><i data-ic="bag" data-s="15"></i><div><b>#20419</b><span>Today · ₹8,499</span></div><em class="b">Pickup</em></div>
+    <div class="or"><i data-ic="bag" data-s="15"></i><div><b>#19872</b><span>22 Oct · ₹5,400</span></div><em class="g">Delivered</em></div>
+    <div class="or"><i data-ic="bag" data-s="15"></i><div><b>#19015</b><span>3 Sep · ₹6,250</span></div><em class="g">Delivered</em></div>
+  </div>
+  <span class="cap">Conversation</span>
+  <div class="kv"><div>Assigned to<b><span class="mini">PR</span>Priya</b></div><div>First reply<b>0:42</b></div><div>Channel<b>WhatsApp</b></div></div>
+  <div class="note"><b>Note</b> · Asked about blue in size 8 twice last month. Offer the restock alert.</div>
+</aside>
+<script type="module">
+import { icon, hydrateIcons, $ } from '/ui.js';
+const C = { wa: ['#25d366', 'chat'], ig: ['#e1306c', 'heart'], yt: ['#ff0033', 'play'], em: ['#3b4057', 'mail'] };
+const rows = [
+  ['AR', '#0ea5e9', 'wa', 'Aisha Rahman', 'Paid. Thank you so much!', '10:47', 0, 1],
+  ['KL', '#f97316', 'ig', '@kicklab', 'Replied to your story: are these restocking?', '10:39', 2],
+  ['DM', '#8b5cf6', 'wa', 'Dev Menon', 'Where is order #20388? It says shipped', '10:31', 1],
+  ['SS', '#14b8a6', 'ig', '@solestudio', 'Can we collab on the next drop?', '10:12', 0],
+  ['MS', '#ec4899', 'wa', 'Meera Suresh', 'Received, thanks!', '09:58', 0],
+  ['YT', '#64748b', 'yt', 'YouTube comments', '12 new comments on "Aero Drift review"', '09:40', 3],
+  ['RK', '#eab308', 'wa', 'Rahul Krishnan', 'Do you have COD for Coimbatore?', '09:22', 1],
+  ['NV', '#06b6d4', 'em', 'Nila Verma', 'Invoice request for order #20301', 'Yesterday', 0],
+];
+$('#cvs').innerHTML = rows.map(([i, bg, ch, n, p, t, u, on]) => `<div class="cv${on ? ' on' : ''}"><span class="av" style="background:${bg}">${i}<u style="background:${C[ch][0]}">${icon(C[ch][1], 9, 2.4)}</u></span><div><b>${n}<time>${t}</time></b><p><span>${p}</span>${u ? `<em>${u}</em>` : ''}</p></div></div>`).join('');
+hydrateIcons();
+window.__done = true;
+</script>
+</body></html>

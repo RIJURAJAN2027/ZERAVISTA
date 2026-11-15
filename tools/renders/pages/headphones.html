@@ -1,0 +1,150 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script type="importmap">{"imports":{"three":"/node_modules/three/build/three.module.js","three/addons/":"/node_modules/three/examples/jsm/"}}</script>
+<style>
+*{box-sizing:border-box;margin:0}
+body{width:1200px;height:780px;overflow:hidden;font-family:Inter,sans-serif;color:#fff;background:#06070a;-webkit-font-smoothing:antialiased;position:relative}
+.glow{position:absolute;inset:0;background:radial-gradient(560px 460px at 70% 50%,rgba(52,104,255,.34),transparent 70%),radial-gradient(420px 300px at 86% 22%,rgba(255,150,80,.13),transparent 70%)}
+.floor{position:absolute;left:560px;right:120px;bottom:128px;height:54px;background:radial-gradient(50% 50% at 50% 50%,rgba(60,110,255,.3),transparent 72%);filter:blur(10px)}
+nav{position:absolute;left:0;right:0;top:0;height:74px;display:flex;align-items:center;padding:0 48px;gap:34px;font-size:14px;z-index:3}
+nav .brand{font-family:Sora,sans-serif;font-weight:600;font-size:17px;letter-spacing:.34em}
+nav .links{display:flex;gap:30px;color:rgba(255,255,255,.62);margin-left:44px}
+nav .links b{color:#fff;font-weight:500}
+nav .cta{margin-left:auto;padding:10px 20px;border-radius:999px;border:1px solid rgba(255,255,255,.3);font-weight:500}
+.copy{position:absolute;left:48px;top:150px;width:470px;z-index:3}
+.tag{display:inline-flex;align-items:center;gap:9px;font-size:12px;letter-spacing:.2em;color:#8fb0ff;font-weight:600}
+.tag i{width:7px;height:7px;border-radius:50%;background:#5b8cff;box-shadow:0 0 12px #5b8cff}
+h1{font-family:Sora,sans-serif;font-weight:600;font-size:76px;line-height:.98;letter-spacing:-.045em;margin:22px 0 22px}
+h1 span{color:rgba(255,255,255,.42)}
+.sub{font-size:17px;line-height:1.55;color:rgba(255,255,255,.66);max-width:400px}
+.buy{display:flex;align-items:center;gap:14px;margin-top:32px}
+.btn{height:54px;padding:0 28px;border-radius:999px;display:flex;align-items:center;gap:10px;font-weight:600;font-size:15px}
+.btn.w{background:#fff;color:#06070a}
+.btn.g{border:1px solid rgba(255,255,255,.28)}
+.btn i{width:22px;height:22px;border-radius:50%;background:#fff;display:grid;place-items:center}
+.btn i::after{content:'';border-left:7px solid #06070a;border-top:4.5px solid transparent;border-bottom:4.5px solid transparent;margin-left:2px}
+.price{font-family:Sora,sans-serif;font-size:15px;color:rgba(255,255,255,.62)}
+.price b{color:#fff;font-weight:600;font-size:19px;margin-right:6px}
+.colors{display:flex;align-items:center;gap:10px;margin-top:30px;font-size:13px;color:rgba(255,255,255,.6)}
+.colors i{width:22px;height:22px;border-radius:50%;border:1px solid rgba(255,255,255,.25)}
+.colors i.on{box-shadow:0 0 0 2px #06070a,0 0 0 3.5px #fff}
+.specs{position:absolute;left:48px;right:48px;bottom:34px;display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid rgba(255,255,255,.14);z-index:3}
+.specs div{padding:18px 0 0}
+.specs div+div{padding-left:26px;border-left:1px solid rgba(255,255,255,.14)}
+.specs b{display:block;font-family:Sora,sans-serif;font-weight:500;font-size:30px;letter-spacing:-.03em}
+.specs b small{font-size:15px;color:rgba(255,255,255,.55);margin-left:4px;font-weight:400}
+.specs span{font-size:13px;color:rgba(255,255,255,.55)}
+#c{position:absolute;left:440px;top:40px;width:760px;height:640px;z-index:1}
+#calls{position:absolute;left:440px;top:40px;width:760px;height:640px;z-index:2;overflow:visible}
+.cl{stroke:rgba(255,255,255,.5);stroke-width:1;fill:none}
+.ct{font:500 12.5px Inter;fill:#fff}
+.cs{font:400 11.5px Inter;fill:rgba(255,255,255,.55)}
+</style></head>
+<body>
+<div class="glow"></div><div class="floor"></div>
+<nav>
+  <span class="brand">AURALIS</span>
+  <div class="links"><b>Headphones</b><span>Earbuds</span><span>Speakers</span><span>Stories</span><span>Support</span></div>
+  <span class="cta">Pre-order</span>
+</nav>
+<div class="copy">
+  <span class="tag"><i></i>NEW · AURALIS H1</span>
+  <h1>Hear every<br><span>layer.</span></h1>
+  <p class="sub">Adaptive noise cancelling that listens 48,000 times a second, tuned drivers, and a battery that lasts the whole week.</p>
+  <div class="buy"><span class="btn w">Pre-order</span><span class="btn g"><i></i>Watch the film</span><span class="price"><b>₹24,990</b></span></div>
+  <div class="colors"><i class="on" style="background:#1b1e26"></i><i style="background:#cdbfa8"></i><i style="background:#5f6f5c"></i><span>Midnight</span></div>
+</div>
+<canvas id="c"></canvas>
+<svg id="calls" viewBox="0 0 760 640"></svg>
+<div class="specs">
+  <div><b>40<small>hrs</small></b><span>Battery with ANC on</span></div>
+  <div><b>48k<small>Hz</small></b><span>Adaptive noise cancelling</span></div>
+  <div><b>40<small>mm</small></b><span>Tuned dynamic drivers</span></div>
+  <div><b>254<small>g</small></b><span>Aluminium and memory foam</span></div>
+</div>
+
+<script type="module">
+import { THREE, RoundedBoxGeometry, makeStage, weaveTexture, project, shadowAll } from '/lib.js';
+const W = 760, H = 640;
+const stage = makeStage({ canvas: document.getElementById('c'), width: W, height: H, fov: 24, exposure: 1.15, envIntensity: 0.55, shadows: false });
+const { scene, camera, renderer } = stage;
+
+// Materials
+const shell = new THREE.MeshPhysicalMaterial({ color: 0x161922, roughness: 0.42, metalness: 0.15, clearcoat: 0.35, clearcoatRoughness: 0.5 });
+const metal = new THREE.MeshStandardMaterial({ color: 0x8e96a8, roughness: 0.28, metalness: 1 });
+const metalDark = new THREE.MeshStandardMaterial({ color: 0x343946, roughness: 0.34, metalness: 1 });
+const copper = new THREE.MeshStandardMaterial({ color: 0xd79a62, roughness: 0.22, metalness: 1 });
+const leather = new THREE.MeshPhysicalMaterial({ color: 0x0c0d11, roughness: 0.62, clearcoat: 0.15, clearcoatRoughness: 0.7 });
+const cloth = new THREE.MeshStandardMaterial({ color: 0x0b0c10, roughness: 1, bumpMap: weaveTexture(18), bumpScale: 1.2 });
+
+// Rounded puck profile for the ear cup, revolved around its axis.
+function puck(R, T, c1, c2, n = 14) {
+  const pts = [new THREE.Vector2(0.0001, 0)];
+  for (let i = 0; i <= n; i++) { const a = -Math.PI / 2 + (i / n) * (Math.PI / 2); pts.push(new THREE.Vector2(R - c1 + Math.cos(a) * c1, c1 + Math.sin(a) * c1)); }
+  for (let i = 0; i <= n; i++) { const a = (i / n) * (Math.PI / 2); pts.push(new THREE.Vector2(R - c2 + Math.cos(a) * c2, T - c2 + Math.sin(a) * c2)); }
+  pts.push(new THREE.Vector2(0.0001, T));
+  const g = new THREE.LatheGeometry(pts, 96); g.rotateZ(-Math.PI / 2); return g; // axis now +X, outer face at +X
+}
+
+function earCup() {
+  const g = new THREE.Group();
+  const body = new THREE.Mesh(puck(0.385, 0.23, 0.05, 0.1), shell); body.position.x = -0.07; g.add(body);
+  const plate = new THREE.Mesh(new THREE.CylinderGeometry(0.262, 0.262, 0.012, 96), metalDark); plate.rotation.z = Math.PI / 2; plate.position.x = 0.158; g.add(plate);
+  const ring = new THREE.Mesh(new THREE.TorusGeometry(0.283, 0.009, 16, 120), copper); ring.rotation.y = Math.PI / 2; ring.position.x = 0.15; g.add(ring);
+  const dot = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.02, 0.016, 32), copper); dot.rotation.z = Math.PI / 2; dot.position.set(0.16, -0.17, 0); g.add(dot);
+  const cushion = new THREE.Mesh(new THREE.TorusGeometry(0.262, 0.108, 28, 96), leather); cushion.rotation.y = Math.PI / 2; cushion.scale.z = 0.82; cushion.position.x = -0.115; g.add(cushion);
+  const grille = new THREE.Mesh(new THREE.CylinderGeometry(0.19, 0.19, 0.02, 64), cloth); grille.rotation.z = Math.PI / 2; grille.position.x = -0.1; g.add(grille);
+  return g;
+}
+
+function earAssembly(side) {
+  const g = new THREE.Group();
+  // Yoke: half ring over the top of the cup, pivoting at front and back.
+  const yoke = new THREE.Mesh(new THREE.TorusGeometry(0.41, 0.026, 18, 80, Math.PI), metal); yoke.rotation.y = Math.PI / 2; g.add(yoke);
+  for (const z of [-0.41, 0.41]) { const pin = new THREE.Mesh(new THREE.CylinderGeometry(0.036, 0.036, 0.05, 24), metal); pin.rotation.x = Math.PI / 2; pin.position.set(0, 0, z * 0.985); g.add(pin); }
+  const stem = new THREE.Mesh(new RoundedBoxGeometry(0.058, 0.2, 0.1, 4, 0.02), metal); stem.position.y = 0.49; g.add(stem);
+  const cup = earCup(); cup.rotation.z = side * -0.06; g.add(cup);
+  if (side < 0) cup.rotation.y = Math.PI;
+  return g;
+}
+
+const hp = new THREE.Group();
+// Headband: half torus, flattened into a band.
+const band = new THREE.Mesh(new THREE.TorusGeometry(0.8, 0.036, 20, 160, Math.PI), metalDark); band.scale.z = 3.1; hp.add(band);
+const pad = new THREE.Mesh(new THREE.TorusGeometry(0.762, 0.048, 20, 120, Math.PI * 0.62), cloth); pad.rotation.z = Math.PI * 0.19; pad.scale.z = 2.5; hp.add(pad);
+const R = earAssembly(1); R.position.set(0.8, -0.56, 0); R.rotation.y = 0.2; hp.add(R);
+const L = earAssembly(-1); L.position.set(-0.8, -0.56, 0); L.rotation.y = -0.2; hp.add(L);
+// Sliders between band and yokes.
+for (const x of [-0.8, 0.8]) { const s = new THREE.Mesh(new RoundedBoxGeometry(0.05, 0.3, 0.085, 4, 0.02), metal); s.position.set(x, -0.1, 0); hp.add(s); }
+
+hp.rotation.set(0.1, -0.78, -0.1);
+hp.position.set(-0.06, 0.24, 0);
+scene.add(hp);
+
+const key = new THREE.DirectionalLight(0xfff0e2, 2.4); key.position.set(-3, 4, 4); scene.add(key);
+const rimBlue = new THREE.DirectionalLight(0x4f86ff, 9); rimBlue.position.set(4, 1.5, -3.5); scene.add(rimBlue);
+const rimWarm = new THREE.DirectionalLight(0xff9a5c, 3.2); rimWarm.position.set(-4, 2.5, -3); scene.add(rimWarm);
+const fill = new THREE.DirectionalLight(0x9fb8ff, 0.5); fill.position.set(1, -2, 3); scene.add(fill);
+
+camera.position.set(0, 0.1, 6.1); camera.lookAt(0, 0, 0);
+renderer.render(scene, camera);
+
+// Callouts, anchored to real points on the model.
+const svg = document.getElementById('calls'); const NS = 'http://www.w3.org/2000/svg';
+const el = (n, a, t) => { const e = document.createElementNS(NS, n); for (const k in a) e.setAttribute(k, a[k]); if (t) e.textContent = t; svg.appendChild(e); return e; };
+const world = (obj, v) => { obj.updateWorldMatrix(true, false); const p = new THREE.Vector3(...v).applyMatrix4(obj.matrixWorld); return project([p.x, p.y, p.z], camera, W, H); };
+function call(from, to, title, sub, anchor = 'start', run = 30) {
+  const [x1, y1] = from, [x2, y2] = to; const ex = anchor === 'start' ? x2 + run : x2 - run;
+  el('path', { d: `M${x1} ${y1} L${x2} ${y2} L${ex} ${y2}`, class: 'cl' });
+  el('circle', { cx: x1, cy: y1, r: 3.2, fill: '#fff' }); el('circle', { cx: x1, cy: y1, r: 7, fill: 'none', stroke: 'rgba(255,255,255,.4)' });
+  const tx = anchor === 'start' ? ex + 8 : ex - 8;
+  el('text', { x: tx, y: y2 - 2, class: 'ct', 'text-anchor': anchor }, title); el('text', { x: tx, y: y2 + 14, class: 'cs', 'text-anchor': anchor }, sub);
+}
+const pts = { plate: world(R, [0.17, 0.05, 0]), cushion: world(L, [0.16, -0.16, 0.2]), band: world(hp, [0.52, 0.61, 0]) };
+call(pts.band, [pts.band[0] + 40, pts.band[1] - 34], 'Aluminium headband', 'Woven pad, 254 g', 'start', 24);
+call(pts.plate, [pts.plate[0] + 18, pts.plate[1] + 118], 'Touch surface', 'Swipe, tap, hold', 'start', 22);
+call(pts.cushion, [pts.cushion[0] - 44, pts.cushion[1] + 150], 'Memory-foam cushions', 'Replaceable', 'end');
+window.__done = true;
+</script>
+</body></html>

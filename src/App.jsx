@@ -2,492 +2,726 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Hero from './Hero.jsx'
-import { CONTACT, NAV, FILTERS, WORKS, DIVISIONS, FLOW, SPECIAL, CLIENTS, HOME_LIMIT } from './data.js'
+import { BRAND, CONTACT, NAV, CLIENTS, WORKS, STATS, SPECIALS, FLOW, SERVICES, GALLERY, SUPPORT, FAQ, TOOLS } from './data.js'
 import { POLICIES, UPDATED } from './policies.js'
 
 gsap.registerPlugin(ScrollTrigger)
 
 const BASE = import.meta.env.BASE_URL
+const img = (name) => `${BASE}work/${name}.jpg`
 const reduced = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches
 const digits = CONTACT.whatsapp.replace(/\D/g, '')
-const waLink = `https://wa.me/${digits}?text=${encodeURIComponent("Hi Zera Bytes, I'd like a quotation.")}`
+const waLink = `https://wa.me/${digits}?text=${encodeURIComponent("Hi Zera Studio, I'd like a quotation.")}`
 const telLink = `tel:+${digits}`
-
-/* Pointer-reactive glass: sets --mx/--my for the moving highlight and, with `tilt`, --rx/--ry. */
-function glassMove(event) {
-  const el = event.currentTarget
-  const b = el.getBoundingClientRect()
-  const x = (event.clientX - b.left) / b.width
-  const y = (event.clientY - b.top) / b.height
-  el.style.setProperty('--mx', `${x * 100}%`)
-  el.style.setProperty('--my', `${y * 100}%`)
-  if (el.dataset.tilt !== undefined && !reduced()) {
-    el.style.setProperty('--ry', `${(x - 0.5) * 9}deg`)
-    el.style.setProperty('--rx', `${(0.5 - y) * 7}deg`)
-  }
-}
-function glassLeave(event) {
-  event.currentTarget.style.setProperty('--rx', '0deg')
-  event.currentTarget.style.setProperty('--ry', '0deg')
-}
-const glassProps = { onPointerMove: glassMove, onPointerLeave: glassLeave }
-
-/* Ripple from the click point on anything with .rip */
-function useRipples() {
-  useEffect(() => {
-    const onDown = (event) => {
-      const el = event.target.closest('.rip')
-      if (!el || reduced()) return
-      const b = el.getBoundingClientRect()
-      const dot = document.createElement('span')
-      dot.className = 'rip__dot'
-      const size = Math.max(b.width, b.height) * 2
-      dot.style.cssText = `width:${size}px;height:${size}px;left:${event.clientX - b.left - size / 2}px;top:${event.clientY - b.top - size / 2}px`
-      el.appendChild(dot)
-      dot.addEventListener('animationend', () => dot.remove())
-    }
-    document.addEventListener('pointerdown', onDown)
-    return () => document.removeEventListener('pointerdown', onDown)
-  }, [])
-}
+const socials = Object.entries(CONTACT.socials).filter(([, url]) => url)
+const byId = (id) => WORKS.find((w) => w.id === id)
+const lines = (text) => text.split('\n').map((line, i) => <span key={i}>{line}</span>)
 
 /* ---------- icons ---------- */
-const Icon = {
-  web: (
-    <svg viewBox="0 0 48 48" className="draw"><path d="M24 5 41 14.5v19L24 43 7 33.5v-19z" /><path d="M7 14.5 24 24l17-9.5M24 24v19" /></svg>
-  ),
-  auto: (
-    <svg viewBox="0 0 48 48" className="draw"><circle cx="10" cy="12" r="5" /><circle cx="38" cy="24" r="5" /><circle cx="10" cy="36" r="5" /><path d="M15 12c11 0 8 12 18 12M15 36c11 0 8-12 18-12" /></svg>
-  ),
-  erp: (
-    <svg viewBox="0 0 48 48" className="draw"><ellipse cx="24" cy="10" rx="16" ry="5" /><path d="M8 10v28c0 2.8 7.2 5 16 5s16-2.2 16-5V10M8 24c0 2.8 7.2 5 16 5s16-2.2 16-5" /></svg>
-  ),
-  arrow: (
-    <svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3 11 11 3M4.5 3H11v6.5" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg>
-  ),
+const svg = (d, extra) => <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.700" strokeLinecap="round" strokeLinejoin="round" {...extra}><path d={d} /></svg>
+const I = {
+  arrow: svg('M7 17 17 7M9 7h8v8'),
+  right: svg('M5 12h14M13 6l6 6-6 6'),
+  left: svg('M19 12H5M11 6l-6 6 6 6'),
+  plus: svg('M12 5v14M5 12h14'),
+  close: svg('M6 6l12 12M18 6 6 18'),
+  check: svg('M5 12.500 9.500 17 19 7.500', { strokeWidth: 2.200 }),
+  phone: svg('M6.500 3.500h3l1.500 4-2 1.500a12 12 0 0 0 6 6l1.500-2 4 1.500v3a2 2 0 0 1-2.200 2A16.500 16.500 0 0 1 4.500 5.700a2 2 0 0 1 2-2.200z'),
+  chat: svg('M21 12a8 8 0 0 1-11.800 7L4 20l1.200-4.700A8 8 0 1 1 21 12z'),
+  wrench: svg('M14.500 6.500a4 4 0 0 0-5 5L4 17v3h3l5.500-5.500a4 4 0 0 0 5-5L15 12l-3-3 2.500-2.500z'),
+  pulse: svg('M3 12h4l2.500-6 4 12 2.500-6h5'),
+  shield: svg('M12 3l8 3v6c0 5-3.400 8.300-8 9.500C7.400 20.300 4 17 4 12V6l8-3z'),
+  compass: svg('M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM15.500 8.500l-2 5-5 2 2-5 5-2z'),
+  doc: svg('M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8l-5-5zM14 3v5h5M9 13h6M9 17h4'),
+  code: svg('M8 7l-5 5 5 5M16 7l5 5-5 5M14 4l-4 16'),
+  rocket: svg('M5 15c-1 1-1.500 4-1.500 4s3-.500 4-1.500M9 15l-1.500-1.500c0-3 2-8.500 9.500-9.500 0 0-.500 7-9 10.500L9 15zM15 9h.01'),
+  spark: svg('M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.500 2.500M15.500 15.500 18 18M18 6l-2.500 2.500M8.500 15.500 6 18'),
   wa: (
-    <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M3.5 20.5l1.3-4.2A8.5 8.5 0 1 1 8 19.4z" /><path d="M9 8.6c.2-.5.5-.6.8-.6h.5c.2 0 .4.1.5.4l.7 1.6c.1.3 0 .5-.1.7l-.5.6c-.1.2-.1.4 0 .5.6 1 1.4 1.8 2.4 2.3.2.1.4.1.5 0l.6-.6c.2-.2.5-.2.7-.1l1.5.7c.3.1.4.3.4.6v.4c0 .4-.2.8-.6 1-.6.3-1.6.5-2.9-.1-2-.9-3.6-2.6-4.4-4.5-.5-1.2-.4-2.3.1-2.9z" fill="currentColor" stroke="none" /></svg>
+    <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.600" strokeLinecap="round" strokeLinejoin="round"><path d="M3.500 20.500l1.300-4.200A8.500 8.500 0 1 1 8 19.400z" /><path d="M9 8.600c.2-.5.5-.6.8-.6h.5c.2 0 .4.1.5.4l.7 1.600c.1.3 0 .5-.1.7l-.5.6c-.1.2-.1.4 0 .5.6 1 1.400 1.800 2.400 2.300.2.1.4.1.5 0l.6-.6c.2-.2.5-.2.7-.1l1.500.7c.3.1.4.3.4.6v.4c0 .4-.2.8-.6 1-.6.3-1.600.5-2.900-.1-2-.9-3.600-2.600-4.400-4.500-.5-1.200-.4-2.300.1-2.900z" fill="currentColor" stroke="none" /></svg>
   ),
-  chat: (
-    <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M12 3c5 0 9 3.4 9 7.7s-4 7.7-9 7.7c-1 0-2-.1-2.9-.4L4.5 20l1.2-3.6C4 15 3 13 3 10.7 3 6.4 7 3 12 3z" /></svg>
-  ),
-  call: (
-    <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M6.5 3.5h3l1.5 4-2 1.5a12 12 0 0 0 6 6l1.5-2 4 1.5v3a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 4.5 5.7a2 2 0 0 1 2-2.2z" /></svg>
-  ),
-  support: (
-    <svg viewBox="0 0 48 48" className="draw"><path d="M24 6 39 12v11c0 9-6 16-15 19C15 39 9 32 9 23V12z" /><path d="M17 24l5 5 9-10" /></svg>
-  ),
-  quote: (
-    <svg viewBox="0 0 48 48" className="draw"><path d="M8 10h32v22H22l-9 8v-8H8z" /><path d="M16 18h16M16 24h10" /></svg>
-  ),
-  fast: (
-    <svg viewBox="0 0 48 48" className="draw"><circle cx="24" cy="26" r="15" /><path d="M24 26V16M19 5h10M35 13l3-3" /></svg>
-  ),
-  study: (
-    <svg viewBox="0 0 48 48" className="draw"><circle cx="21" cy="21" r="12" /><path d="M30 30l11 11M16 21h10M21 16v10" /></svg>
-  ),
-  spark: (
-    <svg viewBox="0 0 48 48" className="draw"><path d="M24 5c-8 0-13 6-13 12 0 5 3 8 6 11v5h14v-5c3-3 6-6 6-11 0-6-5-12-13-12z" /><path d="M19 39h10M21 44h6" /></svg>
-  ),
-  back: (
-    <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M11 6l-6 6 6 6" /></svg>
-  ),
-  up: (
-    <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 19V5M6 11l6-6 6 6" /></svg>
+  laurel: (
+    <svg viewBox="0 0 64 40" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.600" strokeLinecap="round"><path d="M14 34C7 28 6 16 13 6M10 27l-5-1M9 20l-5 1M10 13 6 10M50 34c7-6 8-18 1-28M54 27l5-1M55 20l5 1M54 13l4-3" /></svg>
   ),
 }
 
-/* ---------- navigation ---------- */
-function Nav() {
-  const [open, setOpen] = useState(false)
-  const [current, setCurrent] = useState('')
-  useEffect(() => {
-    const io = new IntersectionObserver((entries) => entries.forEach((e) => { if (e.isIntersecting) setCurrent('#' + e.target.id) }), { rootMargin: '-45% 0px -50% 0px' })
-    document.querySelectorAll('main section[id]').forEach((s) => io.observe(s))
-    return () => io.disconnect()
-  }, [])
+/* ---------- top bar and floating dock ---------- */
+function Logo({ onClick }) {
   return (
-    <header className="nav">
-      <div className="nav__pill glass" {...glassProps}>
-        <a className="nav__brand" href="#top" onClick={() => setOpen(false)} aria-label="Zera Bytes"><img src={`${BASE}logo.png`} alt="" width="36" height="36" /><span>zera bytes</span></a>
-        <nav className="nav__links" aria-label="Sections">
-          {NAV.map(([label, href]) => <a key={href} href={href} className={current === href ? 'is-current' : ''}>{label}</a>)}
-        </nav>
-        <a className="nav__cta rip" href="#contact">Let&apos;s talk</a>
-        <button className="nav__menu" type="button" aria-label={open ? 'Close menu' : 'Open menu'} aria-expanded={open} onClick={() => setOpen(!open)}>
-          <span /><span />
-        </button>
-      </div>
-      {open && (
-        <nav className="nav__drawer glass" aria-label="Sections">
-          {[...NAV, ['Contact', '#contact']].map(([label, href]) => <a key={href} href={href} onClick={() => setOpen(false)}>{label}</a>)}
-        </nav>
-      )}
+    <a className="logo" href="#top" onClick={onClick} aria-label={`${BRAND.name} ${BRAND.accent}`}>
+      <img src={`${BASE}logo.png`} alt="" width="34" height="34" />
+      <span>{BRAND.name} <i>{BRAND.accent}</i></span>
+    </a>
+  )
+}
+
+function TopBar() {
+  return (
+    <header className="topbar">
+      <Logo />
+      <a className="btn btn--sm" href="#contact">Contact Us</a>
     </header>
   )
 }
 
-/* ---------- works ---------- */
-function Glyph({ work }) {
-  return <span className="glyph" style={{ background: work.tint, color: work.ink }} aria-hidden="true">{work.name[0]}</span>
-}
-
-function FilterBar({ filter, setFilter }) {
-  const barRef = useRef(null)
-  // Slide the glass indicator under the active pill.
-  useLayoutEffect(() => {
-    const bar = barRef.current
-    const active = bar.querySelector('[aria-pressed="true"]')
-    bar.style.setProperty('--ix', `${active.offsetLeft}px`)
-    bar.style.setProperty('--iw', `${active.offsetWidth}px`)
-  }, [filter])
-  return (
-    <div className="filters glass" ref={barRef} role="group" aria-label="Filter works">
-      <span className="filters__ind" aria-hidden="true" />
-      {FILTERS.map(([key, label]) => (
-        <button key={key} type="button" className="filter" aria-pressed={filter === key} onClick={() => setFilter(key)}>{label}</button>
-      ))}
-    </div>
-  )
-}
-
-function WorkGrid({ items, filter, onOpen, animateCards }) {
-  const gridRef = useRef(null)
-  const first = useRef(true)
-  // Re-deal the cards when the filter changes.
-  useLayoutEffect(() => {
-    if (first.current) { first.current = false; return }
-    if (reduced()) return
-    const tween = gsap.fromTo(gridRef.current.children, { opacity: 0, y: 28, scale: 0.94 }, { opacity: 1, y: 0, scale: 1, duration: 0.55, ease: 'power3.out', stagger: 0.05, clearProps: 'opacity,transform' })
-    return () => tween.kill()
-  }, [filter])
-  return (
-    <div className="grid" ref={gridRef}>
-      {items.map((work) => (
-        <button key={work.id} type="button" className="work" {...(animateCards ? { 'data-card': '' } : {})} data-tilt {...glassProps} onClick={(e) => onOpen(work, e.currentTarget.querySelector('.work__shot'))} aria-label={`${work.name}, ${work.label}. Open details`}>
-          <span className="work__frame glass">
-            <img className="work__shot" src={`${BASE}work/${work.id}.jpg`} alt="" loading="lazy" width="1200" height="780" />
-            <span className="work__go">{Icon.arrow}</span>
-          </span>
-          <span className="work__meta"><Glyph work={work} /><b>{work.name}</b><i>{work.label}</i></span>
-        </button>
-      ))}
-    </div>
-  )
-}
-
-const pick = (filter) => WORKS.filter((w) => filter === 'all' || w.cat === filter)
-
-function Works({ filter, setFilter, onOpen }) {
-  return (
-    <section className="section works" id="work">
-      <div className="wrap">
-        <div className="works__head">
-          <h2 className="title" data-reveal>Works</h2>
-          <div data-reveal><FilterBar filter={filter} setFilter={setFilter} /></div>
-        </div>
-        <WorkGrid items={pick(filter).slice(0, HOME_LIMIT)} filter={filter} onOpen={onOpen} animateCards />
-        <div className="works__more"><a className="btn rip" href="#all-works">See more {Icon.arrow}</a></div>
-      </div>
-    </section>
-  )
-}
-
-/* Full-screen page with every project. Opens at #all-works. */
-function AllWorks({ filter, setFilter, onOpen }) {
-  const ref = useRef(null)
-  useLayoutEffect(() => {
-    document.documentElement.style.overflow = 'hidden'
-    let tween
-    if (!reduced()) tween = gsap.fromTo(ref.current, { clipPath: 'circle(0% at 50% 100%)' }, { clipPath: 'circle(150% at 50% 100%)', duration: 0.9, ease: 'expo.out', clearProps: 'clipPath' })
-    const onKey = (event) => { if (event.key === 'Escape' && !document.querySelector('.modal')) window.location.hash = 'work' }
-    window.addEventListener('keydown', onKey)
-    return () => { document.documentElement.style.overflow = ''; window.removeEventListener('keydown', onKey); if (tween) tween.kill() }
-  }, [])
-  const items = pick(filter)
-  return (
-    <div className="all" ref={ref} role="dialog" aria-modal="true" aria-label="All works">
-      <div className="wrap">
-        <div className="all__bar">
-          <a className="all__back glass rip" href="#work">{Icon.back}<span>Back</span></a>
-          <span className="mono">{items.length} {items.length === 1 ? 'project' : 'projects'}</span>
-        </div>
-        <div className="works__head">
-          <h2 className="title">All works</h2>
-          <FilterBar filter={filter} setFilter={setFilter} />
-        </div>
-        <WorkGrid items={items} filter={filter} onOpen={onOpen} />
-        <p className="fine">Concept projects</p>
-      </div>
-    </div>
-  )
-}
-
-function WorkModal({ work, origin, list, onStep, onClose }) {
-  const index = list.findIndex((w) => w.id === work.id)
-  const dir = useRef(0)
-  const step = (d) => { if (list.length > 1) { dir.current = d; onStep(list[(index + d + list.length) % list.length]) } }
-  const panelRef = useRef(null)
-  const backRef = useRef(null)
-  const closing = useRef(false)
-
-  const close = () => {
-    if (closing.current) return
-    closing.current = true
-    if (reduced()) { onClose(); return }
-    gsap.to(panelRef.current, { y: 40, scale: 0.96, opacity: 0, duration: 0.3, ease: 'power2.in' })
-    gsap.to(backRef.current, { opacity: 0, duration: 0.3, onComplete: onClose })
-  }
-
-  useLayoutEffect(() => {
-    const panel = panelRef.current
-    const shot = panel.querySelector('.modal__shot')
-    document.documentElement.style.overflow = 'hidden'
-    panel.querySelector('.modal__close').focus()
-    const onKey = (event) => { if (event.key === 'Escape') close() }
-    window.addEventListener('keydown', onKey)
-    let timeline
-    if (!reduced()) {
-      // Grow the image out of the card that was clicked.
-      const from = origin
-      const to = shot.getBoundingClientRect()
-      timeline = gsap.timeline({ defaults: { ease: 'expo.out' } })
-      timeline.fromTo(backRef.current, { opacity: 0 }, { opacity: 1, duration: 0.4 }, 0)
-      timeline.fromTo(panel, { opacity: 0 }, { opacity: 1, duration: 0.25 }, 0)
-      if (from) {
-        timeline.fromTo(shot, { x: from.left - to.left, y: from.top - to.top, scaleX: from.width / to.width, scaleY: from.height / to.height, transformOrigin: '0 0', borderRadius: 18 }, { x: 0, y: 0, scaleX: 1, scaleY: 1, borderRadius: 14, duration: 0.75 }, 0)
-      }
-      timeline.from(panel.querySelectorAll('[data-in]'), { y: 22, opacity: 0, duration: 0.6, stagger: 0.06 }, 0.2)
-    }
-    return () => {
-      window.removeEventListener('keydown', onKey)
-      document.documentElement.style.overflow = ''
-      if (timeline) timeline.kill()
-    }
-  }, [])
-
-  // Arrow keys and a slide when moving between projects.
+function Dock() {
+  const [pct, setPct] = useState(0)
+  const [light, setLight] = useState(false)
+  const [open, setOpen] = useState(false)
   useEffect(() => {
-    const onKey = (event) => { if (event.key === 'ArrowRight') step(1); if (event.key === 'ArrowLeft') step(-1) }
+    const update = () => {
+      const max = document.documentElement.scrollHeight - window.innerHeight
+      setPct(max > 0 ? Math.min(100, Math.round((window.scrollY / max) * 100)) : 0)
+      const y = window.innerHeight - 46
+      let dark = false
+      document.querySelectorAll('[data-dark]').forEach((el) => { const r = el.getBoundingClientRect(); if (r.top <= y && r.bottom >= y) dark = true })
+      setLight(dark)
+    }
+    update()
+    window.addEventListener('scroll', update, { passive: true })
+    window.addEventListener('resize', update)
+    return () => { window.removeEventListener('scroll', update); window.removeEventListener('resize', update) }
+  }, [])
+  useEffect(() => {
+    if (!open) return
+    const onKey = (event) => { if (event.key === 'Escape') setOpen(false) }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  })
-  useLayoutEffect(() => {
-    if (!dir.current || reduced()) return
-    const panel = panelRef.current
-    const tween = gsap.fromTo([panel.querySelector('.modal__shot'), ...panel.querySelectorAll('[data-in]')], { opacity: 0, x: 60 * dir.current }, { opacity: 1, x: 0, duration: 0.5, ease: 'expo.out', stagger: 0.04, clearProps: 'opacity,transform' })
-    return () => tween.kill()
-  }, [work.id])
+  }, [open])
+  return (
+    <div className={`dock${light ? ' is-light' : ''}`}>
+      {open && (
+        <nav className="dock__menu" aria-label="Menu">
+          <span className="cap">Menu</span>
+          {NAV.map(([label, href]) => <a key={href} href={href} onClick={() => setOpen(false)}>{label}<span>{I.arrow}</span></a>)}
+          <div className="dock__contact">
+            <a className="btn btn--sm" href={telLink}>{I.phone} Call</a>
+            <a className="btn btn--sm btn--light" href={waLink} target="_blank" rel="noopener">{I.wa} WhatsApp</a>
+          </div>
+        </nav>
+      )}
+      <div className="dock__bar">
+        <a className="dock__logo" href="#top" onClick={() => setOpen(false)} aria-label="Back to top"><img src={`${BASE}logo.png`} alt="" width="30" height="30" /></a>
+        <span className="dock__pct">{pct}%</span>
+        <button className="dock__btn" type="button" aria-expanded={open} onClick={() => setOpen(!open)}>
+          <span className="dock__burger" aria-hidden="true"><i /><i /></span>{open ? 'Close' : 'Menu'}
+        </button>
+      </div>
+    </div>
+  )
+}
 
+/* ---------- clients ---------- */
+function Clients() {
+  return (
+    <section className="clients" aria-label="Our clients">
+      <div className="clients__grid">
+        {CLIENTS.map((name) => <div className="clients__card" key={name} data-reveal>{name}</div>)}
+      </div>
+      <p className="t-large center">Our clients</p>
+    </section>
+  )
+}
+
+/* ---------- one team ---------- */
+const FLOATS = ['kripkart-1', 'apex', 'jula-m', 'oakloom', 'zerafinance-1', 'kripkart-m']
+function OneTeam() {
+  return (
+    <section className="team" id="about">
+      {FLOATS.map((name, i) => <img key={name} className={`team__float team__float--${i + 1}`} src={img(name)} alt="" loading="lazy" data-float={i % 2 ? 60 : -60} />)}
+      <div className="team__circle">
+        <h2 className="h2" data-reveal>One Team For Your Website, <br className="br-d" />Automation And Software</h2>
+        <p className="t-large" data-reveal>Growing businesses lose time juggling separate designers, developers and tools. We do all of it, so your website, your messages and your books stay connected.</p>
+        <a className="btn" href={waLink} target="_blank" rel="noopener" data-reveal>Get a quotation in 24 hours</a>
+        <p className="t-small team__label">We are available on</p>
+        <div className="team__socials">
+          <a href={telLink} aria-label="Call us">{I.phone}</a>
+          <a href={waLink} target="_blank" rel="noopener" aria-label="WhatsApp">{I.wa}</a>
+          {socials.map(([name, url]) => <a key={name} href={url} target="_blank" rel="noopener" aria-label={name}>{name[0]}</a>)}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+/* ---------- works carousel ---------- */
+function Works({ onOpen }) {
+  const ref = useRef(null)
+  useEffect(() => {
+    const el = ref.current
+    const cards = [...el.children]
+    const update = () => {
+      const mid = el.scrollLeft + el.clientWidth / 2
+      for (const card of cards) card.style.setProperty('--d', ((card.offsetLeft + card.offsetWidth / 2 - mid) / el.clientWidth).toFixed(4))
+    }
+    update()
+    el.addEventListener('scroll', update, { passive: true })
+    window.addEventListener('resize', update)
+    // Drag to scroll with a mouse; touch scrolls natively.
+    let down = false, startX = 0, startLeft = 0, moved = 0
+    const onDown = (event) => { if (event.pointerType !== 'mouse') return; down = true; moved = 0; startX = event.clientX; startLeft = el.scrollLeft; el.classList.add('is-drag') }
+    const onMove = (event) => { if (!down) return; const dx = event.clientX - startX; moved = Math.abs(dx); el.scrollLeft = startLeft - dx }
+    const onUp = () => { if (!down) return; down = false; el.classList.remove('is-drag') }
+    const onClick = (event) => { if (moved > 6) { event.preventDefault(); event.stopPropagation(); moved = 0 } }
+    el.addEventListener('pointerdown', onDown)
+    window.addEventListener('pointermove', onMove)
+    window.addEventListener('pointerup', onUp)
+    el.addEventListener('click', onClick, true)
+    return () => {
+      el.removeEventListener('scroll', update); window.removeEventListener('resize', update)
+      el.removeEventListener('pointerdown', onDown); window.removeEventListener('pointermove', onMove); window.removeEventListener('pointerup', onUp); el.removeEventListener('click', onClick, true)
+    }
+  }, [])
+  const step = (dir) => { const el = ref.current; const card = el.children[0]; el.scrollBy({ left: dir * (card.offsetWidth + 28), behavior: reduced() ? 'auto' : 'smooth' }) }
+  return (
+    <section className="works" id="work">
+      <div className="head">
+        <h2 className="h2" data-reveal>Explore Our Latest Work <br className="br-d" />Across Industries</h2>
+        <p className="t-large" data-reveal>Live client websites and concept designs, from online stores and company sites to dashboards, automation and 3D product pages.</p>
+      </div>
+      <div className="arc" ref={ref}>
+        {WORKS.map((work) => (
+          <article className="arc__card" key={work.id} style={{ '--tint': work.tint }}>
+            <span className={`tag${work.live ? ' tag--live' : ''}`}>{work.live ? <><i />Live Now</> : 'Concept'}</span>
+            <h3 className="h5">{work.name}</h3>
+            <p>{work.line}</p>
+            <button className="arc__shot" type="button" onClick={() => onOpen(work)} aria-label={`Open ${work.name}`}><img src={img(work.images[0])} alt="" loading="lazy" draggable="false" /></button>
+            {work.live
+              ? <a className="btn btn--light btn--sm arc__go" href={work.url} target="_blank" rel="noopener">View Website {I.arrow}</a>
+              : <button className="btn btn--light btn--sm arc__go" type="button" onClick={() => onOpen(work)}>View Project {I.arrow}</button>}
+          </article>
+        ))}
+      </div>
+      <div className="arc__nav">
+        <button type="button" onClick={() => step(-1)} aria-label="Previous project">{I.left}</button>
+        <span className="t-small">Drag</span>
+        <button type="button" onClick={() => step(1)} aria-label="Next project">{I.right}</button>
+      </div>
+    </section>
+  )
+}
+
+/* ---------- statement and stats ---------- */
+function Statement() {
+  return (
+    <section className="statement">
+      <p className="h-st" data-reveal>
+        We Study Your Company First. Then We Design And Build What You Imagine, Put It Live, And Stay With You For A Full Year After Launch.
+      </p>
+      <span className="chipf chipf--a">Quotation in 24 hours</span>
+      <span className="chipf chipf--b">Built around your business</span>
+      <span className="chipf chipf--c">One year of free support</span>
+    </section>
+  )
+}
+
+function Stats() {
+  return (
+    <section className="stats">
+      {STATS.map(([value, label]) => (
+        <div className="stats__item" key={label} data-reveal>
+          <span className="stats__ic">{I.laurel}</span>
+          <b className="h3">{value}</b>
+          <span className="t-large">{label}</span>
+        </div>
+      ))}
+    </section>
+  )
+}
+
+/* ---------- small illustrations (drawn in HTML) ---------- */
+function Illo({ kind }) {
+  if (kind === 'study') {
+    return (
+      <div className="illo"><div className="mini">
+        <div className="mini__head"><b>Your business</b><span className="mini__pill">Mapped</span></div>
+        {['Sales channels', 'Daily tasks', 'Tools in use', 'What to automate'].map((row, i) => <div className="mini__row" key={row}><span className={`mini__check${i === 3 ? ' is-off' : ''}`}>{I.check}</span>{row}</div>)}
+        <div className="mini__bar"><i style={{ width: '78%' }} /></div>
+      </div></div>
+    )
+  }
+  if (kind === 'imagine') {
+    return (
+      <div className="illo illo--split">
+        <div className="mini mini--sketch"><span /><span /><span /><em>Your idea</em></div>
+        <span className="illo__arrow">{I.right}</span>
+        <div className="mini mini--live"><div className="mini__dots"><i /><i /><i /><span className="mini__pill mini__pill--ok">Live</span></div><div className="mini__hero" /><div className="mini__cols"><i /><i /><i /></div></div>
+      </div>
+    )
+  }
+  if (kind === 'quote') {
+    return (
+      <div className="illo"><div className="mini mini--chat">
+        <span className="bub bub--me">I need a website for my store</span>
+        <div className="bub bub--quote"><b>Quotation · Zera Studio</b><span>Scope and pages</span><span>Timeline: 4 to 10 days</span><span>Support: 1 year, free</span></div>
+        <span className="mini__pill mini__pill--ok">Sent within 24 hours</span>
+      </div></div>
+    )
+  }
+  if (kind === 'days') {
+    return (
+      <div className="illo"><div className="mini">
+        <div className="mini__head"><b>Launch timeline</b><span className="mini__pill">On track</span></div>
+        <svg className="mini__chart" viewBox="0 0 300 130" aria-hidden="true">
+          <path d="M14 112 C 70 108, 96 92, 126 84 S 190 62, 214 44 S 262 22, 286 14" fill="none" stroke="#ff7a3d" strokeWidth="3" strokeLinecap="round" />
+          {[[14, 112, 'Order'], [126, 84, 'Quotation'], [214, 44, 'Build'], [286, 14, 'Live']].map(([x, y, t]) => <g key={t}><circle cx={x} cy={y} r="6" fill="#fff" stroke="#ff7a3d" strokeWidth="3" /><text x={x} y={y + 22} textAnchor={x > 250 ? 'end' : x < 30 ? 'start' : 'middle'} fontSize="11" fill="rgba(0,0,0,.6)">{t}</text></g>)}
+        </svg>
+        <div className="mini__foot"><span>Day 1</span><span>Day 4 to 10</span></div>
+      </div></div>
+    )
+  }
+  if (kind === 'support') {
+    return (
+      <div className="illo"><div className="mini mini--support">
+        <span className="mini__ring"><b>365</b><i>days</i></span>
+        <div><b>Support active</b><span>Fault fixes and help, free for a year</span><span className="mini__pill mini__pill--ok">Included</span></div>
+      </div></div>
+    )
+  }
+  // business-flow panels
+  if (kind === 'order') {
+    return (
+      <div className="illo illo--flow">
+        <div className="mini"><div className="mini__head"><b>New enquiry</b><span className="mini__pill">Today</span></div><div className="mini__row"><span className="mini__check">{I.check}</span>Company website</div><div className="mini__row"><span className="mini__check">{I.check}</span>Product catalogue</div><div className="mini__row"><span className="mini__check">{I.check}</span>WhatsApp enquiries</div></div>
+        <div className="mini mini--note"><b>We ask about</b><span>Your business</span><span>Your customers</span><span>Your deadline</span></div>
+      </div>
+    )
+  }
+  if (kind === 'build') {
+    return (
+      <div className="illo illo--flow">
+        <div className="mini mini--live"><div className="mini__dots"><i /><i /><i /><span className="mini__pill">Preview</span></div><div className="mini__hero" /><div className="mini__cols"><i /><i /><i /></div></div>
+        <div className="mini mini--note"><b>Progress</b><span>Design approved</span><span>Pages built</span><span>Your review</span><div className="mini__bar"><i style={{ width: '64%' }} /></div></div>
+      </div>
+    )
+  }
+  if (kind === 'live') {
+    return (
+      <div className="illo illo--flow">
+        <div className="mini mini--live"><div className="mini__dots"><i /><i /><i /><span className="mini__pill mini__pill--ok">Live</span></div><div className="mini__hero" /><div className="mini__cols"><i /><i /><i /></div></div>
+        <div className="mini mini--support"><span className="mini__ring"><b>365</b><i>days</i></span><div><b>Support begins</b><span>Free for one year</span></div></div>
+      </div>
+    )
+  }
+  return null
+}
+
+/* ---------- our specialities (black, side-scrolling) ---------- */
+function Specials() {
+  const section = useRef(null)
+  const track = useRef(null)
+  useLayoutEffect(() => {
+    if (reduced()) return
+    const mm = gsap.matchMedia()
+    mm.add('(min-width: 1000px) and (min-height: 640px)', () => {
+      const distance = () => Math.max(0, track.current.scrollWidth - window.innerWidth)
+      section.current.classList.add('is-pinned')
+      const tween = gsap.to(track.current, { x: () => -distance(), ease: 'none', scrollTrigger: { trigger: section.current, start: 'top top', end: () => `+=${distance()}`, pin: true, scrub: 0.5, invalidateOnRefresh: true } })
+      return () => { tween.scrollTrigger?.kill(); tween.kill(); section.current?.classList.remove('is-pinned'); gsap.set(track.current, { clearProps: 'transform' }) }
+    })
+    return () => mm.revert()
+  }, [])
+  return (
+    <section className="spec" id="specialities" data-dark ref={section}>
+      <div className="spec__track" ref={track}>
+        <div className="spec__intro">
+          <span className="pill pill--mint">Our specialities</span>
+          <h2 className="h-st">We Help Growing Businesses Design, Build, Launch And Automate.</h2>
+        </div>
+        {SPECIALS.map(([title, text, kind], i) => (
+          <article className={`spec__card${i % 2 ? ' spec__card--dark' : ''}`} key={kind}>
+            <h3 className="h2">{lines(title)}</h3>
+            <p className="t-body">{text}</p>
+            <Illo kind={kind} />
+          </article>
+        ))}
+      </div>
+    </section>
+  )
+}
+
+/* ---------- automation ---------- */
+function Automation({ onOpen }) {
+  const row = [...TOOLS, ...TOOLS]
+  return (
+    <section className="auto" id="automation">
+      <div className="head">
+        <h2 className="h2" data-reveal>Business And Social Media <br className="br-d" />Automation, Built In</h2>
+        <p className="t-large" data-reveal>We connect WhatsApp, Instagram, your website and your books. Enquiries get answered, leads get assigned and reports arrive on their own.</p>
+        <button className="btn" type="button" onClick={() => onOpen(byId('drift'))} data-reveal>See an automation</button>
+      </div>
+      <div className="marq" aria-hidden="true"><div className="marq__track">{row.map((tool, i) => <span className="pill" key={i}><span className="pill__dot" />{tool}</span>)}</div></div>
+      <div className="auto__shots">
+        {['drift', 'pulse'].map((id) => (
+          <button key={id} type="button" className="shot" onClick={() => onOpen(byId(id))} aria-label={`Open ${byId(id).name}`} data-reveal><img src={img(id)} alt="" loading="lazy" /><span className="shot__cap">{byId(id).name} · {byId(id).label}</span></button>
+        ))}
+      </div>
+    </section>
+  )
+}
+
+/* ---------- our business flow (tabs on a soft panel) ---------- */
+const FLOW_ICONS = [I.compass, I.doc, I.code, I.rocket]
+function Flow() {
+  const [tab, setTab] = useState(0)
+  const [auto, setAuto] = useState(true)
+  const ref = useRef(null)
+  useEffect(() => {
+    if (!auto || reduced()) return
+    let visible = false
+    const io = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting }, { threshold: 0.4 })
+    io.observe(ref.current)
+    const id = setInterval(() => { if (visible) setTab((t) => (t + 1) % FLOW.length) }, 4200)
+    return () => { clearInterval(id); io.disconnect() }
+  }, [auto])
+  const [, title, text, chips, kind] = FLOW[tab]
+  return (
+    <section className="flow" id="flow" ref={ref}>
+      <div className="head">
+        <h2 className="h2" data-reveal>Our Business Flow</h2>
+        <p className="t-large" data-reveal>Four steps from your first message to a live website.</p>
+      </div>
+      <div className="flow__panel" data-reveal>
+        <div className="flow__tabs" role="tablist" aria-label="Business flow steps">
+          {FLOW.map(([name], i) => <button key={name} type="button" role="tab" aria-selected={tab === i} className="flow__tab" onClick={() => { setTab(i); setAuto(false) }}><b>{i + 1}</b>{name}</button>)}
+        </div>
+        <div className="flow__card" key={tab}>
+          <div className="flow__text">
+            <span className="flow__ic">{FLOW_ICONS[tab]}</span>
+            <h3 className="h5">{title}</h3>
+            <p className="t-small">{text}</p>
+            <div className="chips">{chips.map((chip) => <span className="chip" key={chip}>{chip}</span>)}</div>
+            <a className="btn btn--sm" href={waLink} target="_blank" rel="noopener">Get in touch</a>
+          </div>
+          <div className="flow__art"><Illo kind={kind} /></div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+/* ---------- featured client work ---------- */
+function Cases({ onOpen }) {
+  const live = WORKS.filter((w) => w.live)
+  return (
+    <section className="cases" id="clients-work">
+      <div className="head">
+        <h2 className="h2" data-reveal>Featured Client Work, <br className="br-d" />Live Right Now</h2>
+        <p className="t-large" data-reveal>Three websites we built that are online today. Open any of them and look around.</p>
+        <a className="btn btn--light btn--sm" href="#gallery" data-reveal>View all work {I.arrow}</a>
+      </div>
+      <div className="cases__list">
+        {live.map((work, i) => (
+          <article className="case" key={work.id} style={{ '--i': i }}>
+            <button className="case__media" type="button" onClick={() => onOpen(work)} aria-label={`Open ${work.name} screens`} style={{ '--tint': work.tint }}>
+              <img src={img(work.images[0])} alt={`${work.name} home page`} loading="lazy" />
+              {work.mobile && <img className="case__phone" src={img(work.mobile)} alt="" loading="lazy" />}
+            </button>
+            <div className="case__info">
+              <span className="case__glyph" style={{ background: work.dot }}>{work.name[0]}</span>
+              <h3 className="h5">{work.name}</h3>
+              <span className="t-small case__cat">{work.label} · <span className="tag tag--live tag--inline"><i />Live</span></span>
+              <p className="t-body">{work.line}</p>
+              <div className="case__fact"><b className="h5">{work.fact[0]}</b><span className="t-cap">{work.fact[1]}</span></div>
+              <div className="case__btns">
+                <a className="btn btn--sm" href={work.url} target="_blank" rel="noopener">Visit website {I.arrow}</a>
+                <button className="btn btn--light btn--sm" type="button" onClick={() => onOpen(work)}>See screens</button>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+  )
+}
+
+/* ---------- founder / quotation / support ---------- */
+function Bento() {
+  const initials = BRAND.founder.split(' ').map((part) => part[0]).join('')
+  return (
+    <section className="bento">
+      <div className="head"><h2 className="h2" data-reveal>The People And Promises <br className="br-d" />Behind Zera Studio</h2></div>
+      <div className="bento__grid">
+        <div className="bento__card bento__card--sand" data-reveal>
+          <span className="pill pill--dark">Founder</span>
+          <div className="bento__founder"><span className="avatar">{initials}</span><div><b className="h5">{BRAND.founder}</b><span className="t-large">Founder, Zera Studio</span></div></div>
+        </div>
+        <div className="bento__card" data-reveal>
+          <span className="bento__ic">{I.doc}</span>
+          <b className="h5">Clear quotation.<br />No surprises.</b>
+          <span className="t-small">Sent on WhatsApp within 24 hours.</span>
+          <a className="btn btn--sm" href={waLink} target="_blank" rel="noopener">Get a quotation</a>
+        </div>
+        <div className="bento__card bento__card--deep" data-reveal>
+          <b className="h3">1 Year</b>
+          <span className="t-small">Free support with every project</span>
+          <span className="logo logo--white"><img src={`${BASE}logo.png`} alt="" width="30" height="30" /><span>{BRAND.name} <i>{BRAND.accent}</i></span></span>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+/* ---------- services (stacked colour bands) ---------- */
+function Services({ onOpen }) {
+  return (
+    <section className="svcs" id="services">
+      {SERVICES.map(([title, bullet, text, color, shots], i) => (
+        <article className="svc" key={title} style={{ '--c': color }} data-dark>
+          <div className="svc__in">
+            <div className="svc__head"><h2 className="h-st">{lines(title)}</h2><span className="h-st svc__no">/{String(i + 1).padStart(2, '0')}</span></div>
+            <div className="svc__panel">
+              <div className="svc__row">
+                <p className="t-small svc__bullet"><i />{bullet}</p>
+                <a className="btn btn--light btn--sm" href={waLink} target="_blank" rel="noopener">Get Started {I.arrow}</a>
+                <p className="t-small svc__text">{text}</p>
+              </div>
+              <div className={`svc__shots svc__shots--${shots.length}${shots[0].endsWith('-m') ? ' svc__shots--phone' : ''}`}>
+                {shots.map((name) => {
+                  const work = WORKS.find((w) => w.images.includes(name) || w.mobile === name)
+                  return work
+                    ? <button key={name} type="button" className="svc__shot" onClick={() => onOpen(work)} aria-label={`Open ${work.name}`}><img src={img(name)} alt="" loading="lazy" /></button>
+                    : <span key={name} className="svc__shot"><img src={img(name)} alt="" loading="lazy" /></span>
+                })}
+              </div>
+            </div>
+          </div>
+        </article>
+      ))}
+    </section>
+  )
+}
+
+/* ---------- gallery ---------- */
+function Gallery({ onOpen }) {
+  return (
+    <section className="gallery" id="gallery">
+      <div className="head"><h2 className="h2" data-reveal>Explore Some Of Our <br className="br-d" />Latest Work</h2></div>
+      <div className="gallery__grid">
+        {GALLERY.map(([id, name]) => {
+          const work = byId(id)
+          return (
+            <button key={name} type="button" className="gallery__item" onClick={() => onOpen(work, work.images.indexOf(name))} aria-label={`Open ${work.name}`} data-reveal>
+              <img src={img(name)} alt="" loading="lazy" />
+              <span className="gallery__cap"><b>{work.name}</b>{work.live ? <span className="tag tag--live tag--inline"><i />Live</span> : <span className="tag tag--inline">Concept</span>}</span>
+            </button>
+          )
+        })}
+      </div>
+    </section>
+  )
+}
+
+/* ---------- support ---------- */
+function Support() {
+  return (
+    <section className="support">
+      <div className="head">
+        <h2 className="h2" data-reveal>One Year Of Free Support, <br className="br-d" />Included</h2>
+        <p className="t-large" data-reveal>Every project we deliver comes with a year of support from the day it goes live.</p>
+      </div>
+      <div className="support__grid">
+        {SUPPORT.map(([title, text, icon]) => (
+          <div className="support__card" key={title} data-reveal><span className="support__ic">{I[icon]}</span><b>{title}</b><span className="t-small">{text}</span></div>
+        ))}
+      </div>
+    </section>
+  )
+}
+
+/* ---------- FAQ ---------- */
+function Faq() {
+  const [open, setOpen] = useState(0)
+  const initials = BRAND.founder.split(' ').map((part) => part[0]).join('')
+  return (
+    <section className="faq" id="faq">
+      <div className="faq__side">
+        <h2 className="h2">Got Questions? <br />We&apos;ve Got Answers</h2>
+        <p className="t-large">If you are unsure where to start, reach out and we will walk you through it.</p>
+        <a className="faq__card" href={telLink}>
+          <span className="avatar avatar--sm">{initials}</span>
+          <span><span className="t-cap">Let&apos;s Talk</span><b>Book An Intro Call</b><span className="t-cap">{BRAND.founder}, Founder @ZeraStudio</span></span>
+          <span className="faq__go">{I.arrow}</span>
+        </a>
+      </div>
+      <div className="faq__list">
+        {FAQ.map(([question, answer], i) => (
+          <div className={`faq__item${open === i ? ' is-open' : ''}`} key={question}>
+            <button type="button" aria-expanded={open === i} onClick={() => setOpen(open === i ? -1 : i)}><span>{question}</span><span className="faq__plus">{I.plus}</span></button>
+            <div className="faq__answer"><p className="t-body">{answer}</p></div>
+          </div>
+        ))}
+      </div>
+    </section>
+  )
+}
+
+/* ---------- closing call to action and footer ---------- */
+function Cta() {
+  return (
+    <section className="cta" id="contact" data-dark>
+      <h2 className="h1" data-reveal>Let&apos;s Build Yours.</h2>
+      <p className="cta__tag" data-reveal>{BRAND.tagline}</p>
+      <p className="cta__num select" data-reveal>{CONTACT.phone}</p>
+      <div className="cta__btns" data-reveal>
+        <a className="btn btn--white" href={telLink}>{I.phone} Call</a>
+        <a className="btn btn--ghost" href={waLink} target="_blank" rel="noopener">{I.wa} WhatsApp</a>
+      </div>
+    </section>
+  )
+}
+
+function Footer() {
+  return (
+    <footer className="footer">
+      <div className="footer__top">
+        <div><Logo /><p className="t-small">We design and build websites, software, automation and ERP for growing businesses.</p></div>
+        <span className="footer__tag">{BRAND.tagline}</span>
+      </div>
+      <div className="footer__main">
+        <div className="footer__lead">
+          <p className="h5">Quotation in 24 hours.<br />Websites in 4 to 10 days.</p>
+          <div className="footer__contact">
+            <div><span className="cap">Call us</span><a href={telLink}>{CONTACT.phone}</a></div>
+            <div><span className="cap">WhatsApp</span><a href={waLink} target="_blank" rel="noopener">{CONTACT.phone}</a></div>
+            {CONTACT.email && <div><span className="cap">Drop us a line</span><span className="select">{CONTACT.email}</span></div>}
+          </div>
+          <a className="btn" href={waLink} target="_blank" rel="noopener">{I.wa} Get a quotation</a>
+        </div>
+        <div className="footer__cols">
+          <div><span className="cap">Services</span>{SERVICES.map(([title]) => <a key={title} href="#services">{title.replace(/\n/g, ' ').replace(/,$/, '')}</a>)}</div>
+          <div><span className="cap">Quick links</span>{NAV.map(([label, href]) => <a key={href} href={href}>{label}</a>)}</div>
+          <div><span className="cap">Policies</span>{Object.entries(POLICIES).map(([id, policy]) => <a key={id} href={`#${id}`}>{policy.title}</a>)}</div>
+          {socials.length > 0 && <div><span className="cap">Follow us</span>{socials.map(([name, url]) => <a key={name} href={url} target="_blank" rel="noopener">{name}</a>)}</div>}
+        </div>
+      </div>
+      {CONTACT.address && <div className="footer__loc"><span className="cap">Our location</span><p className="t-small">{CONTACT.address}</p></div>}
+      <div className="footer__bar">
+        <span>© {new Date().getFullYear()}, Zera Studio | All Rights Reserved.</span>
+        <nav aria-label="Policies">{['terms', 'privacy', 'refund'].map((id) => <a key={id} href={`#${id}`}>{POLICIES[id].title}</a>)}</nav>
+      </div>
+    </footer>
+  )
+}
+
+/* ---------- project popup ---------- */
+function WorkModal({ work, start, onStep, onClose }) {
+  const [index, setIndex] = useState(start || 0)
+  const list = WORKS
+  const at = list.findIndex((w) => w.id === work.id)
+  const step = (dir) => onStep(list[(at + dir + list.length) % list.length])
+  useEffect(() => { setIndex(start || 0) }, [work.id, start])
+  useEffect(() => {
+    document.documentElement.style.overflow = 'hidden'
+    const onKey = (event) => { if (event.key === 'Escape') onClose(); if (event.key === 'ArrowRight') step(1); if (event.key === 'ArrowLeft') step(-1) }
+    window.addEventListener('keydown', onKey)
+    return () => { document.documentElement.style.overflow = ''; window.removeEventListener('keydown', onKey) }
+  })
+  const shots = work.mobile ? [...work.images, work.mobile] : work.images
+  const current = shots[Math.min(index, shots.length - 1)]
+  const phone = current.endsWith('-m')
   return (
     <div className="modal" role="dialog" aria-modal="true" aria-label={work.name}>
-      <div className="modal__back" ref={backRef} onClick={close} />
-      <div className="modal__panel glass" ref={panelRef}>
-        <button className="modal__close rip" type="button" onClick={close} aria-label="Close">×</button>
-        {list.length > 1 && <button className="modal__nav modal__nav--prev rip" type="button" onClick={() => step(-1)} aria-label="Previous project">{Icon.back}</button>}
-        {list.length > 1 && <button className="modal__nav modal__nav--next rip" type="button" onClick={() => step(1)} aria-label="Next project">{Icon.back}</button>}
-        <img className="modal__shot" src={`${BASE}work/${work.id}.jpg`} alt={`${work.name} screen`} width="1200" height="780" />
+      <div className="modal__back" onClick={onClose} />
+      <div className="modal__panel">
+        <button className="modal__x" type="button" onClick={onClose} aria-label="Close">{I.close}</button>
+        <div className={`modal__stage${phone ? ' modal__stage--phone' : ''}`} style={{ '--tint': work.tint }}>
+          <img key={current} src={img(current)} alt={`${work.name} screen`} />
+          <button className="modal__nav modal__nav--prev" type="button" onClick={() => step(-1)} aria-label="Previous project">{I.left}</button>
+          <button className="modal__nav modal__nav--next" type="button" onClick={() => step(1)} aria-label="Next project">{I.right}</button>
+        </div>
+        {shots.length > 1 && (
+          <div className="modal__thumbs">
+            {shots.map((name, i) => <button key={name} type="button" className={i === index ? 'is-on' : ''} onClick={() => setIndex(i)} aria-label={`Screen ${i + 1}`}><img src={img(name)} alt="" /></button>)}
+          </div>
+        )}
         <div className="modal__info">
-          <div className="modal__name" data-in><Glyph work={work} /><h3>{work.name}</h3><span className="chip">{work.label}</span><span className="chip chip--soft">Concept</span><span className="mono modal__count">{index + 1} / {list.length}</span></div>
-          <p data-in>{work.line}</p>
-          <div className="chips" data-in>{work.stack.map((t) => <span className="chip chip--soft" key={t}>{t}</span>)}</div>
-          <a className="btn rip" href="#contact" onClick={close} data-in>Build something like this</a>
+          <div className="modal__name"><h3 className="h5">{work.name}</h3><span className="chip">{work.label}</span>{work.live ? <span className="tag tag--live tag--inline"><i />Live site</span> : <span className="chip chip--soft">Concept</span>}<span className="t-cap modal__count">{at + 1} / {list.length}</span></div>
+          <p className="t-body">{work.line}</p>
+          {work.live
+            ? <a className="btn btn--sm" href={work.url} target="_blank" rel="noopener">Visit website {I.arrow}</a>
+            : <a className="btn btn--sm" href={waLink} target="_blank" rel="noopener" onClick={onClose}>Build something like this</a>}
         </div>
       </div>
     </div>
   )
 }
 
-/* ---------- other sections ---------- */
-function Clients() {
-  const row = [...CLIENTS, ...CLIENTS, ...CLIENTS, ...CLIENTS]
-  return (
-    <section className="clients" aria-label="Our clients">
-      <p className="mono clients__label">Our clients</p>
-      <div className="marquee">
-        <div className="marquee__track">{row.map((name, i) => <span key={i} aria-hidden={i >= CLIENTS.length}>{name}</span>)}</div>
-      </div>
-    </section>
-  )
-}
-
-function Solutions() {
-  return (
-    <section className="section" id="solutions">
-      <div className="wrap">
-        <h2 className="title" data-reveal>Solutions</h2>
-        <div className="sols">
-          {DIVISIONS.map((d) => (
-            <article className="sol glass" key={d.id} data-card data-tilt {...glassProps}>
-              <div className="sol__top"><span className="sol__icon">{Icon[d.id]}</span></div>
-              <h3>{d.name}</h3>
-              <p>{d.line}</p>
-              <ul>{d.points.map((point) => <li key={point}>{point}</li>)}</ul>
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
-  )
-}
-
-function About() {
-  const words = 'We study your company first. Then we build what you imagine and make it live.'.split(' ')
-  return (
-    <section className="section" id="about">
-      <div className="wrap">
-        <p className="statement" aria-label={words.join(' ')}>
-          {words.map((word, i) => <span key={i} data-word aria-hidden="true">{word} </span>)}
-        </p>
-        <h2 className="title title--sm" data-reveal>Our business flow</h2>
-        <ol className="chain glass" data-reveal {...glassProps}>
-          {FLOW.map(([step, when]) => <li key={step}><span className="chain__dot" /><span><b>{step}</b><i>{when}</i></span></li>)}
-          <li className="chain__line" aria-hidden="true"><i data-chain /></li>
-        </ol>
-      </div>
-    </section>
-  )
-}
-
-function Special() {
-  return (
-    <section className="section" id="special">
-      <div className="wrap">
-        <h2 className="title" data-reveal>Our specialities</h2>
-        <div className="specials">
-          {SPECIAL.map(([figure, name, line, icon]) => (
-            <article className={`special glass${figure ? ' special--fig' : ''}`} key={name} data-card data-tilt {...glassProps}>
-              <span className="sol__icon">{Icon[icon]}</span>
-              {figure && <span className="special__fig">{figure}</span>}
-              <h3>{name}</h3>
-              <p>{line}</p>
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
-  )
-}
-
-function Contact() {
-  return (
-    <section className="section" id="contact">
-      <div className="wrap">
-        <div className="contact glass" data-reveal {...glassProps}>
-          <h2 className="title">Let&apos;s build yours.</h2>
-          <p className="contact__num select">{CONTACT.phone}</p>
-          <div className="contact__row">
-            <a className="btn rip" href={telLink}>{Icon.call} Call</a>
-            <a className="btn btn--glass rip" href={waLink} target="_blank" rel="noopener">{Icon.wa} WhatsApp</a>
-          </div>
-        </div>
-      </div>
-    </section>
-  )
-}
-
-/* Full-screen policy page. Opens at #privacy, #terms, #refund or #support. */
+/* ---------- policy pages (open at #privacy, #terms, #refund, #support) ---------- */
 function Policy({ id }) {
   const ref = useRef(null)
   const policy = POLICIES[id]
   useLayoutEffect(() => {
     document.documentElement.style.overflow = 'hidden'
     ref.current.scrollTop = 0
-    let tween
-    if (!reduced()) tween = gsap.fromTo(ref.current, { clipPath: 'circle(0% at 50% 100%)' }, { clipPath: 'circle(150% at 50% 100%)', duration: 0.9, ease: 'expo.out', clearProps: 'clipPath' })
     const onKey = (event) => { if (event.key === 'Escape') window.location.hash = 'contact' }
     window.addEventListener('keydown', onKey)
-    return () => { document.documentElement.style.overflow = ''; window.removeEventListener('keydown', onKey); if (tween) tween.kill() }
+    return () => { document.documentElement.style.overflow = ''; window.removeEventListener('keydown', onKey) }
   }, [id])
   return (
-    <div className="all" ref={ref} role="dialog" aria-modal="true" aria-label={policy.title}>
-      <div className="wrap policy">
-        <div className="all__bar">
-          <a className="all__back glass rip" href="#contact">{Icon.back}<span>Back</span></a>
-          <span className="mono">Updated {UPDATED}</span>
-        </div>
-        <h2 className="title title--sm">{policy.title}</h2>
-        <div className="policy__body glass">
-          {policy.sections.map(([heading, text]) => <section key={heading}><h3>{heading}</h3><p>{text}</p></section>)}
-          <section><h3>Contact</h3><p>Zera Bytes · Call or WhatsApp <span className="select">{CONTACT.phone}</span></p></section>
+    <div className="policy" ref={ref} role="dialog" aria-modal="true" aria-label={policy.title}>
+      <div className="policy__in">
+        <div className="policy__bar"><a className="btn btn--light btn--sm" href="#contact">{I.left} Back</a><span className="t-cap">Updated {UPDATED}</span></div>
+        <h2 className="h2">{policy.title}</h2>
+        <div className="policy__body">
+          {policy.sections.map(([heading, text]) => <section key={heading}><h3>{heading}</h3><p className="t-body">{text}</p></section>)}
+          <section><h3>Contact</h3><p className="t-body">Zera Studio · Call or WhatsApp <span className="select">{CONTACT.phone}</span></p></section>
         </div>
       </div>
     </div>
   )
 }
 
-function Dock() {
-  const [top, setTop] = useState(false)
-  useEffect(() => {
-    const onScroll = () => setTop(window.scrollY > window.innerHeight)
-    onScroll()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
-  return (
-    <div className="dock glass" {...glassProps}>
-      <a className="dock__btn rip" href={waLink} target="_blank" rel="noopener" aria-label="WhatsApp">{Icon.wa}</a>
-      <a className="dock__btn dock__btn--solid rip" href={telLink} aria-label={`Call ${CONTACT.phone}`}>{Icon.call}</a>
-      {top && <a className="dock__btn rip" href="#top" aria-label="Back to top">{Icon.up}</a>}
-    </div>
-  )
-}
-
 export default function App() {
   const [open, setOpen] = useState(null)
-  const [filter, setFilter] = useState('all')
   const [hash, setHash] = useState(() => window.location.hash)
-  const siteRef = useRef(null)
-  const openWork = (work, shot) => setOpen({ work, origin: shot ? shot.getBoundingClientRect() : null })
+  const root = useRef(null)
+  const openWork = (work, start = 0) => setOpen({ work, start: Math.max(0, start) })
+
   useEffect(() => {
     const onHash = () => setHash(window.location.hash)
     window.addEventListener('hashchange', onHash)
     return () => window.removeEventListener('hashchange', onHash)
   }, [])
-  useRipples()
 
-  // Scroll-driven motion. Transforms only at rest, so content is never hidden if this fails.
+  // Scroll motion. Only positions are animated, so nothing is hidden if this never runs.
   useEffect(() => {
     if (reduced()) return
     const context = gsap.context(() => {
-      gsap.utils.toArray('[data-reveal]').forEach((el) => {
-        gsap.from(el, { y: 60, duration: 1, ease: 'expo.out', scrollTrigger: { trigger: el, start: 'top 90%' } })
+      ScrollTrigger.batch('[data-reveal]', { start: 'top 92%', once: true, onEnter: (batch) => gsap.from(batch, { y: 44, duration: 0.9, ease: 'expo.out', stagger: 0.07, clearProps: 'transform' }) })
+      gsap.utils.toArray('[data-float]').forEach((el) => {
+        gsap.fromTo(el, { y: -Number(el.dataset.float) }, { y: Number(el.dataset.float), ease: 'none', scrollTrigger: { trigger: el.parentElement, start: 'top bottom', end: 'bottom top', scrub: true } })
       })
-      ScrollTrigger.batch('[data-card]', {
-        start: 'top 92%',
-        once: true,
-        onEnter: (batch) => gsap.from(batch, { y: 70, scale: 0.94, rotateX: 8, duration: 1, ease: 'expo.out', stagger: 0.08, clearProps: 'transform' }),
-      })
-      gsap.fromTo('[data-word]', { opacity: 0.28 }, { opacity: 1, stagger: 0.08, ease: 'none', scrollTrigger: { trigger: '.statement', start: 'top 80%', end: 'bottom 45%', scrub: true } })
-      gsap.fromTo('[data-chain]', { scaleX: 0 }, { scaleX: 1, ease: 'none', scrollTrigger: { trigger: '.chain', start: 'top 85%', end: 'top 45%', scrub: true } })
-      gsap.utils.toArray('.draw').forEach((svg) => {
-        const paths = svg.querySelectorAll('path, circle, ellipse')
-        paths.forEach((path) => { const len = path.getTotalLength(); path.style.strokeDasharray = len; path.style.strokeDashoffset = len })
-        gsap.to(paths, { strokeDashoffset: 0, duration: 1.4, ease: 'power2.out', stagger: 0.12, scrollTrigger: { trigger: svg, start: 'top 88%' } })
-      })
-    }, siteRef)
-    return () => context.revert()
+    }, root)
+    const refresh = () => ScrollTrigger.refresh()
+    window.addEventListener('load', refresh)
+    return () => { window.removeEventListener('load', refresh); context.revert() }
   }, [])
 
   return (
-    <>
-      <Nav />
+    <div ref={root}>
+      <TopBar />
       <main>
-        <Hero />
-        <div className="site" ref={siteRef}>
-          <Works filter={filter} setFilter={setFilter} onOpen={openWork} />
-          <Clients />
-          <Solutions />
-          <About />
-          <Special />
-          <Contact />
-          <footer className="footer"><div className="wrap"><span className="footer__brand"><img src={`${BASE}logo.png`} alt="" width="28" height="28" />© {new Date().getFullYear()} Zera Bytes · We build your dream</span><nav aria-label="Policies">{Object.entries(POLICIES).map(([id, policy]) => <a key={id} href={`#${id}`}>{policy.title}</a>)}</nav></div></footer>
-        </div>
+        <Hero waLink={waLink} telLink={telLink} />
+        <Clients />
+        <OneTeam />
+        <Works onOpen={openWork} />
+        <Statement />
+        <Stats />
+        <Specials />
+        <Automation onOpen={openWork} />
+        <Flow />
+        <Cases onOpen={openWork} />
+        <Bento />
+        <Services onOpen={openWork} />
+        <Gallery onOpen={openWork} />
+        <Support />
+        <Faq />
+        <Cta />
       </main>
+      <Footer />
       <Dock />
       {POLICIES[hash.slice(1)] && <Policy id={hash.slice(1)} />}
-      {hash === '#all-works' && <AllWorks filter={filter} setFilter={setFilter} onOpen={openWork} />}
-      {open && <WorkModal work={open.work} origin={open.origin} list={pick(filter)} onStep={(work) => setOpen({ work, origin: null })} onClose={() => setOpen(null)} />}
-    </>
+      {open && <WorkModal work={open.work} start={open.start} onStep={(work) => setOpen({ work, start: 0 })} onClose={() => setOpen(null)} />}
+    </div>
   )
 }

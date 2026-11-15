@@ -1,0 +1,160 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0}
+body{width:1200px;height:780px;overflow:hidden;font-family:Inter,sans-serif;color:#111827;background:#f4f5f8;-webkit-font-smoothing:antialiased;display:flex;font-size:13px}
+i[data-ic]{display:inline-flex}
+.side{width:214px;background:#0f172a;color:#cbd5e1;padding:18px 14px;display:flex;flex-direction:column;gap:4px;flex:none}
+.logo{display:flex;align-items:center;gap:10px;padding:2px 8px 16px;color:#fff;font-weight:700;font-size:16px;letter-spacing:-.01em}
+.logo b{width:30px;height:30px;border-radius:9px;background:#3b82f6;display:grid;place-items:center;font-size:15px}
+.ws{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:10px;background:#1e293b;margin-bottom:12px}
+.ws b{width:28px;height:28px;border-radius:8px;background:#f59e0b;color:#111;display:grid;place-items:center;font-size:12px;font-weight:700}
+.ws div{line-height:1.25}.ws strong{display:block;color:#fff;font-size:13px;font-weight:600}.ws span{font-size:11px;color:#94a3b8}
+.ws i{margin-left:auto;color:#64748b}
+.cap{font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:#64748b;padding:10px 10px 6px}
+.mi{display:flex;align-items:center;gap:11px;padding:8.5px 10px;border-radius:9px;font-weight:500}
+.mi.on{background:#3b82f6;color:#fff}
+.mi em{margin-left:auto;font-style:normal;font-size:11px;background:#1e293b;color:#cbd5e1;border-radius:999px;padding:1px 7px}
+.mi.on em{background:rgba(255,255,255,.22);color:#fff}
+.me{margin-top:auto;display:flex;align-items:center;gap:10px;padding:10px;border-top:1px solid #1e293b}
+.av{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-weight:600;font-size:12px;color:#fff;flex:none}
+.me strong{display:block;color:#fff;font-size:13px;font-weight:600}.me span{font-size:11px;color:#94a3b8}
+.main{flex:1;padding:18px 22px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.top{display:flex;align-items:center;gap:10px}
+.top h1{font-size:21px;font-weight:700;letter-spacing:-.02em;margin-right:auto}
+.top h1 span{display:block;font-size:12px;font-weight:400;color:#6b7280;letter-spacing:0;margin-top:2px}
+.pill{height:36px;padding:0 12px;border-radius:9px;background:#fff;border:1px solid #e5e7eb;display:flex;align-items:center;gap:8px;font-weight:500;color:#374151}
+.pill.s{width:196px;color:#9ca3af;font-weight:400;white-space:nowrap}
+.pill.p{background:#2563eb;border-color:#2563eb;color:#fff;font-weight:600}
+.bell{position:relative}.bell::after{content:'';position:absolute;right:9px;top:8px;width:7px;height:7px;border-radius:50%;background:#ef4444;border:2px solid #fff}
+.card{background:#fff;border:1px solid #e9ebf0;border-radius:14px}
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.kpi{padding:13px 15px;display:flex;flex-direction:column;gap:5px;position:relative}
+.kpi .l{display:flex;align-items:center;gap:8px;color:#6b7280;font-weight:500;white-space:nowrap}
+.kpi .l i{width:26px;height:26px;border-radius:8px;display:grid;place-items:center}
+.kpi b{font-size:22px;font-weight:700;letter-spacing:-.025em;margin-top:3px}
+.kpi .d{font-size:11.5px;color:#6b7280;display:flex;align-items:center;gap:6px;white-space:nowrap}
+.up{color:#059669;background:#ecfdf5;border-radius:999px;padding:1px 7px;font-weight:600;display:inline-flex;align-items:center;gap:2px}
+.dn{color:#dc2626;background:#fef2f2;border-radius:999px;padding:1px 7px;font-weight:600;display:inline-flex;align-items:center;gap:2px}
+.kpi .sp{position:absolute;right:12px;bottom:10px}
+.row{display:grid;gap:12px;min-height:0}
+.r1{grid-template-columns:minmax(0,1.85fr) minmax(0,1fr);height:246px}
+.r2{grid-template-columns:minmax(0,1.85fr) minmax(0,1fr);flex:1}
+.hd{display:flex;align-items:center;gap:10px;padding:14px 16px 0}
+.hd b{font-size:14.5px;font-weight:600;margin-right:auto}
+.hd span{font-size:12px;color:#6b7280}
+.lg{display:flex;align-items:center;gap:6px;font-size:12px;color:#4b5563}.lg i{width:9px;height:9px;border-radius:3px}
+.seg{display:flex;background:#f3f4f6;border-radius:8px;padding:3px;font-size:12px;font-weight:500;color:#6b7280}
+.seg span{padding:4px 10px;border-radius:6px}.seg span.on{background:#fff;color:#111827;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.ch{padding:6px 10px 0}
+.dn2{display:flex;align-items:center;gap:16px;padding:8px 16px}
+.dl{display:grid;gap:9px;flex:1}
+.dl div{display:flex;align-items:center;gap:8px;font-size:12.5px;color:#374151}
+.dl i{width:9px;height:9px;border-radius:3px}.dl b{margin-left:auto;font-weight:600}
+table{width:100%;border-collapse:collapse;margin-top:8px}
+th{font-size:10.5px;font-weight:500;color:#6b7280;text-align:left;padding:7px 8px 7px 16px;background:#f9fafb;border-block:1px solid #eef0f4;text-transform:uppercase;letter-spacing:.04em}
+td{padding:7px 8px 7px 16px;border-bottom:1px solid #f1f2f5;white-space:nowrap;font-size:12.5px}
+tr:last-child td{border-bottom:0}
+td.n{text-align:right;font-variant-numeric:tabular-nums;font-weight:500}th.n{text-align:right}
+.cu{display:flex;align-items:center;gap:9px;font-weight:500}.cu .av{width:24px;height:24px;font-size:10px}
+.st{display:inline-flex;align-items:center;gap:5px;padding:2px 9px;border-radius:999px;font-size:11.5px;font-weight:600}
+.st::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor}
+.st.g{background:#ecfdf5;color:#047857}.st.a{background:#fffbeb;color:#b45309}.st.r{background:#fef2f2;color:#b91c1c}.st.b{background:#eff6ff;color:#1d4ed8}
+.mono{font-variant-numeric:tabular-nums;color:#374151}
+.gst{padding:4px 16px 12px;display:grid;gap:8px}
+.gi{display:flex;align-items:center;gap:11px;padding:8px 12px;border-radius:11px;background:#f9fafb;border:1px solid #eef0f4}
+.gi i.ic{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;flex:none}
+.gi strong{display:block;font-size:13px;font-weight:600}.gi span{font-size:11.5px;color:#6b7280}
+.gi .st{margin-left:auto}
+.bar{height:6px;border-radius:999px;background:#e5e7eb;overflow:hidden;margin-top:6px}.bar i{display:block;height:100%;border-radius:999px;background:#2563eb}
+</style></head>
+<body>
+<aside class="side">
+  <div class="logo"><b>Z</b>Zera Core</div>
+  <div class="ws"><b>AR</b><div><strong>Apex Retail</strong><span>3 stores · Chennai</span></div><i data-ic="down" data-s="15"></i></div>
+  <div class="mi on"><i data-ic="home"></i>Overview</div>
+  <div class="mi"><i data-ic="chart"></i>Sales</div>
+  <div class="mi"><i data-ic="box"></i>Inventory<em>7</em></div>
+  <div class="mi"><i data-ic="truck"></i>Purchases</div>
+  <div class="mi"><i data-ic="receipt"></i>Invoices</div>
+  <div class="cap">Compliance</div>
+  <div class="mi"><i data-ic="percent"></i>GST returns<em>1</em></div>
+  <div class="mi"><i data-ic="file"></i>e-Way bills</div>
+  <div class="cap">Team</div>
+  <div class="mi"><i data-ic="users"></i>Payroll</div>
+  <div class="mi"><i data-ic="settings"></i>Settings</div>
+  <div class="me"><span class="av" style="background:#7c3aed">AR</span><div><strong>Anita Rao</strong><span>Owner</span></div></div>
+</aside>
+<main class="main">
+  <div class="top">
+    <h1>Overview<span>All stores · updated 2 minutes ago</span></h1>
+    <span class="pill s"><i data-ic="search" data-s="16"></i>Search invoices, SKUs…</span>
+    <span class="pill"><i data-ic="cal" data-s="16"></i>1 – 14 Nov 2026<i data-ic="down" data-s="14"></i></span>
+    <span class="pill bell"><i data-ic="bell" data-s="17"></i></span>
+    <span class="pill p"><i data-ic="plus" data-s="16"></i>New invoice</span>
+  </div>
+  <div class="kpis">
+    <div class="card kpi"><span class="l"><i style="background:#eff6ff;color:#2563eb" data-ic="rupee" data-s="15"></i>Revenue this month</span><b>₹18,42,300</b><span class="sp" id="s1"></span><span class="d"><span class="up">↑ 12.4%</span>vs Oct</span></div>
+    <div class="card kpi"><span class="l"><i style="background:#f5f3ff;color:#7c3aed" data-ic="cart" data-s="15"></i>Orders</span><b>1,284</b><span class="sp" id="s2"></span><span class="d"><span class="up">↑ 8.1%</span>avg ₹1,435</span></div>
+    <div class="card kpi"><span class="l"><i style="background:#fff7ed;color:#ea580c" data-ic="percent" data-s="15"></i>GST payable</span><b>₹2,31,480</b><span class="sp" id="s3"></span><span class="d"><span class="st a" style="padding:1px 7px">Due 20 Nov</span></span></div>
+    <div class="card kpi"><span class="l"><i style="background:#ecfdf5;color:#059669" data-ic="box" data-s="15"></i>Stock value</span><b>₹46,20,000</b><span class="sp" id="s4"></span><span class="d"><span class="dn">↓ 2.3%</span>7 low SKUs</span></div>
+  </div>
+  <div class="row r1">
+    <div class="card">
+      <div class="hd"><b>Revenue</b><span class="lg"><i style="background:#2563eb"></i>This month</span><span class="lg"><i style="background:#cbd5e1"></i>Last month</span><span class="seg"><span>Day</span><span class="on">Week</span><span>Month</span></span></div>
+      <div class="ch" id="rev"></div>
+    </div>
+    <div class="card">
+      <div class="hd"><b>Sales by channel</b><i data-ic="more" data-s="16" style="color:#9ca3af"></i></div>
+      <div class="dn2"><span id="don"></span>
+        <div class="dl">
+          <div><i style="background:#2563eb"></i>In store<b>54%</b></div>
+          <div><i style="background:#7c3aed"></i>Website<b>28%</b></div>
+          <div><i style="background:#f59e0b"></i>Instagram<b>12%</b></div>
+          <div><i style="background:#10b981"></i>WhatsApp<b>6%</b></div>
+        </div>
+      </div>
+      <div style="padding:0 16px 14px;display:flex;gap:8px"><span class="pill" style="height:30px;flex:1;justify-content:center;font-size:12px"><i data-ic="store" data-s="14"></i>Anna Nagar ₹8.1L</span><span class="pill" style="height:30px;flex:1;justify-content:center;font-size:12px"><i data-ic="store" data-s="14"></i>T. Nagar ₹5.6L</span></div>
+    </div>
+  </div>
+  <div class="row r2">
+    <div class="card" style="overflow:hidden">
+      <div class="hd" style="padding-bottom:4px"><b>Recent invoices</b><span class="pill" style="height:30px;font-size:12px"><i data-ic="filter" data-s="13"></i>Filter</span><span class="pill" style="height:30px;font-size:12px"><i data-ic="download" data-s="13"></i>Export</span></div>
+      <table>
+        <tr><th>Invoice</th><th>Customer</th><th>Date</th><th class="n">Amount</th><th class="n">GST</th><th>Status</th></tr>
+        <tr><td class="mono">APX-0412</td><td><span class="cu"><span class="av" style="background:#2563eb">SS</span>Stride Sports LLP</span></td><td>14 Nov</td><td class="n">₹53,794</td><td class="n">₹8,206</td><td><span class="st g">Paid</span></td></tr>
+        <tr><td class="mono">APX-0411</td><td><span class="cu"><span class="av" style="background:#db2777">MK</span>Meera Kitchens</span></td><td>14 Nov</td><td class="n">₹18,420</td><td class="n">₹2,810</td><td><span class="st a">Due 20 Nov</span></td></tr>
+        <tr><td class="mono">APX-0410</td><td><span class="cu"><span class="av" style="background:#059669">GT</span>Greenfield Traders</span></td><td>13 Nov</td><td class="n">₹1,12,600</td><td class="n">₹17,176</td><td><span class="st g">Paid</span></td></tr>
+        <tr><td class="mono">APX-0409</td><td><span class="cu"><span class="av" style="background:#f59e0b">NH</span>Nila Home Store</span></td><td>12 Nov</td><td class="n">₹9,860</td><td class="n">₹1,504</td><td><span class="st r">Overdue</span></td></tr>
+        <tr><td class="mono">APX-0408</td><td><span class="cu"><span class="av" style="background:#0891b2">KF</span>Kaveri Fitness</span></td><td>12 Nov</td><td class="n">₹27,300</td><td class="n">₹4,164</td><td><span class="st g">Paid</span></td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <div class="hd"><b>GST filing · October</b><span>Auto-prepared</span></div>
+      <div class="gst" style="margin-top:10px">
+        <div class="gi"><i class="ic" style="background:#ecfdf5;color:#059669" data-ic="check" data-s="17"></i><div><strong>GSTR-1</strong><span>Filed 11 Nov</span></div><span class="st g">Filed</span></div>
+        <div class="gi"><i class="ic" style="background:#fffbeb;color:#d97706" data-ic="clock" data-s="17"></i><div style="flex:1"><strong>GSTR-3B</strong><span>Due 20 Nov</span><div class="bar"><i style="width:86%"></i></div></div><span class="st a">Ready</span></div>
+        <div class="gi"><i class="ic" style="background:#eff6ff;color:#2563eb" data-ic="truck" data-s="17"></i><div><strong>e-Way bills</strong><span>142 this month</span></div><span class="st b">Synced</span></div>
+        <div style="display:flex;align-items:center;gap:10px;padding:4px 2px 0"><div><span style="font-size:11.5px;color:#6b7280">Net GST payable</span><strong style="display:block;font-size:17px;letter-spacing:-.02em">₹2,31,480</strong></div><span class="pill p" style="margin-left:auto;height:34px">Review and file</span></div>
+      </div>
+    </div>
+  </div>
+</main>
+<script type="module">
+import { hydrateIcons, spark, lineChart, donut, $ } from '/ui.js';
+hydrateIcons();
+$('#s1').innerHTML = spark([8, 9, 8.5, 10, 11, 10.5, 12, 13, 12.5, 14.5], 62, 28, '#2563eb');
+$('#s2').innerHTML = spark([60, 66, 62, 70, 68, 75, 72, 80, 78, 84], 62, 28, '#7c3aed');
+$('#s3').innerHTML = spark([20, 21, 19, 22, 23, 22, 24, 23, 25, 24], 62, 28, '#ea580c');
+$('#s4').innerHTML = spark([50, 49, 51, 48, 49, 47, 48, 46, 47, 46], 62, 28, '#059669');
+const now = [92, 104, 98, 126, 118, 141, 133, 152, 128, 139, 158, 164, 149, 171].map((v) => v * 1000);
+const prev = [84, 90, 96, 101, 94, 112, 120, 116, 109, 121, 126, 131, 124, 136].map((v) => v * 1000);
+$('#rev').innerHTML = lineChart({ w: 574, h: 190, pad: { l: 44, r: 30, t: 12, b: 28 }, max: 200000, yTicks: [0, 50000, 100000, 150000, 200000], yFmt: (v) => (v ? '₹' + (v / 100000).toFixed(v % 100000 ? 1 : 0) + 'L' : '₹0'),
+  labels: ['1 Nov', '', '3', '', '5', '', '7', '', '9', '', '11', '', '13', '14 Nov'],
+  series: [{ data: now, color: '#2563eb', area: 0.1, width: 2.6 }, { data: prev, color: '#cbd5e1', dash: '5 5', width: 2 }], mark: { i: 11, title: '12 Nov · 96 orders', value: '₹1,64,000', w: 128 } });
+$('#don').innerHTML = donut([{ v: 54, c: '#2563eb' }, { v: 28, c: '#7c3aed' }, { v: 12, c: '#f59e0b' }, { v: 6, c: '#10b981' }], 124, 19,
+  '<text x="62" y="58" text-anchor="middle" font-size="11" fill="#6b7280">Total</text><text x="62" y="78" text-anchor="middle" font-size="17" font-weight="700" fill="#111827">₹18.4L</text>');
+window.__done = true;
+</script>
+</body></html>

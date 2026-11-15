@@ -1,0 +1,120 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0}
+body{width:1200px;height:780px;overflow:hidden;font-family:Inter,sans-serif;color:#1c1f2a;background:#fff;-webkit-font-smoothing:antialiased;font-size:13px;display:grid;grid-template-columns:56px minmax(0,1fr) 292px;grid-template-rows:58px minmax(0,1fr)}
+i[data-ic]{display:inline-flex}
+.rail{grid-row:1/3;background:#14161f;display:flex;flex-direction:column;align-items:center;padding:14px 0;gap:6px;color:#8b90a3}
+.rail b{width:32px;height:32px;border-radius:10px;background:#ff6a3d;color:#fff;display:grid;place-items:center;font-weight:700;margin-bottom:14px}
+.rail i{width:38px;height:38px;border-radius:10px;display:grid;place-items:center}
+.rail i.on{background:#262a38;color:#fff}
+.rail .sp{margin-top:auto}
+.top{grid-column:2/4;display:flex;align-items:center;gap:12px;padding:0 18px;border-bottom:1px solid #e8eaf0}
+.top .crumb{color:#7a8094}.top h1{font-size:15px;font-weight:600;letter-spacing:-.01em}
+.chip{font-size:11.5px;padding:3px 9px;border-radius:999px;background:#f1f3f8;color:#51576b;font-weight:500}
+.tabs{display:flex;margin-left:18px;background:#f1f3f8;border-radius:9px;padding:3px;font-weight:500;color:#6b7186}
+.tabs span{padding:5px 14px;border-radius:7px}.tabs span.on{background:#fff;color:#1c1f2a;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.right{margin-left:auto;display:flex;align-items:center;gap:10px}
+.tog{display:flex;align-items:center;gap:8px;font-weight:500;color:#127a45}
+.tog i{width:36px;height:20px;border-radius:999px;background:#1faa59;position:relative}.tog i::after{content:'';position:absolute;right:2px;top:2px;width:16px;height:16px;border-radius:50%;background:#fff}
+.btn{height:34px;padding:0 14px;border-radius:9px;border:1px solid #dfe2ea;display:flex;align-items:center;gap:7px;font-weight:600}
+.btn.p{background:#ff6a3d;border-color:#ff6a3d;color:#fff}
+.canvas{position:relative;background-color:#f6f7fb;background-image:radial-gradient(#d5d9e4 1.1px,transparent 1.2px);background-size:22px 22px;overflow:hidden}
+.stats{position:absolute;left:18px;top:16px;display:flex;gap:8px;z-index:3}
+.stat{background:#fff;border:1px solid #e8eaf0;border-radius:11px;padding:8px 13px;box-shadow:0 2px 6px rgba(20,22,31,.04)}
+.stat b{display:block;font-size:16px;font-weight:700;letter-spacing:-.02em}.stat span{font-size:11px;color:#7a8094}
+svg#edges{position:absolute;inset:0;width:100%;height:100%;z-index:1}
+.node{position:absolute;z-index:2;width:74px;text-align:center}
+.tile{width:74px;height:74px;border-radius:18px;background:#fff;border:1.5px solid #d9dde8;display:grid;place-items:center;box-shadow:0 6px 16px rgba(20,22,31,.08);position:relative}
+.tile.sel{border-color:#ff6a3d;box-shadow:0 0 0 4px rgba(255,106,61,.16),0 6px 16px rgba(20,22,31,.08)}
+.tile .ic{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;color:#fff}
+.tile .ok{position:absolute;right:-7px;top:-7px;width:20px;height:20px;border-radius:50%;background:#1faa59;color:#fff;display:grid;place-items:center;border:2px solid #f6f7fb}
+.tile .bolt{position:absolute;left:-9px;top:50%;margin-top:-10px;width:20px;height:20px;border-radius:6px;background:#ff6a3d;color:#fff;display:grid;place-items:center}
+.node > strong{display:block;font-size:12px;font-weight:600;margin-top:8px;line-height:1.25;white-space:nowrap;transform:translateX(-50%);margin-left:50%;width:max-content}
+.node > span{display:block;font-size:10.5px;color:#7a8094;white-space:nowrap;transform:translateX(-50%);margin-left:50%;width:max-content}
+.elab{position:absolute;z-index:2;font-size:10.5px;font-weight:600;color:#51576b;background:#fff;border:1px solid #dfe2ea;border-radius:999px;padding:2px 8px;transform:translate(-50%,-50%)}
+.zoom{position:absolute;left:18px;bottom:18px;display:flex;gap:6px;z-index:3}
+.zoom i{width:34px;height:34px;border-radius:9px;background:#fff;border:1px solid #e0e3ec;display:grid;place-items:center;color:#51576b}
+.test{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);z-index:3;height:42px;padding:0 20px;border-radius:11px;background:#ff6a3d;color:#fff;font-weight:600;font-size:14px;display:flex;align-items:center;gap:8px;box-shadow:0 10px 24px rgba(255,106,61,.35)}
+.panel{border-left:1px solid #e8eaf0;display:flex;flex-direction:column;min-height:0}
+.ph{padding:14px 16px 10px;border-bottom:1px solid #eef0f5}
+.ph b{font-size:14px;font-weight:600}.ph span{display:block;color:#7a8094;font-size:12px;margin-top:2px}
+.run{display:flex;align-items:center;gap:8px;margin-top:10px}
+.pillg{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:999px;background:#e8f7ee;color:#127a45;font-weight:600;font-size:11.5px}
+.steps{padding:8px 10px;display:grid;gap:2px}
+.step{display:flex;align-items:center;gap:10px;padding:7px 8px;border-radius:9px}
+.step.on{background:#fff4ef}
+.step .d{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;color:#fff;flex:none}
+.step b{font-weight:500;font-size:12.5px}.step em{margin-left:auto;font-style:normal;font-size:11px;color:#7a8094;font-family:'JetBrains Mono',monospace}
+.step .tk{color:#1faa59}
+.out{margin:6px 12px 12px;border-radius:11px;background:#14161f;color:#d7dbea;padding:11px 13px;font:11.5px/1.6 'JetBrains Mono',monospace;flex:1;min-height:0;overflow:hidden}
+.out .k{color:#8ab4ff}.out .s{color:#9be29b}.out .n{color:#ffb86c}.out .c{color:#6b7186}
+.oh{display:flex;justify-content:space-between;align-items:center;padding:6px 16px 2px;font-size:11.5px;color:#7a8094;font-weight:500}
+</style></head>
+<body>
+<div class="rail"><b>Z</b><i class="on" data-ic="branch"></i><i data-ic="layers"></i><i data-ic="clock"></i><i data-ic="database"></i><i data-ic="users"></i><i class="sp" data-ic="settings"></i></div>
+<div class="top">
+  <span class="crumb">Drift Motors &nbsp;/</span><h1>WhatsApp lead router</h1><span class="chip">sales</span><span class="chip">whatsapp</span>
+  <div class="tabs"><span class="on">Editor</span><span>Executions</span><span>Settings</span></div>
+  <div class="right"><span class="tog"><i></i>Active</span><span class="btn"><i data-ic="users" data-s="15"></i>Share</span><span class="btn p">Save</span></div>
+</div>
+<div class="canvas" id="cv">
+  <div class="stats"><div class="stat"><b>312</b><span>Runs today</span></div><div class="stat"><b>99.4%</b><span>Success rate</span></div><div class="stat"><b>1.3 s</b><span>Average run</span></div></div>
+  <svg id="edges"></svg>
+  <div class="zoom"><i data-ic="plus" data-s="16"></i><i data-ic="search" data-s="16"></i><i data-ic="eye" data-s="16"></i></div>
+  <div class="test"><i data-ic="play" data-s="15"></i>Test workflow</div>
+</div>
+<aside class="panel">
+  <div class="ph"><b>Execution #4812</b><span>14 Nov 2026, 21:42:08 · triggered by WhatsApp</span><div class="run"><span class="pillg">✓ Succeeded</span><span class="chip">1.3 s</span><span class="chip">7 nodes</span></div></div>
+  <div class="steps" id="steps"></div>
+  <div class="oh"><span>Output · Assign owner</span><span>JSON</span></div>
+  <pre class="out"><span class="c">// 1 item</span>
+{
+  <span class="k">"lead"</span>: <span class="s">"Rahul K."</span>,
+  <span class="k">"phone"</span>: <span class="s">"+91 98•• 4410"</span>,
+  <span class="k">"intent"</span>: <span class="s">"test_drive"</span>,
+  <span class="k">"model"</span>: <span class="s">"Drift X"</span>,
+  <span class="k">"slot"</span>: <span class="s">"Sat 11:00"</span>,
+  <span class="k">"owner"</span>: <span class="s">"Arjun"</span>,
+  <span class="k">"sheet_row"</span>: <span class="n">214</span>
+}</pre>
+</aside>
+<script type="module">
+import { icon, hydrateIcons, $ } from '/ui.js';
+const cv = $('#cv');
+const N = {
+  wa:   { x: 34,  y: 322, c: '#25d366', ic: 'chat',   t: 'WhatsApp', s: 'On new message', trigger: true },
+  ai:   { x: 172, y: 322, c: '#7c5cff', ic: 'zap',    t: 'Classify intent', s: 'AI model' },
+  sw:   { x: 310, y: 322, c: '#f59e0b', ic: 'branch', t: 'Route', s: '3 outputs' },
+  sheet:{ x: 462, y: 150, c: '#16a34a', ic: 'sheet',  t: 'Add lead', s: 'Google Sheets' },
+  own:  { x: 606, y: 150, c: '#2563eb', ic: 'users',  t: 'Assign owner', s: 'Round robin', sel: true },
+  ok:   { x: 750, y: 150, c: '#25d366', ic: 'send',   t: 'Confirm slot', s: 'WhatsApp' },
+  emi:  { x: 462, y: 322, c: '#0ea5e9', ic: 'code',   t: 'EMI plan', s: 'Calculate' },
+  emis: { x: 606, y: 322, c: '#25d366', ic: 'send',   t: 'Send plan', s: 'WhatsApp' },
+  tic:  { x: 462, y: 494, c: '#ef4444', ic: 'tag',    t: 'Service ticket', s: 'Create' },
+  tics: { x: 606, y: 494, c: '#25d366', ic: 'send',   t: 'Send slots', s: 'WhatsApp' },
+  wait: { x: 750, y: 322, c: '#64748b', ic: 'timer',  t: 'Wait 24 h', s: 'If no reply', wait: true },
+  fu:   { x: 750, y: 494, c: '#25d366', ic: 'send',   t: 'Follow up', s: 'WhatsApp', wait: true },
+};
+for (const [id, n] of Object.entries(N)) {
+  const d = document.createElement('div'); d.className = 'node'; d.style.left = n.x + 'px'; d.style.top = n.y + 'px';
+  d.innerHTML = `<div class="tile${n.sel ? ' sel' : ''}">${n.trigger ? `<span class="bolt">${icon('bolt', 12, 2)}</span>` : ''}<span class="ic" style="background:${n.c}">${icon(n.ic, 22, 1.9)}</span><span class="ok"${n.wait ? ' style="background:#94a3b8"' : ''}>${icon(n.wait ? 'clock' : 'check', 12, 2.6)}</span></div><strong>${n.t}</strong><span>${n.s}</span>`;
+  cv.appendChild(d);
+}
+const E = [['wa','ai'],['ai','sw'],['sw','sheet','test drive'],['sw','emi','EMI'],['sw','tic','service'],['sheet','own'],['own','ok'],['emi','emis'],['tic','tics'],['ok','wait','v'],['wait','fu','v']];
+let s = '';
+for (const [a, b, lab] of E) {
+  const A = N[a], B = N[b];
+  if (lab === 'v') { const x = A.x + 37, y1 = A.y + 112, y2 = B.y - 4; s += `<path d="M${x} ${y1} L${x} ${y2}" stroke="#aab1c4" stroke-width="2" fill="none" stroke-dasharray="5 5"/><circle cx="${x}" cy="${y2}" r="4" fill="#aab1c4"/>`; continue; }
+  const x1 = A.x + 74, y1 = A.y + 37, x2 = B.x, y2 = B.y + 37, mx = (x1 + x2) / 2;
+  s += `<path d="M${x1} ${y1} C${mx} ${y1} ${mx} ${y2} ${x2} ${y2}" stroke="#aab1c4" stroke-width="2" fill="none"/><circle cx="${x1}" cy="${y1}" r="4.500" fill="#fff" stroke="#aab1c4" stroke-width="2"/><circle cx="${x2}" cy="${y2}" r="4" fill="#aab1c4"/>`;
+  if (lab) { const l = document.createElement('span'); l.className = 'elab'; l.textContent = lab; l.style.left = (mx + 14) + 'px'; l.style.top = ((y1 + y2) / 2 + (y2 - y1) * 0.22) + 'px'; cv.appendChild(l); }
+}
+$('#edges').innerHTML = s;
+const steps = [['wa','WhatsApp trigger','12 ms'],['ai','Classify intent','640 ms'],['sw','Route','2 ms'],['sheet','Add lead','310 ms'],['own','Assign owner','18 ms'],['ok','Confirm slot','290 ms'],['wait','Wait 24 h','queued']];
+$('#steps').innerHTML = steps.map(([id, t, d]) => `<div class="step${id === 'own' ? ' on' : ''}"><span class="d" style="background:${N[id].c}">${icon(N[id].ic, 14, 2)}</span><b>${t}</b><em>${d}</em><span class="tk">${icon(d === 'queued' ? 'clock' : 'check', 15, 2.4)}</span></div>`).join('');
+hydrateIcons();
+window.__done = true;
+</script>
+</body></html>
