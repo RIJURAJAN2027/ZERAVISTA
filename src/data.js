@@ -28,7 +28,7 @@ export const NAV = [
 // Rotating badge above the hero headline.
 export const BADGES = ['Quotation in 24 hours', 'Websites in 4 to 10 days', 'One year of free support']
 
-export const CLIENTS = ['Loyola College', 'Larsen & Toubro', 'Jula International', 'Kripkart', 'Zera Gold Finance']
+export const CLIENTS = ['Loyola College', 'Larsen & Toubro', 'Jula International', 'Kripkart']
 
 // Works. `live` projects are real client sites and link out; the rest are concept designs.
 // Images live in public/work/<name>.jpg.
@@ -62,7 +62,7 @@ export const STATS = [
   ['24 hrs', 'Quotation on WhatsApp'],
   ['4–10 days', 'Website delivery'],
   ['1 year', 'Free support included'],
-  ['3', 'Client sites live'],
+  ['3', 'Websites live right now'],
 ]
 
 // Our specialities: [title, text, illustration key]
@@ -92,7 +92,7 @@ export const SERVICES = [
   ['Social Media\nAutomation', 'Every message answered', 'WhatsApp Business and Instagram replies, follow-ups and one shared inbox for your team.', '#5b34d6', ['pulse', 'drift']],
   ['ERP Software,\nZera Core', 'Books, stock and tax in order', 'GST invoicing, e-way bills, inventory across stores, payroll and an owner dashboard.', '#0f7a52', ['apex', 'ledgerly']],
   ['AI Integration\nFor Your Product', 'AI where it saves real time', 'Automatic replies, enquiry sorting and summaries built into your product or workflow.', '#c2255c', ['drift', 'pulse', 'apex']],
-  ['Brand Identity\nDesign', 'A brand people recognise', 'Logo, colour, type and guidelines that carry across your website, app and documents.', '#1a1a1a', ['brand-1', 'brand-2', 'brand-3']],
+  ['Brand Identity\nDesign', 'A brand people recognise', 'Logo, colour, type and guidelines that carry across your website, app and documents.', '#1a1a1a', ['brand-2', 'brand-3', 'brand-4']],
 ]
 
 export const GALLERY = [

@@ -153,6 +153,9 @@ function Works({ onOpen }) {
       const mid = el.scrollLeft + el.clientWidth / 2
       for (const card of cards) card.style.setProperty('--d', ((card.offsetLeft + card.offsetWidth / 2 - mid) / el.clientWidth).toFixed(4))
     }
+    // Start on the second card so there is work on both sides.
+    const first = cards[1] || cards[0]
+    el.scrollLeft = first.offsetLeft + first.offsetWidth / 2 - el.clientWidth / 2
     update()
     el.addEventListener('scroll', update, { passive: true })
     window.addEventListener('resize', update)
@@ -352,7 +355,7 @@ function Automation({ onOpen }) {
       <div className="marq" aria-hidden="true"><div className="marq__track">{row.map((tool, i) => <span className="pill" key={i}><span className="pill__dot" />{tool}</span>)}</div></div>
       <div className="auto__shots">
         {['drift', 'pulse'].map((id) => (
-          <button key={id} type="button" className="shot" onClick={() => onOpen(byId(id))} aria-label={`Open ${byId(id).name}`} data-reveal><img src={img(id)} alt="" loading="lazy" /><span className="shot__cap">{byId(id).name} · {byId(id).label}</span></button>
+          <button key={id} type="button" className="shot" onClick={() => onOpen(byId(id))} aria-label={`Open ${byId(id).name}`} data-reveal><img src={img(id)} alt="" loading="lazy" width="1200" height="780" /><span className="shot__cap">{byId(id).name} · {byId(id).label}</span></button>
         ))}
       </div>
     </section>
@@ -366,7 +369,8 @@ function Flow() {
   const [auto, setAuto] = useState(true)
   const ref = useRef(null)
   useEffect(() => {
-    if (!auto || reduced()) return
+    // Only on wide screens, where the card keeps one height and nothing below it moves.
+    if (!auto || reduced() || !window.matchMedia('(min-width: 1000px)').matches) return
     let visible = false
     const io = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting }, { threshold: 0.4 })
     io.observe(ref.current)
@@ -405,7 +409,7 @@ function Cases({ onOpen }) {
   return (
     <section className="cases" id="clients-work">
       <div className="head">
-        <h2 className="h2" data-reveal>Featured Client Work, <br className="br-d" />Live Right Now</h2>
+        <h2 className="h2" data-reveal>Featured Work, <br className="br-d" />Live Right Now</h2>
         <p className="t-large" data-reveal>Three websites we built that are online today. Open any of them and look around.</p>
         <a className="btn btn--light btn--sm" href="#gallery" data-reveal>View all work {I.arrow}</a>
       </div>
@@ -413,7 +417,7 @@ function Cases({ onOpen }) {
         {live.map((work, i) => (
           <article className="case" key={work.id} style={{ '--i': i }}>
             <button className="case__media" type="button" onClick={() => onOpen(work)} aria-label={`Open ${work.name} screens`} style={{ '--tint': work.tint }}>
-              <img src={img(work.images[0])} alt={`${work.name} home page`} loading="lazy" />
+              <img src={img(work.images[0])} alt={`${work.name} home page`} loading="lazy" width="1280" height="832" />
               {work.mobile && <img className="case__phone" src={img(work.mobile)} alt="" loading="lazy" />}
             </button>
             <div className="case__info">
@@ -694,6 +698,7 @@ export default function App() {
     }, root)
     const refresh = () => ScrollTrigger.refresh()
     window.addEventListener('load', refresh)
+    document.fonts?.ready.then(refresh)
     return () => { window.removeEventListener('load', refresh); context.revert() }
   }, [])
 

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import gazeFrames from './gaze-frames.json'
-import { BADGES, BRAND, CONTACT } from './data.js'
+import { BADGES, BRAND } from './data.js'
 
 const BASE = import.meta.env.BASE_URL
 
@@ -97,7 +97,6 @@ export default function Hero({ waLink, telLink }) {
         <img src={`${BASE}dog-white.jpg`} alt="" style={{ opacity: ready ? 0 : 1 }} />
         <video ref={videoRef} muted playsInline preload="auto" style={{ opacity: ready ? 1 : 0 }} />
       </div>
-      <span className="sr-only">{CONTACT.phone}</span>
     </section>
   )
 }
