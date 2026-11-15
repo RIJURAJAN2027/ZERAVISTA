@@ -1,0 +1,75 @@
+# Zera Studio website: project notes
+
+Read this first. It is the hand-over from the previous Claude session.
+
+## What this is
+
+The company website for **Zera Studio**, founded by **Riju Rajan**. Tagline: **We build your dream**.
+
+It is a single-page site built with React 19, Vite 6 and GSAP, on a light theme. The layout follows the section structure of orbix.studio, a US design agency the owner chose as a reference. All text, images and branding here are Zera's own. Do not copy Orbix's text, images, fonts, reviews, awards or numbers.
+
+## Where things are
+
+- **Branches:**
+  - `claude/jolly-fermi-nqvth4` is the repo's default branch and where work happens.
+  - `main` is what GitHub Pages deploys.
+  - When the owner asks to publish, fast-forward `main` to the working branch.
+- **Deploy:** `.github/workflows/pages.yml` builds and deploys on every push to `main`. The build passes. The deploy step fails until GitHub Pages is switched on: repo Settings → Pages → Source: **GitHub Actions**. Once that is on, re-run the latest workflow.
+- **Preview:** https://claude.ai/artifact/DQVZ1AdpdB4s5sQQo7Rk4R is private to the owner's original Claude account.
+
+## Run it
+
+```bash
+npm install
+npm run dev     # local preview
+npm run build   # writes dist/
+```
+
+## Owner's content (all in `src/data.js`)
+
+- **Phone / WhatsApp:** +91 93603 25702
+- **Clients:** Loyola College, Larsen & Toubro, Jula International, Kripkart
+- **Live client work:** kripkart.com, julainternational.com, zerafinance.in. These are shown with real screenshots in `public/work/`.
+- **Business flow:**
+  1. Order
+  2. Quotation on WhatsApp within 24 hours
+  3. Website creation in 4–10 days
+  4. Final output
+- **Specialities:**
+  - We study your company first
+  - What you imagine, live
+  - Quotation in 24 hours
+  - Websites in 4–10 days
+  - One year of free support
+- **Services:** UI/UX design, web design and development, mobile apps, SaaS and custom software, business automation (n8n), social media automation (WhatsApp and Instagram), ERP (Zera Core), AI integration, brand identity.
+- **Policy pages:** `src/policies.js`, opened at `#privacy`, `#terms`, `#refund` and `#support`.
+
+## Still missing (ask the owner)
+
+- Email, office address and social media links. The fields exist in `CONTACT` in `src/data.js`; empty ones are hidden.
+- A review of the policy pages, which are templates.
+- More real client screenshots, to replace the projects marked "Concept" over time.
+
+## What the owner wants
+
+- A premium look with few words. Let images and motion carry the page.
+- The dog hero on a white background. The dog follows the pointer; on phones it looks around on its own.
+- Nothing that looks AI-made: no sparkle icons, no gradient text, no invented stats or reviews, plain English.
+- Fonts: Inter Tight, plus Instrument Serif italic for the tagline.
+- Concept projects stay labelled "Concept". Real client sites are labelled "Live" and link out.
+- Short, plain explanations. Push to `main` only when the owner asks.
+
+## Files
+
+```
+src/data.js              All content
+src/App.jsx              Sections, works carousel and popup, dock menu, policy pages
+src/Hero.jsx             Hero; seeks the dog film using src/gaze-frames.json
+src/index.css            Styles
+public/dog-white.mp4     Dog film on white: 74 frames, every frame a keyframe, for instant seeking
+public/work/             Work images
+tools/make-white-dog.py  Rebuilds the dog film and gaze table from the original film
+tools/renders/           Sources of the concept screens (Three.js and HTML), rendered with shoot.cjs
+```
+
+To rebuild the dog film, run `npm run assets` first. It downloads the original into `source/`. Never re-encode `public/dog-white.mp4` with normal settings: seeking needs every frame to be a keyframe, and the gaze table timings must match the film. Regenerate both with the tool.
