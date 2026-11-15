@@ -183,7 +183,8 @@ img, svg, video { display: block; max-width: 100%; }
 .spec.is-pinned .spec__card { flex: none; width: min(600px, 86vw); height: min(660px, 80vh); min-height: 540px; border-radius: 36px; padding: 44px 36px 0; }
 .spec__card--dark { background: #101011; color: #fff; border: 1px solid rgba(255, 255, 255, 0.14); }
 .spec__card .h2 { color: inherit; }
-.spec__card .h2 span, .svc__head .h-st span { display: block; }
+/* each line of a two-line title (not the letters the print effect adds) */
+.spec__card .h2 .ln, .svc__head .h-st .ln { display: block; }
 .spec__card .t-body { max-width: 400px; color: inherit; opacity: 0.74; font-size: 16.5px; }
 .spec__card .illo { margin-top: auto; width: 100%; display: flex; justify-content: center; align-items: flex-end; gap: 14px; padding-top: 18px; }
 
@@ -512,7 +513,6 @@ button.svc__shot:hover img { transform: scale(1.04); }
   .hero__text { display: none; }
   .hero__tag { margin-top: 14px; }
   .hero__btns { margin-top: 18px; }
-}
 }
 
 /* ---------- motion helpers ---------- */

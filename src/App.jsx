@@ -17,7 +17,7 @@ const waLink = `https://wa.me/${digits}?text=${encodeURIComponent("Hi Zera Studi
 const telLink = `tel:+${digits}`
 const socials = Object.entries(CONTACT.socials).filter(([, url]) => url)
 const byId = (id) => WORKS.find((w) => w.id === id)
-const lines = (text) => text.split('\n').map((line, i) => <span key={i}>{line}</span>)
+const lines = (text) => text.split('\n').map((line, i) => <span className="ln" key={i}>{line}</span>)
 
 /* ---------- icons ---------- */
 const svg = (d, extra) => <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.700" strokeLinecap="round" strokeLinejoin="round" {...extra}><path d={d} /></svg>

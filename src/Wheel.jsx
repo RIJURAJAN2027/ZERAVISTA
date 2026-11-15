@@ -71,7 +71,7 @@ export default function Wheel({ works, img, icons, onOpen }) {
       }
       if (!down || event.pointerId !== pid) return
       const dx = event.clientX - startX
-      if (!moved && Math.abs(dx) > 6) { moved = true; el.classList.add('is-drag'); el.setPointerCapture?.(pid) }
+      if (!moved && Math.abs(dx) > 6) { moved = true; tween?.kill(); el.classList.add('is-drag'); el.setPointerCapture?.(pid) }
       if (!moved) return
       const now = performance.now()
       velocity = (event.clientX - lastX) / Math.max(1, now - lastTime)
@@ -128,13 +128,15 @@ export default function Wheel({ works, img, icons, onOpen }) {
   }, [])
 
   // Clicking a side card turns it to the front; clicking the front card opens it.
+  // Keyboard focus (Tab) also turns the focused card to the front; a mouse press does not,
+  // so it never fights a drag.
   const open = (work, i) => { if (api.current?.front(i)) onOpen(work); else api.current?.focus(i) }
 
   return (
     <>
       <div className="wheel" ref={stage} aria-roledescription="carousel" aria-label="Our work">
         {works.map((work, i) => (
-          <article className="wheel__card" key={work.id} ref={(el) => { cards.current[i] = el }} style={{ '--tint': work.tint }} onFocus={() => api.current?.focus(i)}>
+          <article className="wheel__card" key={work.id} ref={(el) => { cards.current[i] = el }} style={{ '--tint': work.tint }} onFocus={(event) => { if (event.target.matches(':focus-visible')) api.current?.focus(i) }}>
             <span className={`tag${work.live ? ' tag--live' : ''}`}>{work.live ? <><i />Live Now</> : 'Concept'}</span>
             <h3 className="h5">{work.name}</h3>
             <p>{work.line}</p>

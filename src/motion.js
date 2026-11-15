@@ -69,7 +69,8 @@ const spectrum = (x) => {
 const rgb = (c) => `rgb(${Math.round(c[0])},${Math.round(c[1])},${Math.round(c[2])})`
 
 function splitLetters(el) {
-  el.setAttribute('aria-label', el.textContent.replace(/\s+/g, ' ').trim())
+  // innerText keeps the break between lines (<br> or block spans) as a space.
+  el.setAttribute('aria-label', (el.innerText || el.textContent).replace(/\s+/g, ' ').trim())
   const units = []
   const walk = (node) => {
     if (node.nodeType === Node.TEXT_NODE) {

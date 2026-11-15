@@ -59,12 +59,34 @@ npm run build   # writes dist/
 - Concept projects stay labelled "Concept". Real client sites are labelled "Live" and link out.
 - Short, plain explanations. Push to `main` only when the owner asks.
 
+## Motion
+
+The motion follows the reference site's behaviour, written in our own code with Zera's colours:
+
+- Smooth scrolling with Lenis, synced to GSAP ScrollTrigger. Phones keep native scrolling.
+- Big headings print in letter by letter: blur, then a colour wave, then the final colour.
+- Bracket cursor `[ ]` on desktop. It hides over links, buttons and the works wheel.
+- Button labels roll up on hover (`Roll` in `src/bits.jsx`).
+- The hero stays pinned and fades to white as the client cards rise over it.
+- Works sit on an endless wheel: drag, swipe, sideways trackpad, arrow buttons or Tab.
+- Featured work is a deck of cards that peel away on scroll (desktop, 1000px+ wide).
+- The menu grows out of the dock, with a scrambled Menu/Close label and a blurred backdrop.
+- Numbers count up, and gallery images sharpen in with a light sweep.
+- Everything respects reduced-motion settings.
+
+Two rules learned the hard way:
+- The print effect wraps letters in `span.pw` and `span.pc`. Never style headings with a bare `h2 span` selector; use a class (two-line titles use `.ln`).
+- Card focus on the wheel reacts to keyboard focus only (`:focus-visible`), or it fights a mouse drag.
+
 ## Files
 
 ```
 src/data.js              All content
-src/App.jsx              Sections, works carousel and popup, dock menu, policy pages
+src/App.jsx              Sections, popup, dock menu, featured-work deck, policy pages
 src/Hero.jsx             Hero; seeks the dog film using src/gaze-frames.json
+src/Wheel.jsx            Endless drag wheel for the works
+src/motion.js            Smooth scroll, scroll locking, heading print, bracket cursor
+src/bits.jsx             Roll (hover label) and CountUp
 src/index.css            Styles
 public/dog-white.mp4     Dog film on white: 74 frames, every frame a keyframe, for instant seeking
 public/work/             Work images
