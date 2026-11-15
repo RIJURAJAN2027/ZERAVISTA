@@ -35,8 +35,8 @@ def box(a, r):
 def shadow_map():
     """A soft neutral floor shadow under the dog (the original one is baked into the blue)."""
     y, x = np.mgrid[0:H, 0:W].astype(np.float32)
-    core = 0.30 * np.exp(-(((x - 655) / 200) ** 2 + ((y - 694) / 11) ** 2))
-    cast = 0.16 * np.exp(-(((x - 575) / 330) ** 2 + ((y - 696) / 20) ** 2))
+    core = 0.28 * np.exp(-(((x - 650) / 190) ** 2 + ((y - 684) / 9) ** 2))
+    cast = 0.14 * np.exp(-(((x - 590) / 280) ** 2 + ((y - 684) / 13) ** 2))   # fades out before the frame edge
     return np.clip(core + cast, 0, 0.45)
 
 
@@ -46,57 +46,43 @@ TARGET = (255.0 * (1.0 - shadow_map()))[..., None]   # what the backdrop becomes
 def process(frame):
     a = frame.astype(np.float32)
     r, g, b = a[..., 0], a[..., 1], a[..., 2]
-    key = b - np.maximum(r, g)
-    t = np.clip((key - T0) / (T1 - T0), 0, 1)
-    alpha_bg = t * t * (3 - 2 * t)                       # smoothstep
-    pure = (key >= T1).astype(np.float32)
-    # Only let pixels close to real backdrop go transparent (keeps eye highlights solid).
-    near = np.clip(box(pure, 14) * 841.0, 0, 1)           # 1 where any backdrop within 14 px
-    near = box(near, 2)
-    # Local backdrop colour, spread from pure backdrop pixels into the fur edge.
+    key = b - np.maximum(r, g)                          # how much bluer than warm a pixel is
+    pure = (key >= T1).astype(np.float32)               # clean backdrop
+
+    # Local backdrop colour, spread from clean backdrop pixels into the hair.
     wgt = box(pure, 14)
-    local = np.empty_like(a)
     mean_bg = a[pure > 0].mean(0) if pure.any() else np.array([120, 160, 225], np.float32)
+    local_b = np.empty_like(a)
     for ch in range(3):
-        num = box(a[..., ch] * pure, 14)
-        local[..., ch] = np.where(wgt > 1e-3, num / np.maximum(wgt, 1e-3), mean_bg[ch])
-    # Local fur colour, spread from solid fur pixels. A fur/backdrop mix sits on the line
-    # between the two, so its position on that line is how much backdrop it contains.
-    sure_fg = (key < -30).astype(np.float32)
-    fwgt = box(sure_fg, 6)
-    fur = np.empty_like(a)
-    for ch in range(3):
-        fur[..., ch] = box(a[..., ch] * sure_fg, 6) / np.maximum(fwgt, 1e-3)
-    d = local - fur
-    proj = ((a - fur) * d).sum(-1) / np.maximum((d * d).sum(-1), 1.0)
-    proj = np.clip((proj - 0.04) / 0.92, 0, 1)
-    both = (fwgt > 1e-3) & (wgt > 1e-3)
-    alpha_bg = np.where(both, np.maximum(proj, alpha_bg), alpha_bg)
-    alpha_bg = np.where(sure_fg > 0, 0.0, alpha_bg) * near
-    out = a + alpha_bg[..., None] * (TARGET - local)
-    # Where a pixel is mostly backdrop, its own colour is mostly blue spill, so lean on the
-    # local fur colour there instead: clean orange strands that fade to white, no fringe.
-    fur_based = fur * (1.0 - alpha_bg[..., None]) + TARGET * alpha_bg[..., None]
-    mix = np.where(both, alpha_bg, 0.0)[..., None]
-    out = out * (1.0 - mix) + fur_based * mix
+        local_b[..., ch] = np.where(wgt > 1e-3, box(a[..., ch] * pure, 14) / np.maximum(wgt, 1e-3), mean_bg[ch])
+    key_b = local_b[..., 2] - np.maximum(local_b[..., 0], local_b[..., 1])
+
+    # Local hair colour, spread from clearly-dog pixels. Pale strands near the top of the head
+    # pick up a pale estimate, orange fur an orange one.
+    sure = (key < -30).astype(np.float32)
+    fw = box(sure, 8)
+    key_f_raw = box(key * sure, 8) / np.maximum(fw, 1e-3)
+    key_f = np.where(fw > 1e-3, np.minimum(key_f_raw, -25.0), -60.0)
+
+    # A strand pixel is a mix of hair and backdrop; its key sits between the two keys,
+    # so its position on that line is the share of backdrop showing through.
+    alpha_bg = np.clip((key - key_f) / np.maximum(key_b - key_f, 1.0), 0, 1)
+    near = np.clip(box(pure, 14) * 841.0, 0, 1)         # only near real backdrop (keeps eye whites)
+    near = box(near, 2)
+    alpha_bg = np.where(pure > 0, 1.0, alpha_bg * near)
+    alpha_bg = 0.65 * alpha_bg + 0.35 * box(alpha_bg, 1)  # light anti-aliasing of the edge
+
+    # Swap the backdrop share for white, keeping the hair's own detail.
+    out = a + alpha_bg[..., None] * (TARGET - local_b)
     out = np.where(pure[..., None] > 0, TARGET, out)
-    # Remove the blue cast the backdrop left on fur and in the eyes.
-    limit = np.maximum(out[..., 0], out[..., 1]) + 3.0
-    out[..., 2] = np.minimum(out[..., 2], limit)
-    # In the fur edge the colour must sit between orange and white, so blue can never exceed green.
-    edge = (alpha_bg > 0) & (pure == 0)
-    out[..., 2] = np.where(edge, np.minimum(out[..., 2], out[..., 1] + 2.0), out[..., 2])
-    # Fur over white is always warm: compared with green, blue falls further below the
-    # backdrop and red stays closer to it. Enforce that on edge pixels to remove grey wisps.
-    t = TARGET[..., 0]
-    dg = np.maximum(t - out[..., 1], 0.0)
-    out[..., 2] = np.where(edge, np.minimum(out[..., 2], t - 1.15 * dg), out[..., 2])
-    out[..., 0] = np.where(edge, np.maximum(out[..., 0], t - 0.75 * dg), out[..., 0])
+    # Despill: no blue or lilac cast left in the hair.
+    edge = (alpha_bg > 0.01) & (pure == 0)
+    out[..., 2] = np.where(edge, np.minimum(out[..., 2], out[..., 1] + 2.0), out[..., 2])   # warm hair: blue never above green
     return np.clip(out + 0.5, 0, 255).astype(np.uint8)
 
 
 def reader():
-    cmd = ['ffmpeg', '-v', 'error', '-i', SRC, '-vf', 'scale=in_color_matrix=bt709:in_range=tv:out_range=pc',
+    cmd = ['ffmpeg', '-v', 'error', '-i', SRC, '-vf', 'scale=flags=lanczos+accurate_rnd+full_chroma_int+full_chroma_inp:in_color_matrix=bt709:in_range=tv:out_range=pc',
            '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-']
     p = subprocess.Popen(cmd, stdout=subprocess.PIPE)
     n = W * H * 3
