@@ -74,11 +74,11 @@ npm run build   # writes dist/
 - Prices from the owner:
   - Websites: ₹4,000, ₹6,000 or ₹8,000 (one-time), with domain, hosting and SEO included for the first year.
   - E-commerce websites: priced on the client's customisation.
-  - Software plans are all paid once a year:
-    - Business Orders: ₹15 per day.
-    - Ready Software (pre-built): ₹25 per day.
-    - Custom Software: ₹40,000 per year.
-    - Advanced Growth (full software control): ₹60,000 per year.
+  - Software plans:
+    - Business Orders: ₹15 per day, paid once a year.
+    - Ready Software (pre-built): ₹25 per day, paid once a year.
+    - Custom Software: ₹40,000, one-time.
+    - Advanced Growth (full software control): ₹60,000, one-time.
   - Every software plan, once customisation is finished, includes a demo login, a Zoom walkthrough and a built-in SOP in Tamil and English.
   - Social media automation: ₹4,000 for one account, ₹8,000 for all accounts.
 - The owner asked for no "Quotation in 24 hours" pill, no top-right label and no founder/phone line on the cover.
