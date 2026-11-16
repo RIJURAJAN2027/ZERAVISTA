@@ -72,14 +72,18 @@ npm run build   # writes dist/
 
 - Source: `tools/quotation/quote.html`. Render it with `node tools/quotation/render.cjs out.pdf`. It uses the site's fonts, colours and `public/` images.
 - Prices from the owner:
-  - Websites: ₹4,000, ₹6,000 or ₹8,000, with domain, hosting and SEO included for the first year.
-  - Business Orders: ₹15 per day.
-  - Ready Software (pre-built): ₹20,000 per year.
-  - Custom Software: ₹40,000 per year.
-  - Advanced Growth (full software control): ₹60,000.
+  - Websites: ₹4,000, ₹6,000 or ₹8,000 (one-time), with domain, hosting and SEO included for the first year.
+  - E-commerce websites: priced on the client's customisation.
+  - Software plans are all paid once a year:
+    - Business Orders: ₹15 per day.
+    - Ready Software (pre-built): ₹25 per day.
+    - Custom Software: ₹40,000 per year.
+    - Advanced Growth (full software control): ₹60,000 per year.
+  - Every software plan, once customisation is finished, includes a demo login, a Zoom walkthrough and a built-in SOP in Tamil and English.
   - Social media automation: ₹4,000 for one account, ₹8,000 for all accounts.
+- The owner asked for no "Quotation in 24 hours" pill, no top-right label and no founder/phone line on the cover.
 - Not yet confirmed by the owner:
-  - Whether the ₹60,000 plan and the automation prices are one-time or recurring.
+  - Whether the automation prices are one-time or recurring.
   - The page counts and delivery days per website plan.
   - The terms.
 

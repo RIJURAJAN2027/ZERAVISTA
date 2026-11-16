@@ -82,6 +82,7 @@
   .plan .price small { font-size: 9pt; letter-spacing: 0; color: var(--ink-50); font-weight: 400; margin-left: 1.5mm; }
   .plan .for { font-size: 9pt; color: var(--ink-70); margin: 2.5mm 0 4.5mm; min-height: 9mm; }
   .plan hr { border: 0; border-top: 1px solid var(--line); margin: 0 0 4mm; width: 100%; }
+  .plan .note { margin-top: 3mm; padding: 2.5mm 3mm; border-radius: 8px; background: var(--soft); font-size: 8.5pt; line-height: 1.35; color: var(--ink); }
   .plan .days { margin-top: auto; padding-top: 3mm; font-size: 8.5pt; color: var(--ink-50); }
   .plan.dark { background: #0b0b0b; color: #f3f4f6; border-color: #0b0b0b; }
   .plan.dark .for, .plan.dark ul.ticks li { color: rgba(255,255,255,.78); }
@@ -110,13 +111,13 @@
   .explain p { font-size: 9pt; color: var(--ink-70); }
 
   /* ---------- software ---------- */
-  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; margin-top: 6mm; }
-  .box { padding: 6mm 5.5mm 5mm; display: flex; flex-direction: column; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 3.5mm; margin-top: 5mm; }
+  .box { padding: 4.5mm 5mm 3.5mm; display: flex; flex-direction: column; }
   .box .top { display: flex; justify-content: space-between; align-items: flex-start; gap: 3mm; }
-  .box .price { font-size: 24pt; letter-spacing: -0.03em; line-height: 1; font-weight: 500; margin-top: 5mm; }
+  .box .price { font-size: 22pt; letter-spacing: -0.03em; line-height: 1; font-weight: 500; margin-top: 3.5mm; }
   .box .price small { font-size: 9pt; letter-spacing: 0; color: var(--ink-50); font-weight: 400; margin-left: 1mm; }
-  .box .for { font-size: 9pt; color: var(--ink-70); margin: 2.5mm 0 4mm; }
-  .box hr { border: 0; border-top: 1px solid var(--line); margin: 0 0 4mm; width: 100%; }
+  .box .for { font-size: 9pt; color: var(--ink-70); margin: 2mm 0 3mm; }
+  .box hr { border: 0; border-top: 1px solid var(--line); margin: 0 0 3mm; width: 100%; }
   .box.dark { background: #0b0b0b; color: #f3f4f6; border-color: #0b0b0b; }
   .box.dark .for, .box.dark ul.ticks li { color: rgba(255,255,255,.78); }
   .box.dark ul.ticks li::before { color: #fff; }
@@ -125,26 +126,31 @@
   .box.dark .pill { background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.12); color: #fff; box-shadow: none; }
   .band { margin-top: 5mm; background: var(--soft); border-radius: 12px; padding: 4.5mm 5mm; display: grid; grid-template-columns: 1.1fr 2fr; gap: 5mm; align-items: center; }
   .band .chips { display: flex; flex-wrap: wrap; gap: 2mm; }
+  .box ul.ticks li { margin-bottom: 3.5px; }
+  .band2 { margin-top: 3.5mm; background: var(--soft); border-radius: 12px; padding: 4.5mm 5mm; display: grid; grid-template-columns: 1fr 1fr; gap: 6mm; }
+  .band2 .chips { display: flex; flex-wrap: wrap; gap: 2mm; margin-top: 2.5mm; }
+  .band2 b { font-weight: 500; color: var(--ink); }
+  .band2 ul.ticks li { margin-bottom: 3px; }
 
   /* ---------- quotation ---------- */
-  .q { margin-top: 4mm; font-size: 9.5pt; }
-  .q th, .q td { padding: 1.9mm 2mm; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+  .q { margin-top: 3mm; font-size: 9.5pt; }
+  .q th, .q td { padding: 1.45mm 2mm; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
   .q th { font-size: 7.5pt; text-transform: uppercase; letter-spacing: .07em; color: var(--ink-50); font-weight: 500; border-bottom: 1px solid rgba(0,0,0,.3); }
   .q td.r, .q th.r { text-align: right; white-space: nowrap; }
   .q .box-sel { display: inline-block; width: 10px; height: 10px; border: 1px solid rgba(0,0,0,.45); border-radius: 2px; }
-  .q tr.grp td { font-weight: 500; padding-top: 3mm; border-bottom: 0; font-size: 8pt; text-transform: uppercase; letter-spacing: .07em; color: var(--ink-50); }
+  .q tr.grp td { font-weight: 500; padding-top: 2.4mm; border-bottom: 0; font-size: 8pt; text-transform: uppercase; letter-spacing: .07em; color: var(--ink-50); }
   .q td small { display: block; color: var(--ink-50); font-size: 8pt; margin-top: .5mm; }
   .q tr.total td { border-bottom: 0; border-top: 1px solid rgba(0,0,0,.4); font-weight: 500; font-size: 11pt; padding-top: 3.5mm; }
   .line-fill { display: inline-block; width: 30mm; border-bottom: 1px solid rgba(0,0,0,.3); height: 4mm; }
-  .terms { display: grid; grid-template-columns: 1.25fr 1fr; gap: 8mm; margin-top: 5mm; margin-bottom: auto; }
+  .terms { display: grid; grid-template-columns: 1.25fr 1fr; gap: 8mm; margin-top: 4mm; margin-bottom: auto; }
   .terms ol { margin: 2mm 0 0; padding-left: 4.5mm; font-size: 8.6pt; color: var(--ink-70); }
-  .terms ol li { margin-bottom: 1.3mm; }
+  .terms ol li { margin-bottom: 0.8mm; }
   .sign { display: grid; grid-template-columns: 1fr 1fr; gap: 6mm; margin-top: 2mm; }
   .sign div { border-bottom: 1px solid rgba(0,0,0,.3); height: 15mm; }
   .sign p { font-size: 8pt; color: var(--ink-50); margin-top: 1.5mm; }
 
-  .end { margin: 6mm -16mm -14mm; background: #000; color: #fff; padding: 9mm 16mm 9mm; display: flex; justify-content: space-between; align-items: flex-end; }
-  .end .tag { font-family: var(--serif); font-style: italic; font-size: 26pt; line-height: 1; }
+  .end { margin: 4mm -16mm -14mm; background: #000; color: #fff; padding: 6.5mm 16mm 7mm; display: flex; justify-content: space-between; align-items: flex-end; }
+  .end .tag { font-family: var(--serif); font-style: italic; font-size: 22pt; line-height: 1; }
   .end .c { text-align: right; font-size: 9.5pt; color: rgba(255,255,255,.75); line-height: 1.6; }
   .end .c b { color: #fff; font-weight: 500; font-size: 13pt; display: block; }
   .end .logo img { height: 7mm; }
@@ -156,21 +162,15 @@
 <section class="page cover">
   <div class="bar">
     <span class="logo"><img src="../../public/brand/horizontal.png" alt="Zera Vista" style="height:8.5mm"></span>
-    <span>Plans and Quotation · 2026</span>
   </div>
   <img class="dog" src="../../public/dog-white.jpg" alt="">
   <div class="title">
-    <div class="pill"><span class="dot"></span>Quotation in 24 hours</div>
-    <h1 class="h1" style="margin-top:5mm">Plans and quotation</h1>
+    <h1 class="h1">Plans and quotation</h1>
     <div class="tag" style="margin-top:2mm">We build your dream.</div>
     <div class="meta">
       <div><div class="cap">Prepared for</div><div class="fill"></div></div>
       <div><div class="cap">Date</div><div class="fill"></div></div>
       <div><div class="cap">Quotation no.</div><div class="fill">ZV-</div></div>
-    </div>
-    <div class="foot" style="border:0;margin-top:7mm;padding:0">
-      <span>Zera Vista · Founded by Riju Rajan</span>
-      <span>Phone and WhatsApp: +91 93603 25702</span>
     </div>
   </div>
 </section>
@@ -203,7 +203,6 @@
     <div class="work"><img src="../../public/work/jula-1.jpg" alt=""><div class="row"><span>Jula International</span><span class="pill"><span class="dot live"></span>Live</span></div></div>
     <div class="work"><img src="../../public/work/zerafinance-1.jpg" alt=""><div class="row"><span>Zera Finance</span><span class="pill"><span class="dot live"></span>Live</span></div></div>
   </div>
-  <p class="muted" style="font-size:8.5pt;margin-top:2mm">julainternational.com · zerafinance.in</p>
 
   <div class="cap" style="margin-top:9mm">Trusted by</div>
   <div class="clients"><span>Loyola College</span><span>Larsen &amp; Toubro</span><span>Jula International</span><span>Kripkart</span></div>
@@ -277,6 +276,7 @@
         <li>Priority support</li>
         <li>Training to manage your site</li>
       </ul>
+      <p class="note">E-commerce websites are priced on your customisation.</p>
       <div class="days">Ready in 7 to 10 days</div>
     </div>
   </div>
@@ -351,26 +351,28 @@
 
   <div class="cap">Business software · Zera Core</div>
   <h2 class="h2" style="margin-top:3mm">Run your orders, stock and team <span class="serif">from one place.</span></h2>
-  <p class="lead">Start small with daily billing, or own a complete system built around how your company works.</p>
+  <p class="lead">Start small for a few rupees a day, or own a complete system built around how your company works. Every plan is paid once a year.</p>
 
   <div class="grid2">
     <div class="card box">
-      <div class="top"><h3 class="h4">Business Orders</h3><span class="pill"><span class="dot"></span>Pay as you go</span></div>
-      <div class="price">₹15<small>per day</small></div>
+      <div class="top"><h3 class="h4">Business Orders</h3><span class="pill"><span class="dot"></span>Low cost</span></div>
+      <div class="price">₹15<small>per day · paid yearly</small></div>
       <p class="for">Take and track customer orders online, without a big upfront cost.</p>
       <hr>
       <ul class="ticks">
         <li>Online order taking and tracking</li>
         <li>Order alerts on WhatsApp</li>
-        <li>Daily sales view</li>
+        <li>Daily sales view and reports</li>
+        <li>Customer list and order history</li>
+        <li>Bills shared on WhatsApp</li>
         <li>Works on phone and computer</li>
-        <li>Hosting and updates included</li>
+        <li>Hosting, updates and support included</li>
       </ul>
     </div>
 
     <div class="card box">
       <div class="top"><h3 class="h4">Ready Software</h3><span class="pill">Pre-built</span></div>
-      <div class="price">₹20,000<small>per year</small></div>
+      <div class="price">₹25<small>per day · paid yearly</small></div>
       <p class="for">Our proven software, set up for your business and ready in days.</p>
       <hr>
       <ul class="ticks">
@@ -379,7 +381,7 @@
         <li>Your logo and business details</li>
         <li>Staff logins and reports</li>
         <li>Updates and support all year</li>
-        <li>Renews yearly</li>
+        <li>Data backups</li>
       </ul>
     </div>
 
@@ -394,13 +396,13 @@
         <li>Custom screens, fields and reports</li>
         <li>New server, new hosting, new setup</li>
         <li>Changes and new features through the year</li>
-        <li>Renews yearly</li>
+        <li>Paid once a year</li>
       </ul>
     </div>
 
     <div class="card box dark">
       <div class="top"><h3 class="h4">Advanced Growth</h3><span class="pill">Full control</span></div>
-      <div class="price">₹60,000</div>
+      <div class="price">₹60,000<small>per year</small></div>
       <p class="for">The complete system, fully in your hands. For companies ready to scale.</p>
       <hr>
       <ul class="ticks">
@@ -414,10 +416,18 @@
     </div>
   </div>
 
-  <div class="band">
-    <div><div class="cap">Every software plan includes</div></div>
-    <div class="chips">
-      <span class="pill">New server</span><span class="pill">New hosting</span><span class="pill">Research and development</span><span class="pill">Data backups</span><span class="pill">Training for your team</span><span class="pill">Support</span>
+  <div class="band2">
+    <div>
+      <div class="cap">Every software plan includes</div>
+      <div class="chips"><span class="pill">New server</span><span class="pill">New hosting</span><span class="pill">Research and development</span><span class="pill">Data backups</span><span class="pill">Support</span></div>
+    </div>
+    <div>
+      <div class="cap">Once your customisation is finished</div>
+      <ul class="ticks" style="margin-top:2.5mm">
+        <li><b>Demo login</b> to check everything yourself</li>
+        <li><b>Zoom call</b> where we walk you through it</li>
+        <li><b>Built-in SOP</b> (step-by-step guide) in Tamil and English</li>
+      </ul>
     </div>
   </div>
 
@@ -492,11 +502,12 @@
     <tr><td><span class="box-sel"></span></td><td>Starter website<small>Up to 5 pages</small></td><td class="r">₹4,000</td><td class="r"><span class="line-fill"></span></td></tr>
     <tr><td><span class="box-sel"></span></td><td>Business website<small>Up to 10 pages</small></td><td class="r">₹6,000</td><td class="r"><span class="line-fill"></span></td></tr>
     <tr><td><span class="box-sel"></span></td><td>Premium website<small>Up to 15 pages</small></td><td class="r">₹8,000</td><td class="r"><span class="line-fill"></span></td></tr>
-    <tr class="grp"><td></td><td colspan="3">Business software</td></tr>
-    <tr><td><span class="box-sel"></span></td><td>Business Orders</td><td class="r">₹15 / day</td><td class="r"><span class="line-fill"></span></td></tr>
-    <tr><td><span class="box-sel"></span></td><td>Ready Software<small>Pre-built, renews yearly</small></td><td class="r">₹20,000 / year</td><td class="r"><span class="line-fill"></span></td></tr>
-    <tr><td><span class="box-sel"></span></td><td>Custom Software<small>Customised, renews yearly</small></td><td class="r">₹40,000 / year</td><td class="r"><span class="line-fill"></span></td></tr>
-    <tr><td><span class="box-sel"></span></td><td>Advanced Growth<small>Full software control</small></td><td class="r">₹60,000</td><td class="r"><span class="line-fill"></span></td></tr>
+    <tr><td><span class="box-sel"></span></td><td>E-commerce website<small>Online store, built to your needs</small></td><td class="r">On customisation</td><td class="r"><span class="line-fill"></span></td></tr>
+    <tr class="grp"><td></td><td colspan="3">Business software · paid once a year</td></tr>
+    <tr><td><span class="box-sel"></span></td><td>Business Orders<small>Orders, bills and customers</small></td><td class="r">₹15 / day</td><td class="r"><span class="line-fill"></span></td></tr>
+    <tr><td><span class="box-sel"></span></td><td>Ready Software<small>Pre-built</small></td><td class="r">₹25 / day</td><td class="r"><span class="line-fill"></span></td></tr>
+    <tr><td><span class="box-sel"></span></td><td>Custom Software<small>Customised</small></td><td class="r">₹40,000 / year</td><td class="r"><span class="line-fill"></span></td></tr>
+    <tr><td><span class="box-sel"></span></td><td>Advanced Growth<small>Full software control</small></td><td class="r">₹60,000 / year</td><td class="r"><span class="line-fill"></span></td></tr>
     <tr class="grp"><td></td><td colspan="3">Social media automation</td></tr>
     <tr><td><span class="box-sel"></span></td><td>Single platform</td><td class="r">₹4,000</td><td class="r"><span class="line-fill"></span></td></tr>
     <tr><td><span class="box-sel"></span></td><td>All platforms</td><td class="r">₹8,000</td><td class="r"><span class="line-fill"></span></td></tr>
@@ -509,6 +520,7 @@
       <ol>
         <li>All prices are in Indian rupees.</li>
         <li>Website prices include domain, hosting and SEO for the first year.</li>
+        <li>Software plans are paid once a year. Every plan includes a demo login, a Zoom walkthrough and a built-in SOP in Tamil and English.</li>
         <li>You share your logo, text and photos; we can help write them.</li>
         <li>Delivery time starts once we have your content.</li>
         <li>This quotation is valid for 30 days from the date above.</li>
