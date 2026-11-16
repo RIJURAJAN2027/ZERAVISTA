@@ -1,4 +1,4 @@
-/* Zera Studio. Light page, black type, pill buttons, a floating bottom dock.
+/* Zera Vista. Light page, black type, pill buttons, a floating bottom dock.
    Layout: centred section heads over full-width bands; colour comes from the work itself. */
 :root {
   color-scheme: light;
@@ -75,7 +75,7 @@ img, svg, video { display: block; max-width: 100%; }
 .avatar--sm { width: 58px; height: 58px; border-radius: 14px; font-size: 19px; }
 
 .logo { display: inline-flex; align-items: center; gap: 10px; font-size: 22px; font-weight: 500; letter-spacing: -0.02em; white-space: nowrap; }
-.logo img { width: 34px; height: 34px; border-radius: 9px; }
+.logo img { height: 31px; width: auto; display: block; }
 .logo i { font-family: var(--serif); font-style: italic; font-weight: 400; font-size: 1.14em; letter-spacing: 0; }
 .logo--white { color: #fff; }
 
@@ -84,7 +84,9 @@ img, svg, video { display: block; max-width: 100%; }
 .dock { position: fixed; left: 50%; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); z-index: 60; width: min(330px, calc(100vw - 32px)); }
 .dock__bar { height: 54px; border-radius: 999px; background: #0a0a0a; color: #fff; display: flex; align-items: center; gap: 10px; padding: 0 8px 0 10px; box-shadow: 0 16px 40px -12px rgba(0, 0, 0, 0.55); transition: background 0.3s, color 0.3s; }
 .dock.is-light .dock__bar { background: #fff; color: #000; }
-.dock__logo img { width: 32px; height: 32px; border-radius: 9px; }
+.dock__logo img { width: 32px; height: 32px; object-fit: contain; }
+.dock__logo .on-light, .dock.is-light .dock__logo .on-dark { display: none; }
+.dock.is-light .dock__logo .on-light { display: block; }
 .dock__pct { margin-left: auto; font-size: 14px; font-variant-numeric: tabular-nums; opacity: 0.85; }
 .dock__btn { position: relative; display: flex; align-items: center; gap: 8px; height: 38px; padding: 0 12px 0 16px; font-size: 15px; }
 .dock__btn::before { content: ''; position: absolute; left: 0; top: 10px; bottom: 10px; width: 1px; background: currentColor; opacity: 0.25; }
@@ -112,7 +114,7 @@ img, svg, video { display: block; max-width: 100%; }
 .hero .h1 { max-width: 1000px; }
 .hero__text { margin-top: 16px; max-width: 560px; font-size: 17px; line-height: 1.45; color: var(--ink-80); letter-spacing: -0.01em; }
 .hero__tag { margin-top: 16px; display: flex; align-items: center; gap: 10px; font-family: var(--serif); font-style: italic; font-size: 30px; line-height: 1; }
-.hero__tag img { width: 28px; height: 28px; border-radius: 8px; }
+.hero__tag img { width: 28px; height: 28px; object-fit: contain; }
 .hero__btns { margin-top: 20px; display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
 /* The dog fills the space left under the copy: ears just below the buttons, cropped at the chest. */
 .hero__dog { position: relative; z-index: 1; flex: 1 1 auto; min-height: 0; width: 100%; margin-top: 4px; container-type: size; mix-blend-mode: multiply; pointer-events: none; }

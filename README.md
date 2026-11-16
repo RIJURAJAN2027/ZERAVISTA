@@ -1,6 +1,6 @@
-# Zera Studio website
+# Zera Vista website
 
-The company website for **Zera Studio**: *We build your dream.*
+The company website for **Zera Vista**: *We build your dream.*
 
 One page: a hero with the pointer-following dog on a white backdrop, clients, a works carousel, specialities, automation, business flow, featured live work, services, gallery, support, FAQ and contact, plus Privacy, Terms, Refund and Support policy pages (`#privacy`, `#terms`, `#refund`, `#support`).
 

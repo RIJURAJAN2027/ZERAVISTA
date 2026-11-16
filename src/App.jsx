@@ -13,7 +13,7 @@ gsap.registerPlugin(ScrollTrigger)
 const BASE = import.meta.env.BASE_URL
 const img = (name) => `${BASE}work/${name}.jpg`
 const digits = CONTACT.whatsapp.replace(/\D/g, '')
-const waLink = `https://wa.me/${digits}?text=${encodeURIComponent("Hi Zera Studio, I'd like a quotation.")}`
+const waLink = `https://wa.me/${digits}?text=${encodeURIComponent("Hi Zera Vista, I'd like a quotation.")}`
 const telLink = `tel:+${digits}`
 const socials = Object.entries(CONTACT.socials).filter(([, url]) => url)
 const byId = (id) => WORKS.find((w) => w.id === id)
@@ -46,11 +46,11 @@ const I = {
 }
 
 /* ---------- top bar and floating dock ---------- */
-function Logo({ onClick }) {
+// The full logo (mark and name). `white` is for dark backgrounds.
+function Logo({ onClick, white }) {
   return (
-    <a className="logo" href="#top" onClick={onClick} aria-label={`${BRAND.name} ${BRAND.accent}`}>
-      <img src={`${BASE}logo.png`} alt="" width="34" height="34" />
-      <span>{BRAND.name} <i>{BRAND.accent}</i></span>
+    <a className="logo" href="#top" onClick={onClick} aria-label={BRAND.name}>
+      <img src={`${BASE}brand/horizontal${white ? '-white' : ''}.png`} alt={BRAND.name} width="168" height="31" />
     </a>
   )
 }
@@ -176,7 +176,7 @@ function Dock() {
           </div>
         </div>
         <div className="dock__bar">
-          <a className="dock__logo" href="#top" onClick={() => setPanel(null)} aria-label="Back to top"><img src={`${BASE}logo.png`} alt="" width="30" height="30" /></a>
+          <a className="dock__logo" href="#top" onClick={() => setPanel(null)} aria-label="Back to top"><img className="on-dark" src={`${BASE}brand/mark-white.png`} alt="" width="30" height="30" /><img className="on-light" src={`${BASE}logo.png`} alt="" width="30" height="30" /></a>
           <span className="dock__pct">{pct}%</span>
           <button className="dock__btn dock__faq-btn m-only" type="button" aria-expanded={panel === 'faq'} aria-label={panel === 'faq' ? 'Close questions' : 'Questions'} onClick={() => setPanel(panel === 'faq' ? null : 'faq')}>FAQ</button>
           <button className="dock__btn" type="button" aria-expanded={open} aria-label={open ? 'Close menu' : 'Open menu'} onClick={() => setPanel(open ? null : 'menu')}>
@@ -286,7 +286,7 @@ function Illo({ kind }) {
     return (
       <div className="illo"><div className="mini mini--chat">
         <span className="bub bub--me">I need a website for my store</span>
-        <div className="bub bub--quote"><b>Quotation · Zera Studio</b><span>Scope and pages</span><span>Timeline: 4 to 10 days</span><span>Support: 1 year, free</span></div>
+        <div className="bub bub--quote"><b>Quotation · Zera Vista</b><span>Scope and pages</span><span>Timeline: 4 to 10 days</span><span>Support: 1 year, free</span></div>
         <span className="mini__pill mini__pill--ok">Sent within 24 hours</span>
       </div></div>
     )
@@ -529,11 +529,11 @@ function Bento() {
   const initials = BRAND.founder.split(' ').map((part) => part[0]).join('')
   return (
     <section className="bento">
-      <div className="head"><h2 className="h2">The People And Promises <br className="br-d" />Behind Zera Studio</h2></div>
+      <div className="head"><h2 className="h2">The People And Promises <br className="br-d" />Behind Zera Vista</h2></div>
       <div className="bento__grid">
         <div className="bento__card bento__card--sand" data-reveal>
           <span className="pill pill--dark">Founder</span>
-          <div className="bento__founder"><span className="avatar">{initials}</span><div><b className="h5">{BRAND.founder}</b><span className="t-large">Founder, Zera Studio</span></div></div>
+          <div className="bento__founder"><span className="avatar">{initials}</span><div><b className="h5">{BRAND.founder}</b><span className="t-large">Founder, Zera Vista</span></div></div>
         </div>
         <div className="bento__card" data-reveal>
           <span className="bento__ic">{I.doc}</span>
@@ -544,7 +544,7 @@ function Bento() {
         <div className="bento__card bento__card--deep" data-reveal>
           <b className="h3">1 Year</b>
           <span className="t-small">Free support with every project</span>
-          <span className="logo logo--white"><img src={`${BASE}logo.png`} alt="" width="30" height="30" /><span>{BRAND.name} <i>{BRAND.accent}</i></span></span>
+          <span className="logo"><img src={`${BASE}brand/horizontal-white.png`} alt={BRAND.name} width="168" height="31" /></span>
         </div>
       </div>
     </section>
@@ -629,7 +629,7 @@ function Faq() {
         <p className="t-large">If you are unsure where to start, reach out and we will walk you through it.</p>
         <a className="faq__card" href={telLink}>
           <span className="avatar avatar--sm">{initials}</span>
-          <span><span className="t-cap">Let&apos;s Talk</span><b>Book An Intro Call</b><span className="t-cap">{BRAND.founder}, Founder @ZeraStudio</span></span>
+          <span><span className="t-cap">Let&apos;s Talk</span><b>Book An Intro Call</b><span className="t-cap">{BRAND.founder}, Founder @ZeraVista</span></span>
           <span className="faq__go">{I.arrow}</span>
         </a>
       </div>
@@ -686,7 +686,7 @@ function Footer() {
       </div>
       {CONTACT.address && <div className="footer__loc"><span className="cap">Our location</span><p className="t-small">{CONTACT.address}</p></div>}
       <div className="footer__mini m-only">
-        <Logo />
+        <Logo white />
         <p className="footer__mini-tag">{BRAND.tagline}</p>
         <p className="footer__mini-line">Quotation in 24 hours. Websites in 4 to 10 days.</p>
         {CONTACT.email && <p className="footer__mini-line select">{CONTACT.email}</p>}
@@ -699,10 +699,10 @@ function Footer() {
           {[['privacy', 'Privacy'], ['terms', 'Terms'], ['refund', 'Refunds'], ['support', 'Support']].map(([id, text]) => POLICIES[id] && <a key={id} href={`#${id}`}>{text}</a>)}
           {socials.map(([name, url]) => <a key={name} href={url} target="_blank" rel="noopener">{name}</a>)}
         </nav>
-        <p className="footer__mini-copy">© {new Date().getFullYear()} Zera Studio</p>
+        <p className="footer__mini-copy">© {new Date().getFullYear()} Zera Vista</p>
       </div>
       <div className="footer__bar">
-        <span>© {new Date().getFullYear()}, Zera Studio | All Rights Reserved.</span>
+        <span>© {new Date().getFullYear()}, Zera Vista | All Rights Reserved.</span>
         <nav aria-label="Policies">{['terms', 'privacy', 'refund'].map((id) => <a key={id} href={`#${id}`}><Roll>{POLICIES[id].title}</Roll></a>)}</nav>
       </div>
     </footer>
@@ -770,7 +770,7 @@ function Policy({ id }) {
         <h2 className="h2">{policy.title}</h2>
         <div className="policy__body">
           {policy.sections.map(([heading, text]) => <section key={heading}><h3>{heading}</h3><p className="t-body">{text}</p></section>)}
-          <section><h3>Contact</h3><p className="t-body">Zera Studio · Call or WhatsApp <span className="select">{CONTACT.phone}</span></p></section>
+          <section><h3>Contact</h3><p className="t-body">Zera Vista · Call or WhatsApp <span className="select">{CONTACT.phone}</span></p></section>
         </div>
       </div>
     </div>

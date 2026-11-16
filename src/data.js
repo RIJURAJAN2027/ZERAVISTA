@@ -14,7 +14,7 @@ export const CONTACT = {
 }
 // ======================================
 
-export const BRAND = { name: 'Zera', accent: 'Studio', tagline: 'We build your dream', founder: 'Riju Rajan' }
+export const BRAND = { name: 'Zera Vista', tagline: 'We build your dream', founder: 'Riju Rajan' }
 
 export const NAV = [
   ['Work', '#work'],
@@ -110,7 +110,7 @@ export const SUPPORT = [
 ]
 
 export const FAQ = [
-  ['What does Zera Studio build?', 'Websites, online stores, 3D product pages, mobile apps, custom software, business automation, social media automation and ERP. One team handles both design and development.'],
+  ['What does Zera Vista build?', 'Websites, online stores, 3D product pages, mobile apps, custom software, business automation, social media automation and ERP. One team handles both design and development.'],
   ['How fast will I get a quotation?', 'Within 24 hours of your enquiry, sent to you on WhatsApp.'],
   ['How long does a website take?', 'Most websites take 4 to 10 days from the time work starts. Larger software and automation projects are scheduled in the quotation.'],
   ['What support is included?', 'Every project includes one year of free support from the day it goes live. It covers fixing faults in what we built and help with using it.'],

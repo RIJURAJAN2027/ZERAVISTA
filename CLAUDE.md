@@ -1,10 +1,10 @@
-# Zera Studio website: project notes
+# Zera Vista website: project notes
 
 Read this first. It is the hand-over from the previous Claude session.
 
 ## What this is
 
-The company website for **Zera Studio**, founded by **Riju Rajan**. Tagline: **We build your dream**.
+The company website for **Zera Vista**, founded by **Riju Rajan**. Tagline: **We build your dream**.
 
 It is a single-page site built with React 19, Vite 6 and GSAP, on a light theme. The layout follows the section structure of orbix.studio, a US design agency the owner chose as a reference. All text, images and branding here are Zera's own. Do not copy Orbix's text, images, fonts, reviews, awards or numbers.
 
@@ -53,6 +53,33 @@ npm run build   # writes dist/
 - Email, office address and social media links. The fields exist in `CONTACT` in `src/data.js`; empty ones are hidden.
 - A review of the policy pages, which are templates.
 - More real client screenshots, to replace the projects marked "Concept" over time.
+
+## Brand
+
+- The company was renamed from Zera Studio to **Zera Vista** on 16 Nov 2026. Write it as "Zera Vista"; the logo itself is lowercase.
+- Logos are the owner's own files, cleaned to transparent PNGs in `public/brand/`:
+  - `horizontal`: mark and name side by side. The site's top bar and footer use this one.
+  - `stacked`: mark above the name.
+  - `wordmark`: the name alone.
+  - `mark`: the symbol alone.
+  
+  Each has a `-white` version for dark backgrounds. `public/logo.png` is the mark (dock, hero tagline) and `public/favicon.png` is the mark on white.
+- The black dock shows the white mark and switches to the dark mark when the dock turns white.
+
+## Plans and quotation PDF
+
+- Source: `tools/quotation/quote.html`. Render it with `node tools/quotation/render.cjs out.pdf`. It uses the site's fonts, colours and `public/` images.
+- Prices from the owner:
+  - Websites: ₹4,000, ₹6,000 or ₹8,000, with domain, hosting and SEO included for the first year.
+  - Business Orders: ₹15 per day.
+  - Ready Software (pre-built): ₹20,000 per year.
+  - Custom Software: ₹40,000 per year.
+  - Advanced Growth (full software control): ₹60,000.
+  - Social media automation: ₹4,000 for one account, ₹8,000 for all accounts.
+- Not yet confirmed by the owner:
+  - Whether the ₹60,000 plan and the automation prices are one-time or recurring.
+  - The page counts and delivery days per website plan.
+  - The terms.
 
 ## What the owner wants
 
