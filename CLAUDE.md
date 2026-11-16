@@ -10,15 +10,16 @@ It is a single-page site built with React 19, Vite 6 and GSAP, on a light theme.
 
 ## Where things are
 
+- **Repo:** https://github.com/RIJURAJAN2027/ZERAVISTA. Start every new session from this repo.
+  - The site moved here from `jeromjojuk-jkj/zerabytes` on 16 Nov 2026, with its full history. The old repo and its old live site (https://jeromjojuk-jkj.github.io/zerabytes/) were left as they were. Don't work there.
 - **Branches:**
-  - `claude/jolly-fermi-nqvth4` is the repo's default branch and where work happens.
-  - `main` is what GitHub Pages deploys.
+  - `main` is the default branch and what GitHub Pages deploys.
+  - Work happens on the session's own branch.
   - When the owner asks to publish, fast-forward `main` to the working branch.
-- **Deploy:** `.github/workflows/pages.yml` builds and deploys on every push to `main`. The live site is https://jeromjojuk-jkj.github.io/zerabytes/.
-  - Pages is switched on, but its Source is "Deploy from a branch". That publishes the raw source files, which show a blank page, and it races the real deploy on every push to `main`.
-  - Fix: repo Settings → Pages → Source: **GitHub Actions**.
-  - Until then, after each push to `main`, check that "Deploy to GitHub Pages" finished after "pages build and deployment". If it didn't, run "Deploy to GitHub Pages" again.
-- **Preview:** https://claude.ai/artifact/DQVZ1AdpdB4s5sQQo7Rk4R is private to the owner's original Claude account.
+- **Deploy:** `.github/workflows/pages.yml` builds and deploys on every push to `main`. The live site will be https://rijurajan2027.github.io/ZERAVISTA/.
+  - The site appears only after the owner turns Pages on: repo Settings → Pages → Source: **GitHub Actions**. Then run "Deploy to GitHub Pages" from the Actions tab once.
+  - Never set Source to "Deploy from a branch". That publishes the raw source files, which show a blank page.
+- **Preview:** https://claude.ai/artifact/6hCNPMVY1baB3r52HAavZ8 (private to the owner). It is the built `dist/` folder, published with all its files.
 
 ## Run it
 
