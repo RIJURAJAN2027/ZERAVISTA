@@ -19,6 +19,8 @@ It is a single-page site built with React 19, Vite 6 and GSAP, on a light theme.
 - **Deploy:** `.github/workflows/pages.yml` builds and deploys on every push to `main`. The live site will be https://rijurajan2027.github.io/ZERAVISTA/.
   - The site appears only after the owner turns Pages on: repo Settings → Pages → Source: **GitHub Actions**. Then run "Deploy to GitHub Pages" from the Actions tab once.
   - Never set Source to "Deploy from a branch". That publishes the raw source files, which show a blank page.
+- **Hostinger:** `.github/workflows/hostinger.yml` builds on every push to `main` and force-pushes the finished files (`dist/`) to the `hostinger` branch. Never edit that branch by hand.
+  - Owner's one-time setup in hPanel → Advanced → Git: repository `https://github.com/RIJURAJAN2027/ZERAVISTA.git`, branch `hostinger`, install path empty (`public_html`). Then turn on Auto Deployment and add its webhook URL to GitHub (Settings → Webhooks).
 - **Preview:** https://claude.ai/artifact/6hCNPMVY1baB3r52HAavZ8 (private to the owner). It is the built `dist/` folder, published with all its files.
 
 ## Run it
