@@ -71,6 +71,7 @@ npm run build   # writes dist/
 ## Plans and quotation PDF
 
 - Source: `tools/quotation/quote.html`. Render it with `node tools/quotation/render.cjs out.pdf`. It uses the site's fonts, colours and `public/` images.
+- Word version: `node tools/quotation/make-docx.cjs` writes `Zera-Vista-Plans-and-Quotation.docx` (Arial and Georgia, so it opens the same on any computer). Its content is a copy of `quote.html`: change both when prices or text change.
 - Prices from the owner:
   - Websites: ₹4,000, ₹6,000 or ₹8,000 (one-time), with domain, hosting and SEO included for the first year.
   - E-commerce websites: priced on the client's customisation.
