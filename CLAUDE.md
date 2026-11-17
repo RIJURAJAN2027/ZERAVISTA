@@ -81,7 +81,7 @@ npm run build   # writes dist/
     - Advanced Growth (full software control): ₹60,000, one-time.
   - Every software plan, once customisation is finished, includes a demo login, a Zoom walkthrough and a built-in SOP in Tamil and English.
   - Social media automation: ₹4,000 for one account, ₹8,000 for all accounts.
-- The owner asked for no "Quotation in 24 hours" pill, no top-right label and no founder/phone line on the cover.
+- The cover shows the large logo mark, not the dog (owner removed it). The owner also asked for no "Quotation in 24 hours" pill, no top-right label and no founder/phone line on the cover.
 - Not yet confirmed by the owner:
   - Whether the automation prices are one-time or recurring.
   - The page counts and delivery days per website plan.
