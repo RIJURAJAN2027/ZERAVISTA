@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Zera Vista · Instagram post 03 · Social media automation</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root { --bg: #fafafa; --ink: #000; --ink-70: rgba(0,0,0,.7); --ink-50: rgba(0,0,0,.5); --line: rgba(0,0,0,.1); --soft: #f1f1f0; --live: #16a34a; --accent: #ff7a3d;
+          --sans: 'Inter Tight', Arial, sans-serif; --serif: 'Instrument Serif', Georgia, serif; }
+  * { box-sizing: border-box; margin: 0; }
+  body { background: #777; font-family: var(--sans); color: var(--ink); letter-spacing: -0.01em; }
+  .slide { width: 1080px; height: 1350px; background: var(--bg); position: relative; overflow: hidden; padding: 72px 76px; display: flex; flex-direction: column; margin-bottom: 20px; }
+  .top { display: flex; justify-content: space-between; align-items: center; }
+  .top img { height: 46px; display: block; }
+  .top span { font-size: 22px; color: var(--ink-50); }
+  .cap { font-size: 20px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-50); }
+  .h { font-size: 96px; line-height: 1.02; letter-spacing: -0.035em; font-weight: 500; }
+  .h2 { font-size: 72px; line-height: 1.06; letter-spacing: -0.03em; font-weight: 500; }
+  .serif { font-family: var(--serif); font-style: italic; font-weight: 400; letter-spacing: -0.01em; }
+  .lead { font-size: 30px; line-height: 1.4; color: var(--ink-70); }
+  .pill { display: inline-flex; align-items: center; gap: 10px; height: 46px; padding: 0 20px 0 16px; border-radius: 999px; background: #fff; border: 1px solid rgba(0,0,0,.06); box-shadow: 0 6px 18px rgba(0,0,0,.06); font-size: 21px; white-space: nowrap; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--accent); }
+  .dot.live { background: var(--live); }
+  .foot { margin-top: auto; display: flex; justify-content: space-between; align-items: center; font-size: 22px; color: var(--ink-50); }
+  .swipe { display: inline-flex; align-items: center; gap: 10px; color: var(--ink); }
+  .swipe i { width: 46px; height: 2px; background: #000; position: relative; }
+  .swipe i::after { content: ''; position: absolute; right: 0; top: -6px; width: 12px; height: 12px; border-right: 2px solid #000; border-top: 2px solid #000; transform: rotate(45deg); }
+  .card { background: #fff; border-radius: 28px; border: 1px solid rgba(0,0,0,.05); box-shadow: 0 30px 60px -30px rgba(0,0,0,.3); }
+
+  /* 1. cover */
+  .s1 .stage { position: relative; height: 640px; margin-top: 60px; }
+  .s1 .desk { position: absolute; left: 0; top: 0; width: 820px; border-radius: 22px; box-shadow: 0 50px 90px -40px rgba(0,0,0,.45); border: 1px solid var(--line); }
+  .s1 .phone { position: absolute; right: 0; top: 150px; width: 270px; border-radius: 34px; border: 8px solid #0b0b0b; box-shadow: 0 50px 80px -30px rgba(0,0,0,.5); }
+
+  /* 2. what you get */
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 56px; }
+  .tile { padding: 34px 32px 32px; min-height: 230px; display: flex; flex-direction: column; }
+  .tile .n { font-size: 20px; color: var(--ink-50); }
+  .tile b { margin-top: auto; font-size: 34px; font-weight: 500; letter-spacing: -0.02em; line-height: 1.15; }
+  .tile p { font-size: 22px; color: var(--ink-70); margin-top: 8px; line-height: 1.35; }
+  .tile.dark { background: #0b0b0b; color: #fff; border-color: #0b0b0b; }
+  .tile.dark .n, .tile.dark p { color: rgba(255,255,255,.65); }
+
+  /* 3. work */
+  .works { display: grid; gap: 24px; margin-top: 44px; }
+  .work { display: grid; grid-template-columns: 420px 1fr; gap: 34px; align-items: center; }
+  .work img { width: 420px; border-radius: 18px; border: 1px solid var(--line); display: block; box-shadow: 0 24px 50px -30px rgba(0,0,0,.35); }
+  .work b { font-size: 36px; font-weight: 500; letter-spacing: -0.02em; display: block; }
+  .work p { font-size: 22px; color: var(--ink-70); margin: 8px 0 16px; line-height: 1.35; }
+
+  /* 4. steps */
+  .steps { margin-top: 56px; border-top: 1px solid var(--line); }
+  .step { display: grid; grid-template-columns: 120px 1fr auto; align-items: center; padding: 58px 0; border-bottom: 1px solid var(--line); }
+  .step .n { font-size: 24px; color: var(--ink-50); }
+  .step b { font-size: 54px; font-weight: 500; letter-spacing: -0.025em; }
+  .step .d { font-size: 26px; color: var(--ink-70); text-align: right; }
+
+  /* 5. plan */
+  .plan { margin-top: 56px; background: #0b0b0b; color: #f3f4f6; border-radius: 32px; padding: 60px 54px 58px; }
+  .plan .row { display: flex; justify-content: space-between; align-items: center; }
+  .plan .name { font-size: 34px; font-weight: 500; }
+  .plan .price { font-size: 150px; font-weight: 500; letter-spacing: -0.045em; line-height: 1; margin-top: 30px; }
+  .plan .price small { font-size: 28px; letter-spacing: 0; color: rgba(255,255,255,.55); font-weight: 400; margin-left: 10px; }
+  .plan ul { list-style: none; padding: 0; margin-top: 44px; border-top: 1px solid rgba(255,255,255,.14); padding-top: 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 24px 30px; }
+  .plan li { position: relative; padding-left: 34px; font-size: 25px; color: rgba(255,255,255,.85); line-height: 1.3; }
+  .plan li::before { content: ''; position: absolute; left: 2px; top: 9px; width: 14px; height: 7px; border-left: 2.5px solid #fff; border-bottom: 2.5px solid #fff; transform: rotate(-45deg); }
+  .plan .pill { background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.14); color: #fff; box-shadow: none; }
+  .cta { margin-top: 44px; display: flex; justify-content: space-between; align-items: center; }
+  .btn { display: inline-flex; align-items: center; gap: 14px; height: 84px; padding: 0 40px; border-radius: 999px; background: #000; color: #fff; font-size: 30px; box-shadow: 0 20px 34px -18px rgba(0,0,0,.7); }
+  .btn svg { width: 30px; height: 30px; }
+
+  /* post 02 */
+  .s1 .stage2 { position: relative; height: 700px; margin-top: 56px; }
+  .s1 .main { position: absolute; left: 0; top: 0; width: 860px; border-radius: 20px; border: 1px solid var(--line); box-shadow: 0 50px 90px -40px rgba(0,0,0,.45); }
+  .s1 .over { position: absolute; right: 0; top: 300px; width: 520px; border-radius: 18px; border: 1px solid var(--line); box-shadow: 0 50px 80px -30px rgba(0,0,0,.5); }
+  .note { font-size: 19px; color: var(--ink-50); }
+  .plans { display: grid; gap: 20px; margin-top: 50px; }
+  .pl { display: grid; grid-template-columns: 1fr auto; align-items: center; padding: 34px 38px; }
+  .pl .nm { font-size: 38px; font-weight: 500; letter-spacing: -0.02em; display: flex; align-items: center; gap: 16px; }
+  .pl .ln { font-size: 22px; color: var(--ink-70); margin-top: 8px; }
+  .pl .pr { text-align: right; font-size: 64px; font-weight: 500; letter-spacing: -0.035em; line-height: 1; }
+  .pl .pr small { display: block; font-size: 21px; letter-spacing: 0; color: var(--ink-50); font-weight: 400; margin-top: 8px; }
+  .pl .pill { height: 38px; font-size: 18px; padding: 0 14px; }
+  .pl.dark { background: #0b0b0b; color: #fff; border-color: #0b0b0b; }
+  .pl.dark .ln, .pl.dark .pr small { color: rgba(255,255,255,.6); }
+  .pl.dark .pill { background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.14); color: #fff; box-shadow: none; }
+  .care { margin-top: 60px; display: grid; gap: 26px; }
+  .care .card { padding: 64px 46px; display: grid; grid-template-columns: 90px 1fr; align-items: start; }
+  .care .n { font-size: 22px; color: var(--ink-50); padding-top: 10px; }
+  .care b { font-size: 52px; font-weight: 500; letter-spacing: -0.025em; display: block; }
+  .care p { font-size: 25px; color: var(--ink-70); margin-top: 8px; line-height: 1.35; }
+  .care .dark { background: #0b0b0b; color: #fff; border-color: #0b0b0b; }
+  .care .dark .n, .care .dark p { color: rgba(255,255,255,.65); }
+  .chips { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 18px; }
+
+  /* post 03 */
+  .duo { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 60px; }
+  .ap { padding: 56px 44px 54px; display: flex; flex-direction: column; }
+  .ap .nm { font-size: 36px; font-weight: 500; letter-spacing: -0.02em; }
+  .ap .pr { font-size: 104px; font-weight: 500; letter-spacing: -0.04em; line-height: 1; margin-top: 30px; }
+  .ap .ln { font-size: 22px; color: var(--ink-70); margin: 16px 0 26px; line-height: 1.35; padding-bottom: 26px; border-bottom: 1px solid var(--line); }
+  .ap ul { list-style: none; padding: 0; display: grid; gap: 22px; }
+  .ap li { position: relative; padding-left: 34px; font-size: 24px; line-height: 1.3; color: rgba(0,0,0,.8); }
+  .ap li::before { content: ''; position: absolute; left: 2px; top: 8px; width: 13px; height: 6px; border-left: 2.5px solid currentColor; border-bottom: 2.5px solid currentColor; transform: rotate(-45deg); color: #000; }
+  .ap.dark { background: #0b0b0b; color: #fff; border-color: #0b0b0b; }
+  .ap.dark .ln { color: rgba(255,255,255,.65); border-color: rgba(255,255,255,.14); }
+  .ap.dark li { color: rgba(255,255,255,.85); } .ap.dark li::before { color: #fff; }
+  .ap .pill { align-self: flex-start; margin-bottom: 26px; }
+  .ap.dark .pill { background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.14); color: #fff; box-shadow: none; }
+  .gains { display: grid; grid-template-columns: 1fr; gap: 18px; margin-top: 60px; }
+  .gains div { background: var(--soft); border-radius: 22px; padding: 38px 40px; display: flex; justify-content: space-between; align-items: center; }
+  .gains b { display: block; font-size: 40px; font-weight: 500; letter-spacing: -0.02em; line-height: 1.15; }
+  .gains p { font-size: 24px; color: var(--ink-70); line-height: 1.35; text-align: right; }
+</style>
+</head>
+<body>
+
+<section class="slide s1" id="s1">
+  <div class="top"><img src="../../public/brand/horizontal.png" alt="zera vista"><span>01 / 05</span></div>
+  <div style="margin-top:70px"><span class="pill"><span class="dot"></span>Social media automation</span></div>
+  <h1 class="h" style="margin-top:34px;font-size:84px">Reply, post and follow up,<br><span class="serif">even while you sleep.</span></h1>
+  <div class="stage2" style="height:640px">
+    <img class="main" src="../../public/work/pulse.jpg" alt="">
+    <img class="over" src="../../public/work/drift.jpg" alt="" style="top:260px">
+  </div>
+  <div class="foot"><span class="note">Sample screens</span><span class="swipe">Swipe <i></i></span></div>
+</section>
+
+<section class="slide" id="s2">
+  <div class="top"><img src="../../public/brand/horizontal.png" alt="zera vista"><span>02 / 05</span></div>
+  <div class="cap" style="margin-top:70px">What it does</div>
+  <h2 class="h2" style="margin-top:22px">Every message answered. <span class="serif">Every lead followed up.</span></h2>
+  <div class="grid">
+    <div class="card tile"><span class="n">01</span><b>Instant auto-replies</b><p>On WhatsApp and Instagram, day or night.</p></div>
+    <div class="card tile dark"><span class="n">02</span><b>Answers common questions</b><p>Prices, timings, location, in seconds.</p></div>
+    <div class="card tile"><span class="n">03</span><b>Every enquiry in one list</b><p>No more lost chats.</p></div>
+    <div class="card tile"><span class="n">04</span><b>Welcome and follow-ups</b><p>Customers hear from you on time.</p></div>
+    <div class="card tile"><span class="n">05</span><b>Scheduled posts</b><p>Your page stays active by itself.</p></div>
+    <div class="card tile"><span class="n">06</span><b>Leads to your team</b><p>Sent straight to their WhatsApp.</p></div>
+  </div>
+  <div class="foot"><span>Zera Vista</span><span class="swipe">Swipe <i></i></span></div>
+</section>
+
+<section class="slide" id="s3">
+  <div class="top"><img src="../../public/brand/horizontal.png" alt="zera vista"><span>03 / 05</span></div>
+  <div class="cap" style="margin-top:70px">Plans</div>
+  <h2 class="h2" style="margin-top:22px">One account, <span class="serif">or every account.</span></h2>
+  <div class="duo">
+    <div class="card ap"><span class="pill">One account</span><div class="nm">Single Platform</div><div class="pr">₹4,000</div>
+      <div class="ln">For one of your accounts, such as WhatsApp or Instagram.</div>
+      <ul><li>Instant auto-replies</li><li>Answers to common questions</li><li>Enquiries in one list</li><li>Welcome and follow-up messages</li><li>Setup and testing by our team</li></ul></div>
+    <div class="card ap dark"><span class="pill">Every account</span><div class="nm">All Platforms</div><div class="pr">₹8,000</div>
+      <div class="ln">Across every social media account your business uses.</div>
+      <ul><li>Everything in Single Platform</li><li>WhatsApp, Instagram, Facebook and more</li><li>Scheduled posts</li><li>All enquiries in one place</li><li>Leads sent to your team</li></ul></div>
+  </div>
+  <div class="foot"><span>Zera Vista</span><span class="swipe">Swipe <i></i></span></div>
+</section>
+
+<section class="slide" id="s4">
+  <div class="top"><img src="../../public/brand/horizontal.png" alt="zera vista"><span>04 / 05</span></div>
+  <div class="cap" style="margin-top:70px">How it works</div>
+  <h2 class="h2" style="margin-top:22px">Set up once.<br><span class="serif">It runs on its own.</span></h2>
+  <div class="steps" style="margin-top:70px">
+    <div class="step" style="padding:74px 0"><span class="n">01</span><b>Connect</b><span class="d">We link your accounts securely</span></div>
+    <div class="step" style="padding:74px 0"><span class="n">02</span><b>Set up</b><span class="d">We write the replies with you</span></div>
+    <div class="step" style="padding:74px 0"><span class="n">03</span><b>Go live</b><span class="d">We test it, then it runs</span></div>
+  </div>
+  <p style="font-size:26px;color:var(--ink-50);margin-top:56px">Built on n8n business automation.</p>
+  <div class="foot"><span>Zera Vista</span><span class="swipe">Swipe <i></i></span></div>
+</section>
+
+<section class="slide" id="s5">
+  <div class="top"><img src="../../public/brand/horizontal.png" alt="zera vista"><span>05 / 05</span></div>
+  <div class="cap" style="margin-top:70px">What it changes</div>
+  <h1 class="h" style="margin-top:28px">Never miss<br><span class="serif">a customer again.</span></h1>
+  <div class="gains">
+    <div><b>No missed customers</b><p>Every message gets a reply.</p></div>
+    <div><b>Time back</b><p>No more typing the same answers.</p></div>
+    <div><b>More sales</b><p>Fast replies turn into orders.</p></div>
+  </div>
+  <div class="cta" style="margin-top:60px">
+    <span class="btn"><svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 2.9 2.9 0 0 0-.9 2.2 5 5 0 0 0 1 2.7 11.5 11.5 0 0 0 4.4 3.9c1.6.7 2.3.8 3.1.6a2.7 2.7 0 0 0 1.8-1.2 2.2 2.2 0 0 0 .2-1.2c-.1-.1-.3-.2-.6-.3Z"/></svg>+91 93603 25702</span>
+    <span style="font-size:24px;color:var(--ink-70);text-align:right;line-height:1.4">Quotation<br>in 24 hours</span>
+  </div>
+  <div class="foot" style="margin-top:auto"><span class="serif" style="font-size:34px;color:#000">We build your dream.</span><span>Zera Vista</span></div>
+</section>
+
+</body>
+</html>
