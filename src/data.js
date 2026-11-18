@@ -6,7 +6,7 @@ export const CONTACT = {
   email: '',                  // e.g. 'hello@yourdomain.com'
   address: '',                // e.g. 'Street, City, State, PIN'
   socials: {                  // full links, e.g. 'https://instagram.com/yourpage'
-    Instagram: '',
+    Instagram: 'https://www.instagram.com/zeravista/',
     LinkedIn: '',
     Facebook: '',
     YouTube: '',

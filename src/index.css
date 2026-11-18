@@ -104,6 +104,35 @@ img, svg, video { display: block; max-width: 100%; }
 .menu-backdrop.is-on { opacity: 1; visibility: visible; }
 .dock__contact { display: flex; gap: 8px; padding-top: 14px; }
 .dock__contact .btn { flex: 1; padding: 0 10px; font-size: 15px; }
+.dock__contact { flex-wrap: wrap; }
+.dock__contact .btn:nth-child(3) { flex-basis: 100%; }
+.dock__menu-in > .dock__menu-faq { display: flex; justify-content: space-between; align-items: center; padding: 10px 6px; font-size: 19px; border-bottom: 1px solid var(--line); text-align: left; }
+.dock__menu-faq svg { width: 16px; height: 16px; opacity: 0.45; }
+.footer__btns { display: flex; gap: 10px; flex-wrap: wrap; }
+.gallery__more { display: flex; flex-direction: column; align-items: center; gap: 18px; margin-top: 64px; text-align: center; }
+.gallery__more .btn svg { width: 20px; height: 20px; }
+
+/* Phones: clear glass bar in place of the black dock bar. No colour of its own: it takes the page behind it. */
+.gbar { display: none; }
+@media (max-width: 760px) {
+  .dock { width: min(370px, calc(100vw - 28px)); }
+  .dock__bar { display: none; }
+  .dock__menu { bottom: 78px; }
+  .gbar { display: grid; grid-template-columns: repeat(4, 1fr); height: 68px; padding: 0 6px; border-radius: 999px; color: #000;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.34), rgba(255, 255, 255, 0.12));
+    -webkit-backdrop-filter: blur(30px) saturate(180%); backdrop-filter: blur(30px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.9), inset 0 -1px 1px rgba(255, 255, 255, 0.3), inset 0 0 20px rgba(255, 255, 255, 0.2),
+      0 14px 34px -10px rgba(0, 0, 0, 0.28), 0 2px 6px rgba(0, 0, 0, 0.06);
+    transition: color 0.3s, background 0.3s, border-color 0.3s; }
+  .gbar > a, .gbar > button { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; margin: 6px 0; border-radius: 999px; font-size: 11.5px; font-weight: 500; letter-spacing: 0; color: inherit; -webkit-tap-highlight-color: transparent; transition: background 0.2s; }
+  .gbar > a:active, .gbar > button:active, .gbar > button[aria-expanded='true'] { background: rgba(255, 255, 255, 0.32); }
+  .gbar svg { width: 23px; height: 23px; }
+  /* over the black sections the glass turns smoky and the icons white */
+  .dock.is-light .gbar { color: #fff; border-color: rgba(255, 255, 255, 0.28);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.1)); }
+  .dock.is-light .gbar > button[aria-expanded='true'] { background: rgba(255, 255, 255, 0.16); }
+}
 
 /* ---------- hero: pinned on the first screen, dissolves as the client cards rise over it ---------- */
 .intro { position: relative; }

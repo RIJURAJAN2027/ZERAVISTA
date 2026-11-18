@@ -16,6 +16,11 @@ const digits = CONTACT.whatsapp.replace(/\D/g, '')
 const waLink = `https://wa.me/${digits}?text=${encodeURIComponent("Hi Zera Vista, I'd like a quotation.")}`
 const telLink = `tel:+${digits}`
 const socials = Object.entries(CONTACT.socials).filter(([, url]) => url)
+// The plans and quotation PDF (public/Zera-Vista-Quotation.pdf); opens in a new tab to view or download.
+const quoteLink = `${BASE}Zera-Vista-Quotation.pdf`
+const igLink = CONTACT.socials.Instagram
+// instagram.com/zeravista/ → @zeravista
+const handle = (url) => '@' + url.replace(/\/+$/, '').split('/').pop()
 const byId = (id) => WORKS.find((w) => w.id === id)
 const lines = (text) => text.split('\n').map((line, i) => <span className="ln" key={i}>{line}</span>)
 
@@ -36,6 +41,8 @@ const I = {
   compass: svg('M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM15.500 8.500l-2 5-5 2 2-5 5-2z'),
   doc: svg('M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8l-5-5zM14 3v5h5M9 13h6M9 17h4'),
   code: svg('M8 7l-5 5 5 5M16 7l5 5-5 5M14 4l-4 16'),
+  ig: <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.700" strokeLinecap="round" strokeLinejoin="round"><rect x="3.500" y="3.500" width="17" height="17" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="17.200" cy="6.800" r=".6" fill="currentColor" /></svg>,
+  menu: svg('M4 8h16M4 16h16'),
   rocket: svg('M5 15c-1 1-1.500 4-1.500 4s3-.500 4-1.500M9 15l-1.500-1.500c0-3 2-8.500 9.500-9.500 0 0-.500 7-9 10.500L9 15zM15 9h.01'),
   wa: (
     <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.600" strokeLinecap="round" strokeLinejoin="round"><path d="M3.500 20.500l1.300-4.200A8.500 8.500 0 1 1 8 19.400z" /><path d="M9 8.600c.2-.5.5-.6.8-.6h.5c.2 0 .4.1.5.4l.7 1.600c.1.3 0 .5-.1.7l-.5.6c-.1.2-.1.4 0 .5.6 1 1.400 1.800 2.400 2.300.2.1.4.1.5 0l.6-.6c.2-.2.5-.2.7-.1l1.500.7c.3.1.4.3.4.6v.4c0 .4-.2.8-.6 1-.6.3-1.600.5-2.900-.1-2-.9-3.600-2.600-4.400-4.500-.5-1.200-.4-2.300.1-2.900z" fill="currentColor" stroke="none" /></svg>
@@ -153,9 +160,11 @@ function Dock() {
           <div className="dock__menu-in">
             <span className="cap" data-mi>Menu</span>
             {NAV.map(([text, href]) => <a key={href} href={href} data-mi onClick={() => setPanel(null)}><Roll>{text}</Roll><span>{I.arrow}</span></a>)}
+            <button type="button" className="dock__menu-faq m-only" data-mi onClick={() => setPanel('faq')}><span>FAQ</span><span>{I.arrow}</span></button>
             <div className="dock__contact" data-mi>
               <a className="btn btn--sm" href={telLink}>{I.phone} <Roll>Call</Roll></a>
               <a className="btn btn--sm btn--light" href={waLink} target="_blank" rel="noopener">{I.wa} <Roll>WhatsApp</Roll></a>
+              <a className="btn btn--sm btn--light" href={quoteLink} target="_blank" rel="noopener">{I.doc} <Roll>Quotation</Roll></a>
             </div>
           </div>
         </nav>
@@ -183,6 +192,13 @@ function Dock() {
             <span className="dock__burger" aria-hidden="true"><i /><i /></span><span className="dock__label" ref={label} aria-hidden="true" />
           </button>
         </div>
+        {/* Phones: a clear glass bar replaces the bar above. */}
+        <nav className="gbar m-only" aria-label="Quick links">
+          <a href="#contact" onClick={() => setPanel(null)}>{I.phone}<span>Contact</span></a>
+          <a href={quoteLink} target="_blank" rel="noopener">{I.doc}<span>Quotation</span></a>
+          {igLink && <a href={igLink} target="_blank" rel="noopener">{I.ig}<span>Instagram</span></a>}
+          <button type="button" aria-expanded={open} onClick={() => setPanel(open ? null : 'menu')}>{open ? I.close : I.menu}<span>{open ? 'Close' : 'Menu'}</span></button>
+        </nav>
       </div>
     </>
   )
@@ -214,7 +230,7 @@ function OneTeam() {
         <div className="team__socials">
           <a href={telLink} aria-label="Call us">{I.phone}</a>
           <a href={waLink} target="_blank" rel="noopener" aria-label="WhatsApp">{I.wa}</a>
-          {socials.map(([name, url]) => <a key={name} href={url} target="_blank" rel="noopener" aria-label={name}>{name[0]}</a>)}
+          {socials.map(([name, url]) => <a key={name} href={url} target="_blank" rel="noopener" aria-label={name}>{name === 'Instagram' ? I.ig : name[0]}</a>)}
         </div>
       </div>
     </section>
@@ -597,6 +613,12 @@ function Gallery({ onOpen }) {
           )
         })}
       </div>
+      {igLink && (
+        <div className="gallery__more" data-reveal>
+          <p className="t-large">Many more designs on our Instagram.</p>
+          <a className="btn btn--light" href={igLink} target="_blank" rel="noopener">{I.ig} <Roll>@zeravista</Roll></a>
+        </div>
+      )}
     </section>
   )
 }
@@ -655,6 +677,7 @@ function Cta() {
       <div className="cta__btns" data-reveal>
         <a className="btn btn--white" href={telLink}>{I.phone} <Roll>Call</Roll></a>
         <a className="btn btn--ghost" href={waLink} target="_blank" rel="noopener">{I.wa} <Roll>WhatsApp</Roll></a>
+        <a className="btn btn--ghost" href={quoteLink} target="_blank" rel="noopener">{I.doc} <Roll>Quotation</Roll></a>
       </div>
     </section>
   )
@@ -674,14 +697,17 @@ function Footer() {
             <div><span className="cap">Call us</span><a href={telLink}>{CONTACT.phone}</a></div>
             <div><span className="cap">WhatsApp</span><a href={waLink} target="_blank" rel="noopener">{CONTACT.phone}</a></div>
             {CONTACT.email && <div><span className="cap">Drop us a line</span><span className="select">{CONTACT.email}</span></div>}
+            {socials.map(([name, url]) => <div key={name}><span className="cap">{name}</span><a href={url} target="_blank" rel="noopener">{handle(url)}</a></div>)}
           </div>
-          <a className="btn" href={waLink} target="_blank" rel="noopener">{I.wa} <Roll>Get a quotation</Roll></a>
+          <div className="footer__btns">
+            <a className="btn" href={waLink} target="_blank" rel="noopener">{I.wa} <Roll>Get a quotation</Roll></a>
+            <a className="btn btn--light" href={quoteLink} target="_blank" rel="noopener">{I.doc} <Roll>Plans and quotation</Roll></a>
+          </div>
         </div>
         <div className="footer__cols">
           <div><span className="cap">Services</span>{SERVICES.map(([title]) => <a key={title} href="#services"><Roll>{title.replace(/\n/g, ' ').replace(/,$/, '')}</Roll></a>)}</div>
           <div><span className="cap">Quick links</span>{NAV.map(([label, href]) => <a key={href} href={href}><Roll>{label}</Roll></a>)}</div>
           <div><span className="cap">Policies</span>{Object.entries(POLICIES).map(([id, policy]) => <a key={id} href={`#${id}`}><Roll>{policy.title}</Roll></a>)}</div>
-          {socials.length > 0 && <div><span className="cap">Follow us</span>{socials.map(([name, url]) => <a key={name} href={url} target="_blank" rel="noopener"><Roll>{name}</Roll></a>)}</div>}
         </div>
       </div>
       {CONTACT.address && <div className="footer__loc"><span className="cap">Our location</span><p className="t-small">{CONTACT.address}</p></div>}
@@ -696,6 +722,7 @@ function Footer() {
           <a href="#services">Services</a>
           <button type="button" onClick={() => window.dispatchEvent(new Event('zera:faq'))}>FAQ</button>
           <a href="#contact">Contact</a>
+          <a href={quoteLink} target="_blank" rel="noopener">Quotation</a>
           {[['privacy', 'Privacy'], ['terms', 'Terms'], ['refund', 'Refunds'], ['support', 'Support']].map(([id, text]) => POLICIES[id] && <a key={id} href={`#${id}`}>{text}</a>)}
           {socials.map(([name, url]) => <a key={name} href={url} target="_blank" rel="noopener">{name}</a>)}
         </nav>
@@ -805,7 +832,7 @@ export default function App() {
       .from('.hero__badge', { y: -14, autoAlpha: 0, duration: 0.8, ...done }, 0.1)
       .from('.hero__film', { y: 90, scale: 0.9, autoAlpha: 0, duration: 1.5, ...done }, 0.3)
       .from('.hero__btns > *', { y: 20, autoAlpha: 0, duration: 0.8, stagger: 0.08, ...done }, 0.75)
-      .from('.dock__bar', { y: 90, autoAlpha: 0, duration: 1, ease: 'expo.out', ...done }, 1)
+      .from('.gbar', { y: 90, autoAlpha: 0, duration: 1, ease: 'expo.out', ...done }, 1)
     return () => intro.revert()
   }, [])
 

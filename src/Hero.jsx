@@ -57,6 +57,20 @@ export default function Hero({ waLink, telLink }) {
     let lastMove = -1e9
 
     const onLoadedData = () => { video.currentTime = FORWARD_TIME; setReady(true) }
+    // Phones (iPhone Safari above all) load no frames until a video has played once,
+    // and only let a video play if it is really muted. Play it for an instant, then pause:
+    // from then on every seek shows a frame, so the dog can look around on phones too.
+    video.muted = true
+    video.setAttribute('muted', '')
+    video.setAttribute('playsinline', '')
+    let primed = false
+    const prime = () => {
+      if (primed || !video.src) return
+      const played = video.play()
+      if (played && played.then) played.then(() => { primed = true; video.pause(); onLoadedData() }).catch(() => {})
+    }
+    const onMeta = () => prime()
+    const onTouch = () => prime()
     const onMove = (event) => {
       lastMove = performance.now()
       targetPose = Math.max(-1, Math.min(1, (event.clientX / window.innerWidth - 0.5) / 0.35))
@@ -74,7 +88,9 @@ export default function Hero({ waLink, telLink }) {
     }
 
     video.addEventListener('loadeddata', onLoadedData)
+    video.addEventListener('loadedmetadata', onMeta)
     window.addEventListener('pointermove', onMove, { passive: true })
+    window.addEventListener('touchstart', onTouch, { passive: true })
     // Held fully in memory and all-intra, so every seek lands immediately.
     fetch(`${BASE}dog-white.mp4`)
       .then((response) => response.blob())
@@ -86,7 +102,9 @@ export default function Hero({ waLink, telLink }) {
       disposed = true
       cancelAnimationFrame(frame)
       video.removeEventListener('loadeddata', onLoadedData)
+      video.removeEventListener('loadedmetadata', onMeta)
       window.removeEventListener('pointermove', onMove)
+      window.removeEventListener('touchstart', onTouch)
       if (objectUrl) URL.revokeObjectURL(objectUrl)
     }
   }, [])

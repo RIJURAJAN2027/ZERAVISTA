@@ -52,7 +52,7 @@ npm run build   # writes dist/
 
 ## Still missing (ask the owner)
 
-- Email, office address and social media links. The fields exist in `CONTACT` in `src/data.js`; empty ones are hidden.
+- Email, office address and other social links. The fields exist in `CONTACT` in `src/data.js`; empty ones are hidden. Instagram is set: https://www.instagram.com/zeravista/ (team buttons, under the gallery, footer contacts, phone glass bar).
 - A review of the policy pages, which are templates.
 - More real client screenshots, to replace the projects marked "Concept" over time.
 
@@ -71,6 +71,7 @@ npm run build   # writes dist/
 ## Plans and quotation PDF
 
 - Source: `tools/quotation/quote.html`. Render it with `node tools/quotation/render.cjs out.pdf`. It uses the site's fonts, colours and `public/` images.
+- The website offers this PDF as `public/Zera-Vista-Quotation.pdf` (menu, contact section, footer, phone glass bar). After re-rendering the PDF, copy it there too.
 - Word version: `node tools/quotation/make-docx.cjs` writes `Zera-Vista-Plans-and-Quotation.docx` (Arial and Georgia, so it opens the same on any computer). Its content is a copy of `quote.html`: change both when prices or text change.
 - Prices from the owner:
   - Websites: ₹4,000, ₹6,000 or ₹8,000 (one-time), with domain, hosting and SEO included for the first year.
@@ -133,10 +134,11 @@ The owner wants a shorter phone page and the PC version left exactly as it is.
   - "We build your dream" is small and in Inter Tight (not the serif) wherever it shows.
   - "One Year Of Free Support" is one small box with four small tiles.
   - The business flow as four steps.
-  - An FAQ button in the dock that opens its own panel.
+  - A clear "liquid glass" bar replaces the black dock bar: Contact, Quotation, Instagram, Menu. No colour of its own; icons turn white over dark sections. FAQ opens from inside the menu.
   - A short, black, centred footer.
 - **Phone motion:**
-  - The hero arrives: the badge drops in, the dog rises, then the buttons and the dock.
+  - The hero arrives: the badge drops in, the dog rises, then the buttons and the glass bar.
+  - The dog film is played for an instant and paused (muted, playsinline) so iPhones load its frames; without that the dog stays a still picture on phones.
   - Specialities stack like cards; a covered card shrinks and darkens.
   - Service bands slide over each other.
   - Featured-work screens slide up into their frames.
